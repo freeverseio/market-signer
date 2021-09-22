@@ -129,7 +129,7 @@ function hideBuyerPrice({ extraPrice, buyerRnd }) {
   );
 }
 
-function computeBidDigest({
+function digestBidCertified({
   currencyId,
   price,
   extraPrice,
@@ -155,33 +155,6 @@ function computeBidDigest({
     ['bytes32', 'bytes32', 'string'],
     [auctionId, buyerHiddenPrice, assetCID],
   );
-}
-
-// TODO remove and rename preivous
-function digestBidCertified({
-  currencyId,
-  price,
-  extraPrice,
-  sellerRnd,
-  buyerRnd,
-  validUntil,
-  offerValidUntil,
-  timeToPay,
-  assetCID,
-  assetId,
-}) {
-  return computeBidDigest({
-    currencyId,
-    price,
-    extraPrice,
-    sellerRnd,
-    buyerRnd,
-    validUntil,
-    offerValidUntil,
-    timeToPay,
-    assetCID,
-    assetId,
-  });
 }
 
 function digestPayNow({ auctionId, amount }) {
@@ -312,7 +285,7 @@ function getBidder({
   assetId,
   signature,
 }) {
-  const digest = computeBidDigest({
+  const digest = digestBidCertified({
     currencyId,
     price,
     extraPrice,

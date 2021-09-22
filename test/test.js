@@ -30,7 +30,6 @@ const {
 const concatHash = mktSigner.__get__('concatHash');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
-const computeBidDigest = mktSigner.__get__('computeBidDigest');
 const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
 
 it('deterministic digestLinkId', async () => {
@@ -302,7 +301,7 @@ it('deterministic digestBidCertified', async () => {
   assert.equal(signedOffer2, expectedSig2);
 
   // deterministic digests
-  const digest3 = computeBidDigest({
+  const digest3 = digestBidCertified({
     currencyId,
     price,
     extraPrice,
@@ -419,7 +418,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
   assert.equal(signedOffer2, expectedSig2);
 
   // deterministic digests
-  const digest3 = computeBidDigest({
+  const digest3 = digestBidCertified({
     currencyId,
     price,
     extraPrice,
@@ -496,7 +495,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
   assert.equal(signedBid2, expectedSig2);
 
   // deterministic digests
-  const digest3 = computeBidDigest({
+  const digest3 = digestBidCertified({
     currencyId,
     price,
     extraPrice,
