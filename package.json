@@ -1,6 +1,6 @@
 {
     "name": "freeverse-marketsigner-js",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "src/MarketSigner.js",
     "description": "Library for signing API calls to Living Assets market",
     "homepage": "https://www.freeverse.io/",
