@@ -31,9 +31,9 @@ const concatHash = mktSigner.__get__('concatHash');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
 const computeBidDigest = mktSigner.__get__('computeBidDigest');
+const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
 
 it('deterministic digestLinkId', async () => {
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const email = 'super.dooper@mylab.great';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
   const digest = digestLinkId({
@@ -46,7 +46,6 @@ it('deterministic digestLinkId', async () => {
 });
 
 it('deterministic digestUnlinkId', async () => {
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const email = 'super.dooper@mylab.great';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
   const digest = digestUnlinkId({
@@ -61,7 +60,6 @@ it('deterministic digestUnlinkId', async () => {
 it('deterministic digestPayNow', async () => {
   const auctionId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
   const amount = '123.45';
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const digest = digestPayNow({
     auctionId,
     amount,
@@ -75,7 +73,6 @@ it('deterministic digestBankTransfer', async () => {
   const bankAccount = 'ES6621000418401123456789';
   const amount = '123.45';
   const nonce = '234132432';
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const digest = digestBankTransfer({
     bankAccount,
     amount,
@@ -91,7 +88,6 @@ it('deterministic digestCardTransfer', async () => {
   const lastFourDigits = '1234';
   const amount = '123.45';
   const nonce = '234132432';
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const digest = digestCardTransfer({
     firstDigits,
     lastFourDigits,
@@ -107,7 +103,6 @@ it('deterministic digestChangeIdAlias', async () => {
   const email = 'super.dooper@mylab.great';
   const alias = 'my gaming account';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const digest = digestChangeIdAlias({
     email,
     alias,
@@ -120,7 +115,6 @@ it('deterministic digestChangeIdAlias', async () => {
 
 it('deterministic digestStolenEmail', async () => {
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const digest = digestStolenEmail({
     freeverseId,
   });
@@ -180,7 +174,7 @@ it('deterministic digestPutForSaleAuction', async () => {
   const rnd = 1234;
   const validUntil = 235985749;
   const timeToPay = 172800; // 2 days
-  const sellerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const sellerAccount = account;
   const expectedSignature = '0xd061068f94e92a1dbafcf7f883a2c03483848b2a2cab38d1262bb11d43e64fed0952910c5c3c6e56eaed4fa83acd5a3df189ef12b36718b1d32dbd3ac9e01af61b';
   const expectedDigest = '0x42ba074c235b5f1a017b7f82f31c77d6f9e8954258c1c52dc90e21ccbf49badc';
 
@@ -208,7 +202,7 @@ it('deterministic digestPutForSaleBuyNow', async () => {
   const price = 345;
   const rnd = 1234;
   const validUntil = 235985749;
-  const sellerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const sellerAccount = account;
   const expectedSignature = '0x9d7d39a3a62b75e8de09fda3da019ead171221faf853d5adc5fe2b65035c2e5a1e0e321240d5d223fb3c0a87d8347b77c517ae7c48f914cfa2d1b952b3a23fa91c';
 
   const digest = digestPutForSaleBuyNow({
@@ -226,7 +220,7 @@ it('deterministic digestAcceptOffer', async () => {
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
   const timeToPay = 172800; // 2 days
-  const sellerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const sellerAccount = account;
   const expected = '0xfc18ba14ff1ed175a50d2319bd919f5160b75337ef9d1446a9de9ec90d02ef903b548d57ff3fa43652c0c7b37a28bd2f8a31ea074d13dd3c2304c24da845b6e71b';
 
   const digest = digestAcceptOffer({
@@ -244,7 +238,7 @@ it('deterministic digestOfferCertified', async () => {
   const offerValidUntil = 4358487;
   const timeToPay = 172800; // 2 days
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
-  const offererAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const offererAccount = account;
   const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
 
   const digest = digestOfferCertified({
@@ -273,7 +267,7 @@ it('deterministic digestBidCertified', async () => {
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const extraPrice = 32453;
   const buyerRnd = 435983;
-  const buyerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const buyerAccount = account;
   const expectedSig = '0x463ec818cbb8a5bb243c982db9b73e5a984256fca534f81f1b92061014c1a02b50175f54c176fbdd68a8928e42e545cbd1ea736789ce63cceb51836153ac6ec11c';
 
   const digest = digestBidCertified({
@@ -346,7 +340,7 @@ it('deterministic buyNow', async () => {
   const sellerRnd = 1234;
   const validUntil = 235985749;
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
-  const buyerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const buyerAccount = account;
   const expectedSig = '0xc6a18f880897952a7f63021365e9b0a9acfd6edbdf5cf4e26b4ee22ea3e51da43062d80638b1187507fd6592cf3e02ad049861d88045fae56b085db512e0d6251b';
 
   const digest = digestBuyNowCertified({
@@ -390,7 +384,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const extraPrice = 32453;
   const buyerRnd = 435983;
-  const buyerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const buyerAccount = account;
   const expectedSig = '0xf9d2ca75d8439825ecf5fb79b27076da60bc83d3e17ec493ba8c53204125d872274edf13c3c7abbf21aac190848fc9ddb97baa7c298c99116c7e11c26326e17c1b';
 
   const digest = digestBidCertified({
@@ -467,7 +461,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const extraPrice = 0;
   const buyerRnd = 0;
-  const buyerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const buyerAccount = account;
   const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
 
   const digest = digestBidCertified({
