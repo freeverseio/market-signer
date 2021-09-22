@@ -30,20 +30,18 @@ function concatHash(types, vals) {
   return Utils.keccak256(Abi.encodeParameters(types, vals));
 }
 
-function signLinkId({ web3account, email, freeverseId }) {
-  const digest = concatHash(
+function digestLinkId({ email, freeverseId }) {
+  return concatHash(
     ['string', 'string'],
     [email, freeverseId],
   );
-  return web3account.sign(digest).signature;
 }
 
-function signUnlinkId({ web3account, email, freeverseId }) {
-  const digest = concatHash(
+function digestUnlinkId({ email, freeverseId }) {
+  return concatHash(
     ['string', 'string'],
     [email, freeverseId],
   );
-  return web3account.sign(digest).signature;
 }
 
 function hideSellerPrice({ currencyId, price, sellerRnd }) {
@@ -74,16 +72,15 @@ function computePutForSaleDigest({
   );
 }
 
-function signPutForSaleAuction({
+function digestPutForSaleAuction({
   currencyId,
   price,
   rnd,
   validUntil,
   timeToPay,
   assetId,
-  sellerAccount,
 }) {
-  const digest = computePutForSaleDigest({
+  return computePutForSaleDigest({
     currencyId,
     price,
     sellerRnd: rnd,
@@ -92,18 +89,16 @@ function signPutForSaleAuction({
     timeToPay,
     assetId,
   });
-  return sellerAccount.sign(digest).signature;
 }
 
-function signPutForSaleBuyNow({
-  currencyId, price, rnd, validUntil, assetId, sellerAccount,
+function digestPutForSaleBuyNow({
+  currencyId, price, rnd, validUntil, assetId,
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd: rnd });
-  const digest = concatHash(
+  return concatHash(
     ['bytes32', 'uint256', 'uint32'],
     [sellerHiddenPrice, assetId.toString(), validUntil],
   );
-  return sellerAccount.sign(digest).signature;
 }
 
 function computeAuctionId({
@@ -162,7 +157,8 @@ function computeBidDigest({
   );
 }
 
-function signBidCertified({
+// TODO remove and rename preivous
+function digestBidCertified({
   currencyId,
   price,
   extraPrice,
@@ -173,9 +169,8 @@ function signBidCertified({
   timeToPay,
   assetCID,
   assetId,
-  buyerAccount,
 }) {
-  const digest = computeBidDigest({
+  return computeBidDigest({
     currencyId,
     price,
     extraPrice,
@@ -187,35 +182,29 @@ function signBidCertified({
     assetCID,
     assetId,
   });
-  return buyerAccount.sign(digest).signature;
 }
 
-function signPayNow({ auctionId, amount, web3account }) {
-  const digest = concatHash(
+function digestPayNow({ auctionId, amount }) {
+  return concatHash(
     ['string', 'string'],
     [auctionId, amount],
   );
-  return web3account.sign(digest).signature;
 }
 
-function signBankTransfer({
-  bankAccount, amount, marketUserNonce, web3account,
-}) {
-  const digest = concatHash(
+function digestBankTransfer({ bankAccount, amount, marketUserNonce }) {
+  return concatHash(
     ['string', 'string', 'uint32'],
     [bankAccount, amount, marketUserNonce],
   );
-  return web3account.sign(digest).signature;
 }
 
-function signCardTransfer({
+function digestCardTransfer({
   firstDigits,
   lastFourDigits,
   amount,
   marketUserNonce,
-  web3account,
 }) {
-  const digest = concatHash(
+  return concatHash(
     ['string', 'string', 'string', 'uint32'],
     [
       lastFourDigits,
@@ -224,30 +213,23 @@ function signCardTransfer({
       marketUserNonce,
     ],
   );
-  return web3account.sign(digest).signature;
 }
 
-function signStolenEmail({ web3account, freeverseId }) {
-  const digest = concatHash(
+function digestStolenEmail({ freeverseId }) {
+  return concatHash(
     ['string'], [freeverseId],
   );
-  return web3account.sign(digest).signature;
 }
 
-function signChangeIdAlias({
-  email,
-  alias,
-  freeverseId,
-  web3account,
-}) {
-  const digest = concatHash(
+function digestChangeIdAlias({ email, alias, freeverseId }) {
+  return concatHash(
     ['string', 'string', 'string'],
     [email, alias, freeverseId],
   );
-  return web3account.sign(digest).signature;
 }
 
-function computeBuyNowDigest({
+// TODO review name
+function digestBuyNowDigest({
   hiddenPrice, assetId, validUntil, assetCID,
 }) {
   return concatHash(
@@ -256,34 +238,32 @@ function computeBuyNowDigest({
   );
 }
 
-function signBuyNowCertified({
-  currencyId, price, sellerRnd, validUntil, assetCID, assetId, buyerAccount,
+function digestBuyNowCertified({
+  currencyId, price, sellerRnd, validUntil, assetCID, assetId,
 }) {
   const hiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  const digest = computeBuyNowDigest({
+  return digestBuyNowDigest({
     hiddenPrice, assetId, validUntil, assetCID,
   });
-  return buyerAccount.sign(digest).signature;
 }
 
-function signBuyNow({
-  currencyId, price, sellerRnd, validUntil, assetId, buyerAccount,
+function digestBuyNow({
+  currencyId, price, sellerRnd, validUntil, assetId,
 }) {
-  return signBuyNowCertified({
+  return digestBuyNowCertified({
     currencyId,
     price,
     sellerRnd,
     validUntil,
     assetCID: '',
     assetId,
-    buyerAccount,
   });
 }
 
-function signAcceptOffer({
-  currencyId, price, rnd, validUntil, offerValidUntil, timeToPay, assetId, sellerAccount,
+function digestAcceptOffer({
+  currencyId, price, rnd, validUntil, offerValidUntil, timeToPay, assetId,
 }) {
-  const digest = computePutForSaleDigest({
+  return computePutForSaleDigest({
     currencyId,
     price,
     sellerRnd: rnd,
@@ -292,10 +272,9 @@ function signAcceptOffer({
     timeToPay,
     assetId,
   });
-  return sellerAccount.sign(digest).signature;
 }
 
-function signBid({
+function digestBid({
   currencyId,
   price,
   extraPrice,
@@ -305,9 +284,8 @@ function signBid({
   offerValidUntil,
   timeToPay,
   assetId,
-  buyerAccount,
 }) {
-  return signBidCertified({
+  return digestBidCertified({
     currencyId,
     price,
     extraPrice,
@@ -318,7 +296,6 @@ function signBid({
     timeToPay,
     assetCID: '',
     assetId,
-    buyerAccount,
   });
 }
 
@@ -354,16 +331,16 @@ function getBuyNowBuyer({
   currencyId, price, sellerRnd, assetId, validUntil, assetCID, signature,
 }) {
   const hiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  const digest = computeBuyNowDigest({
+  const digest = digestBuyNowDigest({
     hiddenPrice, assetId, validUntil, assetCID,
   });
   return new Accounts().recover(digest, signature);
 }
 
-function signOfferCertified({
-  currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID, offererAccount,
+function digestOfferCertified({
+  currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID,
 }) {
-  return signBidCertified({
+  return digestBidCertified({
     currencyId,
     price,
     extraPrice: 0,
@@ -374,35 +351,39 @@ function signOfferCertified({
     timeToPay,
     assetCID,
     assetId,
-    buyerAccount: offererAccount,
   });
 }
 
-function signOffer(
-  currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, offererAccount,
+function digestOffer(
+  currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
 ) {
-  return signOfferCertified({
-    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID: '', offererAccount,
+  return digestOfferCertified({
+    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID: '',
   });
+}
+
+function sign({ digest, web3account }) {
+  return web3account.sign(digest).signature;
 }
 
 module.exports = {
-  signLinkId,
-  signUnlinkId,
-  signBankTransfer,
-  signCardTransfer,
-  signChangeIdAlias,
-  signStolenEmail,
-  signPayNow,
-  signPutForSaleAuction,
-  signPutForSaleBuyNow,
-  signBid,
-  signBidCertified,
-  signBuyNow,
-  signBuyNowCertified,
-  signAcceptOffer,
-  signOfferCertified,
-  signOffer,
+  sign,
+  digestLinkId,
+  digestUnlinkId,
+  digestBankTransfer,
+  digestCardTransfer,
+  digestChangeIdAlias,
+  digestStolenEmail,
+  digestPayNow,
+  digestPutForSaleAuction,
+  digestPutForSaleBuyNow,
+  digestBid,
+  digestBidCertified,
+  digestBuyNow,
+  digestBuyNowCertified,
+  digestAcceptOffer,
+  digestOfferCertified,
+  digestOffer,
   getBidder,
   getBuyNowBuyer,
 };
