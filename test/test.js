@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const { assert } = require('chai');
 const rewire = require('rewire');
-// const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 
 const mktSigner = rewire('../src/MarketSigner');
@@ -35,10 +34,7 @@ const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF3
 it('deterministic digestLinkId', async () => {
   const email = 'super.dooper@mylab.great';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestLinkId({
-    email,
-    freeverseId,
-  });
+  const digest = digestLinkId({ email, freeverseId });
   const signature = sign({ digest, web3account: account });
   const expected = '0x3531526e836fd00e30d3812c7d7f95d4abeb502c03a40e2171650c79e3435f21414cff8394e64a3ec0930fb290623dd0681e126dd75f53eeec49a2f815e3b8201b';
   assert.equal(signature, expected);
@@ -47,10 +43,7 @@ it('deterministic digestLinkId', async () => {
 it('deterministic digestUnlinkId', async () => {
   const email = 'super.dooper@mylab.great';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestUnlinkId({
-    email,
-    freeverseId,
-  });
+  const digest = digestUnlinkId({ email, freeverseId });
   const signature = sign({ digest, web3account: account });
   const expected = '0x3531526e836fd00e30d3812c7d7f95d4abeb502c03a40e2171650c79e3435f21414cff8394e64a3ec0930fb290623dd0681e126dd75f53eeec49a2f815e3b8201b';
   assert.equal(signature, expected);
@@ -59,10 +52,7 @@ it('deterministic digestUnlinkId', async () => {
 it('deterministic digestPayNow', async () => {
   const auctionId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
   const amount = '123.45';
-  const digest = digestPayNow({
-    auctionId,
-    amount,
-  });
+  const digest = digestPayNow({ auctionId, amount });
   const signature = sign({ digest, web3account: account });
   const expected = '0xe230e61ee5eb56efbeae971775e62cef07705b3a3e1d347b73b80c9861d8e0325081f29941d9384d22b813644909582915172af89722a78ab420e4c4cf37facf1c';
   assert.equal(signature, expected);
@@ -72,11 +62,7 @@ it('deterministic digestBankTransfer', async () => {
   const bankAccount = 'ES6621000418401123456789';
   const amount = '123.45';
   const nonce = '234132432';
-  const digest = digestBankTransfer({
-    bankAccount,
-    amount,
-    marketUserNonce: nonce,
-  });
+  const digest = digestBankTransfer({ bankAccount, amount, marketUserNonce: nonce });
   const signature = sign({ digest, web3account: account });
   const expected = '0x66972c147a43ab945a20e3f53779576d633d379d2f5534c6ce7051c430702f522d8936cc1f754c3b84b5437d05e46a165f3f9c090eccab8e280962a2e3c69f8b1c';
   assert.equal(signature, expected);
@@ -102,11 +88,7 @@ it('deterministic digestChangeIdAlias', async () => {
   const email = 'super.dooper@mylab.great';
   const alias = 'my gaming account';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestChangeIdAlias({
-    email,
-    alias,
-    freeverseId,
-  });
+  const digest = digestChangeIdAlias({ email, alias, freeverseId });
   const signature = sign({ digest, web3account: account });
   const expected = '0x296d9f3ae69fbe97f1b30997a98b780fb51a54af7476e587dd8bc2d6af4638846e08109d4dc44459294e1ec23f5949061e8fca318ea743511040ec67fc1e27c81c';
   assert.equal(signature, expected);
@@ -114,9 +96,7 @@ it('deterministic digestChangeIdAlias', async () => {
 
 it('deterministic digestStolenEmail', async () => {
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestStolenEmail({
-    freeverseId,
-  });
+  const digest = digestStolenEmail({ freeverseId });
   const signature = sign({ digest, web3account: account });
   const expected = '0x2808a64c2e34edcf78448345aeed8bc93e5b305f7f1b6536d2f8c3c4b94f01153c294de2c054ef46dfd51d35dc9cb7c23a87f807f6028ed0147b78dd3a78fb0c1c';
   assert.equal(signature, expected);
@@ -281,8 +261,8 @@ it('deterministic digestBidCertified', async () => {
     assetCID,
     assetId,
   });
-  const signedOffer = sign({ digest, web3account: buyerAccount });
-  assert.equal(signedOffer, expectedSig);
+  const signedBid = sign({ digest, web3account: buyerAccount });
+  assert.equal(signedBid, expectedSig);
 
   // uncertified version:
   const digest2 = digestBid({
@@ -296,9 +276,9 @@ it('deterministic digestBidCertified', async () => {
     timeToPay,
     assetId,
   });
-  const signedOffer2 = sign({ digest: digest2, web3account: buyerAccount });
+  const signedBid2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0x826cd822e0ca0833816ea8bed88ce39856730f5a6d4f174528d3bdc0fa9dd01d4cf27ad6431341c2e26aabc765c6f99cee1a0944186e1d79481fbfb08119c5441c';
-  assert.equal(signedOffer2, expectedSig2);
+  assert.equal(signedBid2, expectedSig2);
 
   // deterministic digests
   const digest3 = digestBidCertified({
@@ -327,7 +307,7 @@ it('deterministic digestBidCertified', async () => {
     timeToPay,
     assetCID,
     assetId,
-    signature: signedOffer,
+    signature: signedBid,
   });
   assert.equal(bidderAddress, buyerAccount.address);
 });
@@ -413,9 +393,9 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     timeToPay,
     assetId,
   });
-  const signedOffer2 = sign({ digest: digest2, web3account: buyerAccount });
+  const signedBid2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0xea650b8705009bc5795c70c34eecbfec5448d9809c641b04ea68ad9fbed83c0b4d4dff77cf1065528ce357f9300b20265e00946cc606e336aa928bcdbe3f12a41c';
-  assert.equal(signedOffer2, expectedSig2);
+  assert.equal(signedBid2, expectedSig2);
 
   // deterministic digests
   const digest3 = digestBidCertified({
