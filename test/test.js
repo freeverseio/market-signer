@@ -37,7 +37,6 @@ it('deterministic digestLinkId', async () => {
   const email = 'super.dooper@mylab.great';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
   const digest = digestLinkId({
-    web3account: account,
     email,
     freeverseId,
   });
@@ -51,7 +50,6 @@ it('deterministic digestUnlinkId', async () => {
   const email = 'super.dooper@mylab.great';
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
   const digest = digestUnlinkId({
-    web3account: account,
     email,
     freeverseId,
   });
@@ -67,7 +65,6 @@ it('deterministic digestPayNow', async () => {
   const digest = digestPayNow({
     auctionId,
     amount,
-    web3account: account,
   });
   const signature = sign({ digest, web3account: account });
   const expected = '0xe230e61ee5eb56efbeae971775e62cef07705b3a3e1d347b73b80c9861d8e0325081f29941d9384d22b813644909582915172af89722a78ab420e4c4cf37facf1c';
@@ -83,7 +80,6 @@ it('deterministic digestBankTransfer', async () => {
     bankAccount,
     amount,
     marketUserNonce: nonce,
-    web3account: account,
   });
   const signature = sign({ digest, web3account: account });
   const expected = '0x66972c147a43ab945a20e3f53779576d633d379d2f5534c6ce7051c430702f522d8936cc1f754c3b84b5437d05e46a165f3f9c090eccab8e280962a2e3c69f8b1c';
@@ -101,7 +97,6 @@ it('deterministic digestCardTransfer', async () => {
     lastFourDigits,
     amount,
     marketUserNonce: nonce,
-    web3account: account,
   });
   const signature = sign({ digest, web3account: account });
   const expected = '0x96390c4143926c5147eb559efdfbefc9ac9e4400f7a168835c5e210b04ad2b7917ea0606b77feefb1847f902680357271d8f4bcad467d35fc2ff1afec65763721b';
@@ -117,7 +112,6 @@ it('deterministic digestChangeIdAlias', async () => {
     email,
     alias,
     freeverseId,
-    web3account: account,
   });
   const signature = sign({ digest, web3account: account });
   const expected = '0x296d9f3ae69fbe97f1b30997a98b780fb51a54af7476e587dd8bc2d6af4638846e08109d4dc44459294e1ec23f5949061e8fca318ea743511040ec67fc1e27c81c';
@@ -128,7 +122,6 @@ it('deterministic digestStolenEmail', async () => {
   const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
   const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
   const digest = digestStolenEmail({
-    web3account: account,
     freeverseId,
   });
   const signature = sign({ digest, web3account: account });
@@ -219,7 +212,7 @@ it('deterministic digestPutForSaleBuyNow', async () => {
   const expectedSignature = '0x9d7d39a3a62b75e8de09fda3da019ead171221faf853d5adc5fe2b65035c2e5a1e0e321240d5d223fb3c0a87d8347b77c517ae7c48f914cfa2d1b952b3a23fa91c';
 
   const digest = digestPutForSaleBuyNow({
-    currencyId, price, rnd, validUntil, assetId, sellerAccount,
+    currencyId, price, rnd, validUntil, assetId,
   });
   const sigSeller = sign({ digest, web3account: sellerAccount });
   assert.equal(sigSeller, expectedSignature);
@@ -237,7 +230,7 @@ it('deterministic digestAcceptOffer', async () => {
   const expected = '0xfc18ba14ff1ed175a50d2319bd919f5160b75337ef9d1446a9de9ec90d02ef903b548d57ff3fa43652c0c7b37a28bd2f8a31ea074d13dd3c2304c24da845b6e71b';
 
   const digest = digestAcceptOffer({
-    currencyId, price, rnd, validUntil, offerValidUntil, timeToPay, assetId, sellerAccount,
+    currencyId, price, rnd, validUntil, offerValidUntil, timeToPay, assetId,
   });
   const sigSeller = sign({ digest, web3account: sellerAccount });
   assert.equal(sigSeller, expected);
@@ -255,14 +248,14 @@ it('deterministic digestOfferCertified', async () => {
   const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
 
   const digest = digestOfferCertified({
-    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID, offererAccount,
+    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID,
   });
   const signedOffer = sign({ digest, web3account: offererAccount });
   assert.equal(signedOffer, expectedSig);
 
   // Uncertified version:
   const digest2 = digestOffer(
-    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, offererAccount,
+    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
   );
   const signedOffer2 = sign({ digest: digest2, web3account: offererAccount });
   const expectedSig2 = '0x0168cefa72e1e3e441eae4e3a274f5dd9bd84a2efe5eae8e075c604b356925626100da319e57118957f76851883ba4479c435631e7a7b38bd2e0eb5e145474251b';
@@ -294,7 +287,6 @@ it('deterministic digestBidCertified', async () => {
     timeToPay,
     assetCID,
     assetId,
-    buyerAccount,
   });
   const signedOffer = sign({ digest, web3account: buyerAccount });
   assert.equal(signedOffer, expectedSig);
@@ -310,7 +302,6 @@ it('deterministic digestBidCertified', async () => {
     offerValidUntil,
     timeToPay,
     assetId,
-    buyerAccount,
   });
   const signedOffer2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0x826cd822e0ca0833816ea8bed88ce39856730f5a6d4f174528d3bdc0fa9dd01d4cf27ad6431341c2e26aabc765c6f99cee1a0944186e1d79481fbfb08119c5441c';
@@ -365,7 +356,6 @@ it('deterministic buyNow', async () => {
     validUntil,
     assetCID,
     assetId,
-    buyerAccount,
   });
   const signedBuyNow = sign({ digest, web3account: buyerAccount });
   assert.equal(signedBuyNow, expectedSig);
@@ -383,7 +373,6 @@ it('deterministic buyNow', async () => {
     sellerRnd,
     validUntil,
     assetId,
-    buyerAccount,
   });
   const signedBuyNow2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0xae2299af1765d1deda7ab1378f5a66a9b55acbda0c7948fee5d578e60b87e20d5bd1bb1c4e868700557f2c4296f0c39ddd14c71fc0691abd77278cbfb6914ba11c';
@@ -415,7 +404,6 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     timeToPay,
     assetCID,
     assetId,
-    buyerAccount,
   });
   const signedBid = sign({ digest, web3account: buyerAccount });
   assert.equal(signedBid, expectedSig);
@@ -431,7 +419,6 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     offerValidUntil,
     timeToPay,
     assetId,
-    buyerAccount,
   });
   const signedOffer2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0xea650b8705009bc5795c70c34eecbfec5448d9809c641b04ea68ad9fbed83c0b4d4dff77cf1065528ce357f9300b20265e00946cc606e336aa928bcdbe3f12a41c';
@@ -494,7 +481,6 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     timeToPay,
     assetCID,
     assetId,
-    buyerAccount,
   });
   const signedBid = sign({ digest, web3account: buyerAccount });
   assert.equal(signedBid, expectedSig);
@@ -510,7 +496,6 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     offerValidUntil,
     timeToPay,
     assetId,
-    buyerAccount,
   });
   const signedBid2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0x0168cefa72e1e3e441eae4e3a274f5dd9bd84a2efe5eae8e075c604b356925626100da319e57118957f76851883ba4479c435631e7a7b38bd2e0eb5e145474251b';
