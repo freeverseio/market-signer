@@ -227,9 +227,9 @@ it('deterministic digestOfferCertified', async () => {
   assert.equal(signedOffer, expectedSig);
 
   // Uncertified version:
-  const digest2 = digestOffer(
+  const digest2 = digestOffer({
     currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
-  );
+  });
   const signedOffer2 = sign({ digest: digest2, web3account: offererAccount });
   const expectedSig2 = '0x0168cefa72e1e3e441eae4e3a274f5dd9bd84a2efe5eae8e075c604b356925626100da319e57118957f76851883ba4479c435631e7a7b38bd2e0eb5e145474251b';
   assert.equal(signedOffer2, expectedSig2);
@@ -508,7 +508,10 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
 
 it('Hash of concatenated args', () => {
   const someBytes32 = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
-  const result = concatHash(['uint256', 'bytes32'], [1232, someBytes32]);
+  const result = concatHash({
+    types: ['uint256', 'bytes32'],
+    vals: [1232, someBytes32],
+  });
   const expected = '0x7522d1cef7c9def1b2b909d6e5d00a91f8ee07b51bc10f407986278971c2cbeb';
   assert.equal(result, expected);
 });
