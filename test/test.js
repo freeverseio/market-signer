@@ -16,7 +16,9 @@ const {
   digestPutForSaleAuction,
   digestPutForSaleBuyNow,
   digestBid,
+  digestBidFromAuctionId,
   digestBidCertified,
+  digestBidFromAuctionIdCertified,
   digestBuyNow,
   digestBuyNowCertified,
   digestAcceptOffer,
@@ -280,6 +282,24 @@ it('deterministic digestBidCertified', async () => {
   const expectedSig2 = '0x826cd822e0ca0833816ea8bed88ce39856730f5a6d4f174528d3bdc0fa9dd01d4cf27ad6431341c2e26aabc765c6f99cee1a0944186e1d79481fbfb08119c5441c';
   assert.equal(signedBid2, expectedSig2);
 
+  // via auctionID:
+  const auctionId = computeAuctionId({
+    currencyId,
+    price,
+    sellerRnd,
+    assetId,
+    validUntil,
+    offerValidUntil,
+    timeToPay,
+  });
+  const digest2b = digestBidFromAuctionId({
+    auctionId,
+    extraPrice,
+    buyerRnd,
+  });
+  const signedBid2b = sign({ digest: digest2b, web3account: buyerAccount });
+  assert.equal(signedBid2, signedBid2b);
+
   // deterministic digests
   const digest3 = digestBidCertified({
     currencyId,
@@ -296,6 +316,16 @@ it('deterministic digestBidCertified', async () => {
   const expectedDigest = '0x69d15b633acb8e5ae6bd172ebacfa2d16d5468e261751b42b608eb2a1f4166e3';
   assert.equal(digest3, expectedDigest);
 
+  // from AuctionId
+  const digest3b = digestBidFromAuctionIdCertified({
+    auctionId,
+    extraPrice,
+    buyerRnd,
+    assetCID,
+  });
+  assert.equal(digest3, digest3b);
+
+  // Retrieving bidder:
   const bidderAddress = getBidder({
     currencyId,
     price,

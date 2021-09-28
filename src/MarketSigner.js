@@ -129,6 +129,19 @@ function hideBuyerPrice({ extraPrice, buyerRnd }) {
   });
 }
 
+function digestBidFromAuctionIdCertified({
+  auctionId,
+  extraPrice,
+  buyerRnd,
+  assetCID,
+}) {
+  const buyerHiddenPrice = hideBuyerPrice({ extraPrice, buyerRnd });
+  return concatHash({
+    types: ['bytes32', 'bytes32', 'string'],
+    vals: [auctionId, buyerHiddenPrice, assetCID],
+  });
+}
+
 function digestBidCertified({
   currencyId,
   price,
@@ -141,7 +154,6 @@ function digestBidCertified({
   assetCID,
   assetId,
 }) {
-  const buyerHiddenPrice = hideBuyerPrice({ extraPrice, buyerRnd });
   const auctionId = computeAuctionId({
     currencyId,
     price,
@@ -151,9 +163,8 @@ function digestBidCertified({
     offerValidUntil,
     timeToPay,
   });
-  return concatHash({
-    types: ['bytes32', 'bytes32', 'string'],
-    vals: [auctionId, buyerHiddenPrice, assetCID],
+  return digestBidFromAuctionIdCertified({
+    auctionId, extraPrice, buyerRnd, assetCID,
   });
 }
 
@@ -244,6 +255,19 @@ function digestAcceptOffer({
     offerValidUntil,
     timeToPay,
     assetId,
+  });
+}
+
+function digestBidFromAuctionId({
+  auctionId,
+  extraPrice,
+  buyerRnd,
+}) {
+  return digestBidFromAuctionIdCertified({
+    auctionId,
+    extraPrice,
+    buyerRnd,
+    assetCID: '',
   });
 }
 
@@ -351,7 +375,9 @@ module.exports = {
   digestPutForSaleAuction,
   digestPutForSaleBuyNow,
   digestBid,
+  digestBidFromAuctionId,
   digestBidCertified,
+  digestBidFromAuctionIdCertified,
   digestBuyNow,
   digestBuyNowCertified,
   digestAcceptOffer,
