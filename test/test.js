@@ -508,7 +508,10 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
 
 it('Hash of concatenated args', () => {
   const someBytes32 = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
-  const result = concatHash(['uint256', 'bytes32'], [1232, someBytes32]);
+  const result = concatHash({
+    types: ['uint256', 'bytes32'],
+    vals: [1232, someBytes32],
+  });
   const expected = '0x7522d1cef7c9def1b2b909d6e5d00a91f8ee07b51bc10f407986278971c2cbeb';
   assert.equal(result, expected);
 });

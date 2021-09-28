@@ -26,29 +26,29 @@ const Utils = require('web3-utils');
 
 // Concats values in vals array, interpreting them as defined by the types array
 // and hashes the result using keccak256
-function concatHash(types, vals) {
+function concatHash({ types, vals }) {
   return Utils.keccak256(Abi.encodeParameters(types, vals));
 }
 
 function digestLinkId({ email, freeverseId }) {
-  return concatHash(
-    ['string', 'string'],
-    [email, freeverseId],
-  );
+  return concatHash({
+    types: ['string', 'string'],
+    vals: [email, freeverseId],
+  });
 }
 
 function digestUnlinkId({ email, freeverseId }) {
-  return concatHash(
-    ['string', 'string'],
-    [email, freeverseId],
-  );
+  return concatHash({
+    types: ['string', 'string'],
+    vals: [email, freeverseId],
+  });
 }
 
 function hideSellerPrice({ currencyId, price, sellerRnd }) {
-  return concatHash(
-    ['uint8', 'uint256', 'uint256'],
-    [currencyId, price, sellerRnd],
-  );
+  return concatHash({
+    types: ['uint8', 'uint256', 'uint256'],
+    vals: [currencyId, price, sellerRnd],
+  });
 }
 
 function computePutForSaleDigest({
@@ -60,16 +60,16 @@ function computePutForSaleDigest({
   timeToPay,
   assetId,
 }) {
-  return concatHash(
-    ['bytes32', 'uint256', 'uint32', 'uint32', 'uint32'],
-    [
+  return concatHash({
+    types: ['bytes32', 'uint256', 'uint32', 'uint32', 'uint32'],
+    vals: [
       hideSellerPrice({ currencyId, price, sellerRnd }),
       assetId.toString(),
       validUntil,
       offerValidUntil,
       timeToPay,
     ],
-  );
+  });
 }
 
 function digestPutForSaleAuction({
@@ -95,10 +95,10 @@ function digestPutForSaleBuyNow({
   currencyId, price, rnd, validUntil, assetId,
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd: rnd });
-  return concatHash(
-    ['bytes32', 'uint256', 'uint32'],
-    [sellerHiddenPrice, assetId.toString(), validUntil],
-  );
+  return concatHash({
+    types: ['bytes32', 'uint256', 'uint32'],
+    vals: [sellerHiddenPrice, assetId.toString(), validUntil],
+  });
 }
 
 function computeAuctionId({
@@ -112,21 +112,21 @@ function computeAuctionId({
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
   return Number(offerValidUntil) === 0
-    ? concatHash(
-      ['bytes32', 'uint256', 'uint32', 'uint32'],
-      [sellerHiddenPrice, assetId.toString(), validUntil, timeToPay],
-    )
-    : concatHash(
-      ['bytes32', 'uint256', 'uint32', 'uint32'],
-      [sellerHiddenPrice, assetId.toString(), offerValidUntil, timeToPay],
-    );
+    ? concatHash({
+      types: ['bytes32', 'uint256', 'uint32', 'uint32'],
+      vals: [sellerHiddenPrice, assetId.toString(), validUntil, timeToPay],
+    })
+    : concatHash({
+      types: ['bytes32', 'uint256', 'uint32', 'uint32'],
+      vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, timeToPay],
+    });
 }
 
 function hideBuyerPrice({ extraPrice, buyerRnd }) {
-  return concatHash(
-    ['uint256', 'uint256'],
-    [extraPrice, buyerRnd],
-  );
+  return concatHash({
+    types: ['uint256', 'uint256'],
+    vals: [extraPrice, buyerRnd],
+  });
 }
 
 function digestBidCertified({
@@ -151,24 +151,24 @@ function digestBidCertified({
     offerValidUntil,
     timeToPay,
   });
-  return concatHash(
-    ['bytes32', 'bytes32', 'string'],
-    [auctionId, buyerHiddenPrice, assetCID],
-  );
+  return concatHash({
+    types: ['bytes32', 'bytes32', 'string'],
+    vals: [auctionId, buyerHiddenPrice, assetCID],
+  });
 }
 
 function digestPayNow({ auctionId, amount }) {
-  return concatHash(
-    ['string', 'string'],
-    [auctionId, amount],
-  );
+  return concatHash({
+    types: ['string', 'string'],
+    vals: [auctionId, amount],
+  });
 }
 
 function digestBankTransfer({ bankAccount, amount, marketUserNonce }) {
-  return concatHash(
-    ['string', 'string', 'uint32'],
-    [bankAccount, amount, marketUserNonce],
-  );
+  return concatHash({
+    types: ['string', 'string', 'uint32'],
+    vals: [bankAccount, amount, marketUserNonce],
+  });
 }
 
 function digestCardTransfer({
@@ -177,38 +177,39 @@ function digestCardTransfer({
   amount,
   marketUserNonce,
 }) {
-  return concatHash(
-    ['string', 'string', 'string', 'uint32'],
-    [
+  return concatHash({
+    types: ['string', 'string', 'string', 'uint32'],
+    vals: [
       lastFourDigits,
       amount,
       firstDigits,
       marketUserNonce,
     ],
-  );
+  });
 }
 
 function digestStolenEmail({ freeverseId }) {
-  return concatHash(
-    ['string'], [freeverseId],
-  );
+  return concatHash({
+    types: ['string'],
+    vals: [freeverseId],
+  });
 }
 
 function digestChangeIdAlias({ email, alias, freeverseId }) {
-  return concatHash(
-    ['string', 'string', 'string'],
-    [email, alias, freeverseId],
-  );
+  return concatHash({
+    types: ['string', 'string', 'string'],
+    vals: [email, alias, freeverseId],
+  });
 }
 
 // TODO review name
 function digestBuyNowDigest({
   hiddenPrice, assetId, validUntil, assetCID,
 }) {
-  return concatHash(
-    ['bytes32', 'uint256', 'uint32', 'string'],
-    [hiddenPrice, assetId.toString(), validUntil, assetCID],
-  );
+  return concatHash({
+    types: ['bytes32', 'uint256', 'uint32', 'string'],
+    vals: [hiddenPrice, assetId.toString(), validUntil, assetCID],
+  });
 }
 
 function digestBuyNowCertified({
