@@ -227,9 +227,9 @@ it('deterministic digestOfferCertified', async () => {
   assert.equal(signedOffer, expectedSig);
 
   // Uncertified version:
-  const digest2 = digestOffer(
+  const digest2 = digestOffer({
     currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
-  );
+  });
   const signedOffer2 = sign({ digest: digest2, web3account: offererAccount });
   const expectedSig2 = '0x0168cefa72e1e3e441eae4e3a274f5dd9bd84a2efe5eae8e075c604b356925626100da319e57118957f76851883ba4479c435631e7a7b38bd2e0eb5e145474251b';
   assert.equal(signedOffer2, expectedSig2);

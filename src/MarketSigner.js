@@ -202,7 +202,6 @@ function digestChangeIdAlias({ email, alias, freeverseId }) {
   });
 }
 
-// TODO review name
 function digestBuyNowDigest({
   hiddenPrice, assetId, validUntil, assetCID,
 }) {
@@ -328,9 +327,9 @@ function digestOfferCertified({
   });
 }
 
-function digestOffer(
+function digestOffer({
   currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
-) {
+}) {
   return digestOfferCertified({
     currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID: '',
   });
