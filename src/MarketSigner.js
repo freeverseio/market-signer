@@ -91,13 +91,21 @@ function digestPutForSaleAuction({
   });
 }
 
-function digestPutForSaleBuyNow({
-  currencyId, price, rnd, validUntil, assetId,
+function computeBuyNowId({
+  currencyId, price, sellerRnd, validUntil, assetId,
 }) {
-  const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd: rnd });
+  const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
   return concatHash({
     types: ['bytes32', 'uint256', 'uint32'],
     vals: [sellerHiddenPrice, assetId.toString(), validUntil],
+  });
+}
+
+function digestPutForSaleBuyNow({
+  currencyId, price, rnd, validUntil, assetId,
+}) {
+  return computeBuyNowId({
+    currencyId, price, sellerRnd: rnd, validUntil, assetId,
   });
 }
 
@@ -213,21 +221,23 @@ function digestChangeIdAlias({ email, alias, freeverseId }) {
   });
 }
 
-function computeBuyNowDigest({
-  hiddenPrice, assetId, validUntil, assetCID,
+function digestBuyNowFromBuyNowIdCertified({
+  buyNowId, assetCID,
 }) {
   return concatHash({
-    types: ['bytes32', 'uint256', 'uint32', 'string'],
-    vals: [hiddenPrice, assetId.toString(), validUntil, assetCID],
+    types: ['bytes32', 'string'],
+    vals: [buyNowId, assetCID],
   });
 }
 
 function digestBuyNowCertified({
   currencyId, price, sellerRnd, validUntil, assetCID, assetId,
 }) {
-  const hiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  return computeBuyNowDigest({
-    hiddenPrice, assetId, validUntil, assetCID,
+  const buyNowId = computeBuyNowId({
+    currencyId, price, sellerRnd, validUntil, assetId,
+  });
+  return digestBuyNowFromBuyNowIdCertified({
+    buyNowId, assetCID,
   });
 }
 
@@ -241,6 +251,13 @@ function digestBuyNow({
     validUntil,
     assetCID: '',
     assetId,
+  });
+}
+
+function digestBuyNowFromBuyNowId({ buyNowId }) {
+  return digestBuyNowFromBuyNowIdCertified({
+    buyNowId,
+    assetCID: '',
   });
 }
 
@@ -327,9 +344,11 @@ function getBidder({
 function getBuyNowBuyer({
   currencyId, price, sellerRnd, assetId, validUntil, assetCID, signature,
 }) {
-  const hiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  const digest = computeBuyNowDigest({
-    hiddenPrice, assetId, validUntil, assetCID,
+  const buyNowId = computeBuyNowId({
+    currencyId, price, sellerRnd, validUntil, assetId,
+  });
+  const digest = digestBuyNowFromBuyNowIdCertified({
+    buyNowId, assetCID,
   });
   return new Accounts().recover(digest, signature);
 }
@@ -379,7 +398,9 @@ module.exports = {
   digestBidCertified,
   digestBidFromAuctionIdCertified,
   digestBuyNow,
+  digestBuyNowFromBuyNowId,
   digestBuyNowCertified,
+  digestBuyNowFromBuyNowIdCertified,
   digestAcceptOffer,
   digestOfferCertified,
   digestOffer,

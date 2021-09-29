@@ -2,6 +2,7 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
+const { digestBuyNowFromBuyNowId, digestBuyNowFromBuyNowIdCertified } = require('../src/MarketSigner');
 
 const mktSigner = rewire('../src/MarketSigner');
 const {
@@ -30,6 +31,7 @@ const {
 
 const concatHash = mktSigner.__get__('concatHash');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
+const computeBuyNowId = mktSigner.__get__('computeBuyNowId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
 const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
 
@@ -350,7 +352,7 @@ it('deterministic buyNow', async () => {
   const validUntil = 235985749;
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const buyerAccount = account;
-  const expectedSig = '0xc6a18f880897952a7f63021365e9b0a9acfd6edbdf5cf4e26b4ee22ea3e51da43062d80638b1187507fd6592cf3e02ad049861d88045fae56b085db512e0d6251b';
+  const expectedSig = '0x673eb89583014503c5c3237afccfbec8d240974ccf01417c4f02272c9ac281195b14581ac8210748bd2b4cb05fd2e6befd030650a4952aa6803c955d97bb05eb1c';
 
   const digest = digestBuyNowCertified({
     currencyId,
@@ -369,6 +371,16 @@ it('deterministic buyNow', async () => {
   });
   assert.equal(recoveredBuyer, buyerAccount.address);
 
+  const buyNowId = computeBuyNowId({
+    currencyId, price, sellerRnd, validUntil, assetId,
+  });
+
+  const digest1b = digestBuyNowFromBuyNowIdCertified({
+    buyNowId,
+    assetCID,
+  });
+  assert.equal(digest, digest1b);
+
   // uncertified version:
   const digest2 = digestBuyNow({
     currencyId,
@@ -378,8 +390,11 @@ it('deterministic buyNow', async () => {
     assetId,
   });
   const signedBuyNow2 = sign({ digest: digest2, web3account: buyerAccount });
-  const expectedSig2 = '0xae2299af1765d1deda7ab1378f5a66a9b55acbda0c7948fee5d578e60b87e20d5bd1bb1c4e868700557f2c4296f0c39ddd14c71fc0691abd77278cbfb6914ba11c';
+  const expectedSig2 = '0x75e23b5ff621f073de9b984881edf99c7d5666ef3d1558a1400f0ba8319488a078b7ed6d562c236fcc3e1265e73a0bc687328cfea3afe477e4a0581c1b9a6d761b';
   assert.equal(signedBuyNow2, expectedSig2);
+
+  const digest3 = digestBuyNowFromBuyNowId({ buyNowId });
+  assert.equal(digest2, digest3);
 });
 
 it('deterministic digestBidCertified with zero offerValidUntil', async () => {
