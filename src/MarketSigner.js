@@ -213,7 +213,7 @@ function digestChangeIdAlias({ email, alias, freeverseId }) {
   });
 }
 
-function digestBuyNowDigest({
+function computeBuyNowDigest({
   hiddenPrice, assetId, validUntil, assetCID,
 }) {
   return concatHash({
@@ -226,7 +226,7 @@ function digestBuyNowCertified({
   currencyId, price, sellerRnd, validUntil, assetCID, assetId,
 }) {
   const hiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  return digestBuyNowDigest({
+  return computeBuyNowDigest({
     hiddenPrice, assetId, validUntil, assetCID,
   });
 }
@@ -328,7 +328,7 @@ function getBuyNowBuyer({
   currencyId, price, sellerRnd, assetId, validUntil, assetCID, signature,
 }) {
   const hiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  const digest = digestBuyNowDigest({
+  const digest = computeBuyNowDigest({
     hiddenPrice, assetId, validUntil, assetCID,
   });
   return new Accounts().recover(digest, signature);
