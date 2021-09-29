@@ -2,6 +2,7 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
+const { digestBuyNowFromBuyNowId, digestBuyNowFromBuyNowIdCertified } = require('../src/MarketSigner');
 
 const mktSigner = rewire('../src/MarketSigner');
 const {
@@ -30,6 +31,7 @@ const {
 
 const concatHash = mktSigner.__get__('concatHash');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
+const computeBuyNowId = mktSigner.__get__('computeBuyNowId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
 const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
 
@@ -369,6 +371,16 @@ it('deterministic buyNow', async () => {
   });
   assert.equal(recoveredBuyer, buyerAccount.address);
 
+  const buyNowId = computeBuyNowId({
+    currencyId, price, sellerRnd, validUntil, assetId,
+  });
+
+  const digest1b = digestBuyNowFromBuyNowIdCertified({
+    buyNowId,
+    assetCID,
+  });
+  assert.equal(digest, digest1b);
+
   // uncertified version:
   const digest2 = digestBuyNow({
     currencyId,
@@ -380,6 +392,9 @@ it('deterministic buyNow', async () => {
   const signedBuyNow2 = sign({ digest: digest2, web3account: buyerAccount });
   const expectedSig2 = '0x75e23b5ff621f073de9b984881edf99c7d5666ef3d1558a1400f0ba8319488a078b7ed6d562c236fcc3e1265e73a0bc687328cfea3afe477e4a0581c1b9a6d761b';
   assert.equal(signedBuyNow2, expectedSig2);
+
+  const digest3 = digestBuyNowFromBuyNowId({ buyNowId });
+  assert.equal(digest2, digest3);
 });
 
 it('deterministic digestBidCertified with zero offerValidUntil', async () => {

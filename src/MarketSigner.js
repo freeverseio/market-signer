@@ -221,7 +221,7 @@ function digestChangeIdAlias({ email, alias, freeverseId }) {
   });
 }
 
-function computeBuyNowDigest({
+function digestBuyNowFromBuyNowIdCertified({
   buyNowId, assetCID,
 }) {
   return concatHash({
@@ -236,7 +236,7 @@ function digestBuyNowCertified({
   const buyNowId = computeBuyNowId({
     currencyId, price, sellerRnd, validUntil, assetId,
   });
-  return computeBuyNowDigest({
+  return digestBuyNowFromBuyNowIdCertified({
     buyNowId, assetCID,
   });
 }
@@ -251,6 +251,13 @@ function digestBuyNow({
     validUntil,
     assetCID: '',
     assetId,
+  });
+}
+
+function digestBuyNowFromBuyNowId({ buyNowId }) {
+  return digestBuyNowFromBuyNowIdCertified({
+    buyNowId,
+    assetCID: '',
   });
 }
 
@@ -340,7 +347,7 @@ function getBuyNowBuyer({
   const buyNowId = computeBuyNowId({
     currencyId, price, sellerRnd, validUntil, assetId,
   });
-  const digest = computeBuyNowDigest({
+  const digest = digestBuyNowFromBuyNowIdCertified({
     buyNowId, assetCID,
   });
   return new Accounts().recover(digest, signature);
@@ -391,7 +398,9 @@ module.exports = {
   digestBidCertified,
   digestBidFromAuctionIdCertified,
   digestBuyNow,
+  digestBuyNowFromBuyNowId,
   digestBuyNowCertified,
+  digestBuyNowFromBuyNowIdCertified,
   digestAcceptOffer,
   digestOfferCertified,
   digestOffer,
