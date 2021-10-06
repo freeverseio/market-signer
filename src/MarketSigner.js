@@ -349,6 +349,20 @@ function digestBid({
   });
 }
 
+function getBidderFromHiddenPrice({
+  auctionId,
+  buyerHiddenPrice,
+  assetCID,
+  signature,
+}) {
+  const digest = digestBidFromAuctionIdCertifiedFromHiddenPrice({
+    auctionId,
+    buyerHiddenPrice,
+    assetCID,
+  });
+  return new Accounts().recover(digest, signature);
+}
+
 function getBidder({
   currencyId,
   price,
@@ -362,17 +376,29 @@ function getBidder({
   assetId,
   signature,
 }) {
-  const digest = digestBidCertified({
+  const auctionId = computeAuctionId({
     currencyId,
     price,
-    extraPrice,
     sellerRnd,
-    buyerRnd,
+    assetId,
     validUntil,
     offerValidUntil,
     timeToPay,
+  });
+  const buyerHiddenPrice = hideBuyerPrice({ extraPrice, buyerRnd });
+  return getBidderFromHiddenPrice({
+    auctionId,
+    buyerHiddenPrice,
     assetCID,
-    assetId,
+    signature,
+  });
+}
+
+function getBuyNowBuyerFromBuyNowId({
+  buyNowId, assetCID, signature,
+}) {
+  const digest = digestBuyNowFromBuyNowIdCertified({
+    buyNowId, assetCID,
   });
   return new Accounts().recover(digest, signature);
 }
@@ -383,10 +409,9 @@ function getBuyNowBuyer({
   const buyNowId = computeBuyNowId({
     currencyId, price, sellerRnd, validUntil, assetId,
   });
-  const digest = digestBuyNowFromBuyNowIdCertified({
-    buyNowId, assetCID,
+  return getBuyNowBuyerFromBuyNowId({
+    buyNowId, assetCID, signature,
   });
-  return new Accounts().recover(digest, signature);
 }
 
 function digestOfferCertified({
