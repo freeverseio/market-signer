@@ -145,7 +145,7 @@ function digestBidFromAuctionIdCertified({
 }) {
   const buyerHiddenPrice = hideBuyerPrice({ extraPrice, buyerRnd });
   return concatHash({
-    types: ['bytes32', 'bytes32', 'string'],
+    types: ['string', 'bytes32', 'string'],
     vals: [auctionId, buyerHiddenPrice, assetCID],
   });
 }
@@ -225,7 +225,7 @@ function digestBuyNowFromBuyNowIdCertified({
   buyNowId, assetCID,
 }) {
   return concatHash({
-    types: ['bytes32', 'string'],
+    types: ['string', 'string'],
     vals: [buyNowId, assetCID],
   });
 }
