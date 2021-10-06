@@ -91,13 +91,21 @@ function digestPutForSaleAuction({
   });
 }
 
+function computeBuyNowIdFromHiddePrice({
+  sellerHiddenPrice, validUntil, assetId,
+}) {
+  return concatHash({
+    types: ['bytes32', 'uint256', 'uint32'],
+    vals: [sellerHiddenPrice, assetId.toString(), validUntil],
+  });
+}
+
 function computeBuyNowId({
   currencyId, price, sellerRnd, validUntil, assetId,
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  return concatHash({
-    types: ['bytes32', 'uint256', 'uint32'],
-    vals: [sellerHiddenPrice, assetId.toString(), validUntil],
+  return computeBuyNowIdFromHiddePrice({
+    sellerHiddenPrice, validUntil, assetId,
   });
 }
 
@@ -107,6 +115,24 @@ function digestPutForSaleBuyNow({
   return computeBuyNowId({
     currencyId, price, sellerRnd: rnd, validUntil, assetId,
   });
+}
+
+function computeAuctionIdFromHiddenPrice({
+  sellerHiddenPrice,
+  assetId,
+  validUntil,
+  offerValidUntil,
+  timeToPay,
+}) {
+  return Number(offerValidUntil) === 0
+    ? concatHash({
+      types: ['bytes32', 'uint256', 'uint32', 'uint32'],
+      vals: [sellerHiddenPrice, assetId.toString(), validUntil, timeToPay],
+    })
+    : concatHash({
+      types: ['bytes32', 'uint256', 'uint32', 'uint32'],
+      vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, timeToPay],
+    });
 }
 
 function computeAuctionId({
@@ -119,21 +145,30 @@ function computeAuctionId({
   timeToPay,
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
-  return Number(offerValidUntil) === 0
-    ? concatHash({
-      types: ['bytes32', 'uint256', 'uint32', 'uint32'],
-      vals: [sellerHiddenPrice, assetId.toString(), validUntil, timeToPay],
-    })
-    : concatHash({
-      types: ['bytes32', 'uint256', 'uint32', 'uint32'],
-      vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, timeToPay],
-    });
+  return computeAuctionIdFromHiddenPrice({
+    sellerHiddenPrice,
+    assetId,
+    validUntil,
+    offerValidUntil,
+    timeToPay,
+  });
 }
 
 function hideBuyerPrice({ extraPrice, buyerRnd }) {
   return concatHash({
     types: ['uint256', 'uint256'],
     vals: [extraPrice, buyerRnd],
+  });
+}
+
+function digestBidFromAuctionIdCertifiedFromHiddenPrice({
+  auctionId,
+  buyerHiddenPrice,
+  assetCID,
+}) {
+  return concatHash({
+    types: ['string', 'bytes32', 'string'],
+    vals: [auctionId, buyerHiddenPrice, assetCID],
   });
 }
 
@@ -144,9 +179,10 @@ function digestBidFromAuctionIdCertified({
   assetCID,
 }) {
   const buyerHiddenPrice = hideBuyerPrice({ extraPrice, buyerRnd });
-  return concatHash({
-    types: ['string', 'bytes32', 'string'],
-    vals: [auctionId, buyerHiddenPrice, assetCID],
+  return digestBidFromAuctionIdCertifiedFromHiddenPrice({
+    auctionId,
+    buyerHiddenPrice,
+    assetCID,
   });
 }
 
