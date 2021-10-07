@@ -104,7 +104,7 @@ function digestPutForSaleAuction({
 function computeBuyNowIdFromHiddePrice({
   sellerHiddenPrice, validUntil, assetId,
 }) {
-  return concatHash({
+  return concatHashWithout0x({
     types: ['bytes32', 'uint256', 'uint32'],
     vals: [sellerHiddenPrice, assetId.toString(), validUntil],
   });

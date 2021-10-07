@@ -186,7 +186,7 @@ it('deterministic digestPutForSaleBuyNow', async () => {
   const rnd = 1234;
   const validUntil = 235985749;
   const sellerAccount = account;
-  const expectedSignature = '0x9d7d39a3a62b75e8de09fda3da019ead171221faf853d5adc5fe2b65035c2e5a1e0e321240d5d223fb3c0a87d8347b77c517ae7c48f914cfa2d1b952b3a23fa91c';
+  const expectedSignature = '0xc15163d3d0393ae5df17a6d99c9ebe5d74fdccb0536bf0411bb6966ac3e082e012a616985c1541eb7bcc8851e70931abade1ce73b7086315ec54652e3b17f5341b';
 
   const digest = digestPutForSaleBuyNow({
     currencyId, price, rnd, validUntil, assetId,
@@ -352,7 +352,7 @@ it('deterministic buyNow', async () => {
   const validUntil = 235985749;
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const buyerAccount = account;
-  const expectedSig = '0x58075717aac8cfc61cb6741e9a3e7d42e9fe3a9db8b16b059cb42bb0a1a4a595708ce9bf3af78d31e34b84824a6fd2baeba88236b961a441eb22c3d7c05f7fac1c';
+  const expectedSig = '0xcbfdba4293b8e9fe344973e29d9d3aadd765ba281ee59133f7d1ef74626fbe4c28e5cdc393ec177433f55489d6ffb9976c5067d3ae9293b6432762013c5a3f741c';
 
   const digest = digestBuyNowCertified({
     currencyId,
@@ -375,7 +375,7 @@ it('deterministic buyNow', async () => {
     currencyId, price, sellerRnd, validUntil, assetId,
   });
 
-  assert.equal(buyNowId, '0x03214d89eb62587cbb48c9056dba878f839a4ebad3ad75f8826d76c566e4acd0');
+  assert.equal(buyNowId, '03214d89eb62587cbb48c9056dba878f839a4ebad3ad75f8826d76c566e4acd0');
 
   const digest1b = digestBuyNowFromBuyNowIdCertified({
     buyNowId,
@@ -392,7 +392,7 @@ it('deterministic buyNow', async () => {
     assetId,
   });
   const signedBuyNow2 = sign({ digest: digest2, web3account: buyerAccount });
-  const expectedSig2 = '0xc43b5461569f4f34e1eadaae1707f10b2f27278b0e0cf3c7e15502bcf68f9e6e24583f0d2d1247829e8c7a806c9596a530ebd60aea58aee65aff9f9ec9eb814d1c';
+  const expectedSig2 = '0xb2835de3f1b6f2f1ad22617b64d574d64d789b265fbabb3e62b70740648d71a90227b4a6cc100de2b8ee0c55c98664facb0e4e9019b528f685d01ba151a6701e1b';
   assert.equal(signedBuyNow2, expectedSig2);
 
   const digest3 = digestBuyNowFromBuyNowId({ buyNowId });
