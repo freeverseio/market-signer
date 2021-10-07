@@ -30,16 +30,6 @@ function concatHash({ types, vals }) {
   return Utils.keccak256(Abi.encodeParameters(types, vals));
 }
 
-function remove0x(x) {
-  return (x.substr(0, 2) === '0x')
-    ? x.substr(2)
-    : x;
-}
-// Strips the '0x' prefix from a hash encoded in Hex
-function concatHashWithout0x({ types, vals }) {
-  return remove0x(concatHash({ types, vals }));
-}
-
 function digestLinkId({ email, freeverseId }) {
   return concatHash({
     types: ['string', 'string'],
@@ -104,7 +94,7 @@ function digestPutForSaleAuction({
 function computeBuyNowIdFromHiddePrice({
   sellerHiddenPrice, validUntil, assetId,
 }) {
-  return concatHashWithout0x({
+  return concatHash({
     types: ['bytes32', 'uint256', 'uint32'],
     vals: [sellerHiddenPrice, assetId.toString(), validUntil],
   });
@@ -135,11 +125,11 @@ function computeAuctionIdFromHiddenPrice({
   timeToPay,
 }) {
   return Number(offerValidUntil) === 0
-    ? concatHashWithout0x({
+    ? concatHash({
       types: ['bytes32', 'uint256', 'uint32', 'uint32'],
       vals: [sellerHiddenPrice, assetId.toString(), validUntil, timeToPay],
     })
-    : concatHashWithout0x({
+    : concatHash({
       types: ['bytes32', 'uint256', 'uint32', 'uint32'],
       vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, timeToPay],
     });
@@ -177,7 +167,7 @@ function digestBidFromAuctionIdCertifiedFromHiddenPrice({
   assetCID,
 }) {
   return concatHash({
-    types: ['string', 'bytes32', 'string'],
+    types: ['bytes32', 'bytes32', 'string'],
     vals: [auctionId, buyerHiddenPrice, assetCID],
   });
 }
@@ -224,7 +214,7 @@ function digestBidCertified({
 
 function digestPayNow({ auctionId, amount }) {
   return concatHash({
-    types: ['string', 'string'],
+    types: ['bytes32', 'string'],
     vals: [auctionId, amount],
   });
 }
@@ -271,7 +261,7 @@ function digestBuyNowFromBuyNowIdCertified({
   buyNowId, assetCID,
 }) {
   return concatHash({
-    types: ['string', 'string'],
+    types: ['bytes32', 'string'],
     vals: [buyNowId, assetCID],
   });
 }
