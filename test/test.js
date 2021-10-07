@@ -54,11 +54,11 @@ it('deterministic digestUnlinkId', async () => {
 });
 
 it('deterministic digestPayNow', async () => {
-  const auctionId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
+  const auctionId = 'b884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
   const amount = '123.45';
   const digest = digestPayNow({ auctionId, amount });
   const signature = sign({ digest, web3account: account });
-  const expected = '0xe230e61ee5eb56efbeae971775e62cef07705b3a3e1d347b73b80c9861d8e0325081f29941d9384d22b813644909582915172af89722a78ab420e4c4cf37facf1c';
+  const expected = '0x9b4a73e337415cc8c84e632d135eab44fe150d8083fba21db0459f2855e5b4692f4e4321ce6b4e4c6f5d29b7884ad602b76c3a35a49d64cfeff49b36dcb131aa1b';
   assert.equal(signature, expected);
 });
 
