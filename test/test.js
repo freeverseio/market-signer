@@ -30,10 +30,17 @@ const {
 } = mktSigner;
 
 const concatHash = mktSigner.__get__('concatHash');
+const remove0x = mktSigner.__get__('remove0x');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
 const computeBuyNowId = mktSigner.__get__('computeBuyNowId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
 const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+
+it('remove0x', async () => {
+  assert.equal(remove0x('0x3531526e836fd0'), '3531526e836fd0');
+  assert.equal(remove0x('3531526e836fd0'), '3531526e836fd0');
+  assert.equal(remove0x('0X3531526e836fd0'), '0X3531526e836fd0');
+});
 
 it('deterministic digestLinkId', async () => {
   const email = 'super.dooper@mylab.great';
