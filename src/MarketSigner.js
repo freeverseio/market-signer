@@ -24,6 +24,18 @@ const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 const Utils = require('web3-utils');
 
+// *****************************************************************************
+// All time variables are expressed in UNITS OF VERSE, not timestamp
+// In particular: validUntil, offerValidUntil and timeToPay
+// Their meaining:
+// - validUntil: in an auction, the verse at which the auction ends:
+//               (the verse at which the last bid will be accepted)
+// - validUntil: in a buyNow, the verse at which the last buyTX will be accepted
+// - offerValidUntil: the verse at which the last acceptOffer will be accepted
+// - timeToPay: in an auction, the amount of verses, after the auction ends,
+//              available to the buyer to pay.
+// *****************************************************************************
+
 // Concats values in vals array, interpreting them as defined by the types array
 // and hashes the result using keccak256
 function concatHash({ types, vals }) {
