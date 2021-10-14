@@ -27,6 +27,8 @@ const {
   digestOffer,
   getBidder,
   getBuyNowBuyer,
+  plannedTime,
+  plannedVerse,
 } = mktSigner;
 
 const concatHash = mktSigner.__get__('concatHash');
@@ -34,6 +36,56 @@ const computeAuctionId = mktSigner.__get__('computeAuctionId');
 const computeBuyNowId = mktSigner.__get__('computeBuyNowId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
 const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+
+it('plannedTime and plannedVerse', async () => {
+  const randomTime = 1634217828;
+  const interval = 900;
+  assert.equal(
+    plannedTime({
+      verse: 3,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    randomTime + 2 * interval,
+  );
+  assert.equal(
+    plannedVerse({
+      time: randomTime + 2 * interval,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    3,
+  );
+  assert.equal(
+    plannedVerse({
+      time: randomTime + 2 * interval - 1,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    3,
+  );
+  assert.equal(
+    plannedVerse({
+      time: randomTime + interval + 1,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    3,
+  );
+  assert.equal(
+    plannedVerse({
+      time: randomTime + 2 * interval + 1,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    4,
+  );
+});
 
 it('deterministic digestLinkId', async () => {
   const email = 'super.dooper@mylab.great';

@@ -455,6 +455,25 @@ function sign({ digest, web3account }) {
   return web3account.sign(digest).signature;
 }
 
+// The frontend may query to the backend the following 3 params:
+// - refenceVerse, referenceTime (the timestamp at which a refenceVerse was submitted)
+// - verseInterval, the time planned between verses
+// And then the front can easily compute the timeStamp for any past or future verse.
+function plannedTime({
+  verse, referenceVerse, referenceTime, verseInterval,
+}) {
+  return referenceTime + (verse - referenceVerse) * verseInterval;
+}
+// Conversely, the frontend can obtain the verse that would correspond to a given timestamp
+// Since a timestamp may happen between verses, the following function
+// returns the largest of the two, to allow for time variability,
+// as recommended for usage in signing BuyNows/Auctions/Bids.
+function plannedVerse({
+  time, referenceVerse, referenceTime, verseInterval,
+}) {
+  return Math.ceil((time - referenceTime) / verseInterval) + referenceVerse;
+}
+
 module.exports = {
   sign,
   digestLinkId,
@@ -479,4 +498,6 @@ module.exports = {
   digestOffer,
   getBidder,
   getBuyNowBuyer,
+  plannedTime,
+  plannedVerse,
 };
