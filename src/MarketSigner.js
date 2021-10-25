@@ -26,13 +26,13 @@ const Utils = require('web3-utils');
 
 // *****************************************************************************
 // All time variables are expressed in UNITS OF VERSE, not timestamp
-// In particular: validUntil, offerValidUntil and timeToPay
+// In particular: validUntil, offerValidUntil and versesToPay
 // Their meaining:
 // - validUntil: in an auction, the verse at which the auction ends:
 //               (the verse at which the last bid will be accepted)
 // - validUntil: in a buyNow, the verse at which the last buyTX will be accepted
 // - offerValidUntil: the verse at which the last acceptOffer will be accepted
-// - timeToPay: in an auction, the amount of verses, after the auction ends,
+// - versesToPay: in an auction, the amount of verses, after the auction ends,
 //              available to the buyer to pay.
 // *****************************************************************************
 
@@ -69,7 +69,7 @@ function computePutForSaleDigest({
   sellerRnd,
   validUntil,
   offerValidUntil,
-  timeToPay,
+  versesToPay,
   assetId,
 }) {
   return concatHash({
@@ -79,7 +79,7 @@ function computePutForSaleDigest({
       assetId.toString(),
       validUntil,
       offerValidUntil,
-      timeToPay,
+      versesToPay,
     ],
   });
 }
@@ -89,7 +89,7 @@ function digestPutForSaleAuction({
   price,
   rnd,
   validUntil,
-  timeToPay,
+  versesToPay,
   assetId,
 }) {
   return computePutForSaleDigest({
@@ -98,7 +98,7 @@ function digestPutForSaleAuction({
     sellerRnd: rnd,
     validUntil,
     offerValidUntil: 0,
-    timeToPay,
+    versesToPay,
     assetId,
   });
 }
@@ -134,16 +134,16 @@ function computeAuctionIdFromHiddenPrice({
   assetId,
   validUntil,
   offerValidUntil,
-  timeToPay,
+  versesToPay,
 }) {
   return Number(offerValidUntil) === 0
     ? concatHash({
       types: ['bytes32', 'uint256', 'uint32', 'uint32'],
-      vals: [sellerHiddenPrice, assetId.toString(), validUntil, timeToPay],
+      vals: [sellerHiddenPrice, assetId.toString(), validUntil, versesToPay],
     })
     : concatHash({
       types: ['bytes32', 'uint256', 'uint32', 'uint32'],
-      vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, timeToPay],
+      vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, versesToPay],
     });
 }
 
@@ -154,7 +154,7 @@ function computeAuctionId({
   assetId,
   validUntil,
   offerValidUntil,
-  timeToPay,
+  versesToPay,
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
   return computeAuctionIdFromHiddenPrice({
@@ -162,7 +162,7 @@ function computeAuctionId({
     assetId,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
   });
 }
 
@@ -206,7 +206,7 @@ function digestBidCertified({
   buyerRnd,
   validUntil,
   offerValidUntil,
-  timeToPay,
+  versesToPay,
   assetCID,
   assetId,
 }) {
@@ -217,7 +217,7 @@ function digestBidCertified({
     assetId,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
   });
   return digestBidFromAuctionIdCertified({
     auctionId, extraPrice, buyerRnd, assetCID,
@@ -310,7 +310,7 @@ function digestBuyNowFromBuyNowId({ buyNowId }) {
 }
 
 function digestAcceptOffer({
-  currencyId, price, rnd, validUntil, offerValidUntil, timeToPay, assetId,
+  currencyId, price, rnd, validUntil, offerValidUntil, versesToPay, assetId,
 }) {
   return computePutForSaleDigest({
     currencyId,
@@ -318,7 +318,7 @@ function digestAcceptOffer({
     sellerRnd: rnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetId,
   });
 }
@@ -344,7 +344,7 @@ function digestBid({
   buyerRnd,
   validUntil,
   offerValidUntil,
-  timeToPay,
+  versesToPay,
   assetId,
 }) {
   return digestBidCertified({
@@ -355,7 +355,7 @@ function digestBid({
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID: '',
     assetId,
   });
@@ -383,7 +383,7 @@ function getBidder({
   buyerRnd,
   validUntil,
   offerValidUntil,
-  timeToPay,
+  versesToPay,
   assetCID,
   assetId,
   signature,
@@ -395,7 +395,7 @@ function getBidder({
     assetId,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
   });
   const buyerHiddenPrice = hideBuyerPrice({ extraPrice, buyerRnd });
   return getBidderFromHiddenPrice({
@@ -427,7 +427,7 @@ function getBuyNowBuyer({
 }
 
 function digestOfferCertified({
-  currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID,
+  currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID,
 }) {
   return digestBidCertified({
     currencyId,
@@ -437,17 +437,17 @@ function digestOfferCertified({
     buyerRnd: 0,
     validUntil: 0,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
 }
 
 function digestOffer({
-  currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
+  currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay,
 }) {
   return digestOfferCertified({
-    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID: '',
+    currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID: '',
   });
 }
 

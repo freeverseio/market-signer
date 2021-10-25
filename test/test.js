@@ -165,7 +165,7 @@ it('deterministic auctionId and digest', async () => {
   const rnd = 1234;
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
 
   const auctionId1 = computeAuctionId({
     currencyId,
@@ -174,7 +174,7 @@ it('deterministic auctionId and digest', async () => {
     assetId,
     validUntil,
     offerValidUntil: 0,
-    timeToPay,
+    versesToPay,
   });
   assert.equal(auctionId1, '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03');
 
@@ -185,7 +185,7 @@ it('deterministic auctionId and digest', async () => {
     assetId,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
   });
   assert.equal(auctionId2, '0x3f6a3102f21d4269ae1e9eac6172c102a6179ac04e21808bc95baaf6bf18c9fd');
 
@@ -197,7 +197,7 @@ it('deterministic auctionId and digest', async () => {
     assetId,
     validUntil: 0,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
   });
   assert.equal(auctionId3, '0x3f6a3102f21d4269ae1e9eac6172c102a6179ac04e21808bc95baaf6bf18c9fd');
 });
@@ -208,7 +208,7 @@ it('deterministic digestPutForSaleAuction', async () => {
   const price = 345;
   const rnd = 1234;
   const validUntil = 235985749;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
   const sellerAccount = account;
   const expectedSignature = '0xd061068f94e92a1dbafcf7f883a2c03483848b2a2cab38d1262bb11d43e64fed0952910c5c3c6e56eaed4fa83acd5a3df189ef12b36718b1d32dbd3ac9e01af61b';
   const expectedDigest = '0x42ba074c235b5f1a017b7f82f31c77d6f9e8954258c1c52dc90e21ccbf49badc';
@@ -219,13 +219,13 @@ it('deterministic digestPutForSaleAuction', async () => {
     sellerRnd: rnd,
     validUntil,
     offerValidUntil: 0,
-    timeToPay,
+    versesToPay,
     assetId,
   });
   assert.equal(digest, expectedDigest);
 
   const digest2 = digestPutForSaleAuction({
-    currencyId, price, rnd, validUntil, timeToPay, assetId,
+    currencyId, price, rnd, validUntil, versesToPay, assetId,
   });
   const sigSeller = sign({ digest: digest2, web3account: sellerAccount });
   assert.equal(sigSeller, expectedSignature);
@@ -254,12 +254,12 @@ it('deterministic digestAcceptOffer', async () => {
   const rnd = 1234;
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
   const sellerAccount = account;
   const expected = '0xfc18ba14ff1ed175a50d2319bd919f5160b75337ef9d1446a9de9ec90d02ef903b548d57ff3fa43652c0c7b37a28bd2f8a31ea074d13dd3c2304c24da845b6e71b';
 
   const digest = digestAcceptOffer({
-    currencyId, price, rnd, validUntil, offerValidUntil, timeToPay, assetId,
+    currencyId, price, rnd, validUntil, offerValidUntil, versesToPay, assetId,
   });
   const sigSeller = sign({ digest, web3account: sellerAccount });
   assert.equal(sigSeller, expected);
@@ -271,20 +271,20 @@ it('deterministic digestOfferCertified', async () => {
   const price = 345;
   const offererRnd = 1234;
   const offerValidUntil = 4358487;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const offererAccount = account;
   const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
 
   const digest = digestOfferCertified({
-    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay, assetCID,
+    currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID,
   });
   const signedOffer = sign({ digest, web3account: offererAccount });
   assert.equal(signedOffer, expectedSig);
 
   // Uncertified version:
   const digest2 = digestOffer({
-    currencyId, price, offererRnd, assetId, offerValidUntil, timeToPay,
+    currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay,
   });
   const signedOffer2 = sign({ digest: digest2, web3account: offererAccount });
   const expectedSig2 = '0x0168cefa72e1e3e441eae4e3a274f5dd9bd84a2efe5eae8e075c604b356925626100da319e57118957f76851883ba4479c435631e7a7b38bd2e0eb5e145474251b';
@@ -298,7 +298,7 @@ it('deterministic digestBidCertified', async () => {
   const sellerRnd = 1234;
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const extraPrice = 32453;
   const buyerRnd = 435983;
@@ -313,7 +313,7 @@ it('deterministic digestBidCertified', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
@@ -329,7 +329,7 @@ it('deterministic digestBidCertified', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetId,
   });
   const signedBid2 = sign({ digest: digest2, web3account: buyerAccount });
@@ -344,7 +344,7 @@ it('deterministic digestBidCertified', async () => {
     assetId,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
   });
   const digest2b = digestBidFromAuctionId({
     auctionId,
@@ -363,7 +363,7 @@ it('deterministic digestBidCertified', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
@@ -388,7 +388,7 @@ it('deterministic digestBidCertified', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
     signature: signedBid,
@@ -458,7 +458,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
   const sellerRnd = 1234;
   const validUntil = 235985749;
   const offerValidUntil = 0;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const extraPrice = 32453;
   const buyerRnd = 435983;
@@ -473,7 +473,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
@@ -489,7 +489,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetId,
   });
   const signedBid2 = sign({ digest: digest2, web3account: buyerAccount });
@@ -505,7 +505,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
@@ -520,7 +520,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
     signature: signedBid,
@@ -535,7 +535,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
   const sellerRnd = 1234;
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
-  const timeToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
+  const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
   const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const extraPrice = 0;
   const buyerRnd = 0;
@@ -550,7 +550,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
@@ -566,7 +566,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetId,
   });
   const signedBid2 = sign({ digest: digest2, web3account: buyerAccount });
@@ -582,7 +582,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
   });
@@ -597,7 +597,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     buyerRnd,
     validUntil,
     offerValidUntil,
-    timeToPay,
+    versesToPay,
     assetCID,
     assetId,
     signature: signedBid,
