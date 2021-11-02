@@ -22,7 +22,7 @@
 const Accounts = require('web3-eth-accounts');
 
 /**
- * Should be used to create a authentication token
+ * Should be used to create an authentication token
  *
  * @method types
  * @param {String} pvk signer private key
