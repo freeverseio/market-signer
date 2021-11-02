@@ -1,7 +1,7 @@
 const { expect } = require('chai');
-const { sign, verify } = require('../src/b2bAuthentication/token');
+const { sign, verify } = require('../../src/b2bAuthentication/token');
 
-describe('token', () => {
+describe('b2bAuthentication', () => {
   const pvk = 'c6d398e89bf7cbda7663ca881bd992eb80ad170e4ca0bd65a8b1c719ee02bc67';
 
   it('sign', () => {
