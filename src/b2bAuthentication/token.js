@@ -22,6 +22,14 @@
 
 const Accounts = require('web3-eth-accounts');
 
+/**
+ * Should be used to create a authentication token
+ *
+ * @method types
+ * @param {String} pvk signer private key
+ * @param {Number} time time of issue since epoch in seconds
+ * @return {String} the token
+ */
 const sign = (pvk, time) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
@@ -34,6 +42,15 @@ const sign = (pvk, time) => {
   return token;
 };
 
+/**
+ * Should be used to verify an authentication token
+ *
+ * @method types
+ * @param {String} token the token to verify
+ * @param {Number} time time which will be used to verify the token
+ * @param {Number} epsilon [time-eplison, time+epsilon] is the validity interval
+ * @return {Object} the issuer address and the time of issuace
+ */
 const verify = (token, time, epsilon) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
