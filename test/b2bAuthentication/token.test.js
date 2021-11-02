@@ -10,7 +10,13 @@ describe('b2bAuthentication', () => {
   });
 
   it('verify', () => {
-    const decoded = verify('40:/BMyyMjBrQPF86Y2kRBWxHd4HPXCWRxuMMc5q6n44NEjQQrM0W7csM+wkTbOQvH6pRlxHp8bV9CIpnCuwcD5Zxs=');
+    const time = 40;
+    const epsilon = 1;
+    const decoded = verify(
+      '40:/BMyyMjBrQPF86Y2kRBWxHd4HPXCWRxuMMc5q6n44NEjQQrM0W7csM+wkTbOQvH6pRlxHp8bV9CIpnCuwcD5Zxs=',
+      time,
+      epsilon,
+    );
 
     expect(decoded.time).equal(40);
     expect(decoded.address).equal('0x426dbD2b27A3C53be05EBCf30354D86cee848d65');

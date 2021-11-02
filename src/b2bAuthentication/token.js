@@ -23,6 +23,10 @@
 const Accounts = require('web3-eth-accounts');
 
 const sign = (pvk, time) => {
+  if (typeof time !== 'number') {
+    throw new Error('time is not a number');
+  }
+
   const accounts = new Accounts();
   const result = accounts.sign(time.toString(), pvk);
   const sig = Buffer.from(result.signature.substring(2), 'hex').toString('base64');
@@ -31,6 +35,13 @@ const sign = (pvk, time) => {
 };
 
 const verify = (token, time, epsilon) => {
+  if (typeof time !== 'number') {
+    throw new Error('time is not a number');
+  }
+  if (typeof epsilon !== 'number') {
+    throw new Error('epsilon is not a number');
+  }
+
   const s = token.split(':');
   const tunix = Number(s[0]);
 
