@@ -18,15 +18,31 @@ describe('b2bAuthentication', () => {
       epsilon,
     );
 
-    expect(decoded.time).equal(40);
+    expect(decoded.time).equal(time);
     expect(decoded.address).equal('0x426dbD2b27A3C53be05EBCf30354D86cee848d65');
   });
 
   it('sing and verify', () => {
-    const pvk2 = '0x348ce564d427a3311b6536bbcff9390d69395b06ed6c486954e971d960fe8709';
     const epsilon = 0;
-    const token = sign(pvk2, 50);
+    const token = sign(pvk, 50);
     const decoded = verify(token, 50, epsilon);
-    expect(decoded.address).equal('0xb8CE9ab6943e0eCED004cDe8e3bBed6568B2Fa01');
+    expect(decoded.address).equal('0x426dbD2b27A3C53be05EBCf30354D86cee848d65');
+  });
+
+  it('sing and verify fails', () => {
+    const epsilon = 0;
+    const time = 50;
+    const token = sign(pvk, time);
+    expect(() => verify(token, time + 1, epsilon)).to.throw('token out of time -1, epsilon 0');
+  });
+
+  it('check epsilon', () => {
+    const epsilon = 1;
+    const time = 50;
+    const token = sign(pvk, time);
+    expect(() => verify(token, time + 1, epsilon)).to.not.throw();
+    expect(() => verify(token, time - 1, epsilon)).to.not.throw();
+    expect(() => verify(token, time - 2, epsilon)).to.throw();
+    expect(() => verify(token, time + 2, epsilon)).to.throw();
   });
 });
