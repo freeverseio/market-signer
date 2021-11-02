@@ -45,4 +45,12 @@ describe('b2bAuthentication', () => {
     expect(() => verify(token, time - 2, epsilon)).to.throw();
     expect(() => verify(token, time + 2, epsilon)).to.throw();
   });
+
+  it('verify malformed token', () => {
+    expect(() => verify('40:/BMyyMjBrQPF86Y2kRBWxHd4HPXCWRxuMMc5q6n44NEjQQrM0W7csM+wkTbOQvH6pRlxHp8bV9CIpnCuwcD5Zxs=', 40, 0)).to.not.throw();
+    expect(() => verify('40,/BMyyMjBrQPF86Y2kRBWxHd4HPXCWRxuMMc5q6n44NEjQQrM0W7csM+wkTbOQvH6pRlxHp8bV9CIpnCuwcD5Zxs=', 40, 0)).to.throw();
+    expect(() => verify('40:/BMyy:MjBrQPF86Y2kRBWxHd4HPXCWRxuMMc5q6n44NEjQQrM0W7csM+wkTbOQvH6pRlxHp8bV9CIpnCuwcD5Zxs=', 40, 0)).to.throw();
+    expect(() => verify(':/BMyyMjBrQPF86Y2kRBWxHd4HPXCWRxuMMc5q6n44NEjQQrM0W7csM+wkTbOQvH6pRlxHp8bV9CIpnCuwcD5Zxs=', 40, 0)).to.throw();
+    expect(() => verify(':', 40, 0)).to.throw();
+  });
 });
