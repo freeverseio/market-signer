@@ -27,8 +27,9 @@ const {
   digestOffer,
   getBidder,
   getBuyNowBuyer,
-  plannedTime,
-  plannedVerse,
+  plannedSubmissionTime,
+  plannedSubmissionVerse,
+  expiresAtTime,
 } = mktSigner;
 
 const concatHash = mktSigner.__get__('concatHash');
@@ -37,11 +38,11 @@ const computeBuyNowId = mktSigner.__get__('computeBuyNowId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
 const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
 
-it('plannedTime and plannedVerse', async () => {
+it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () => {
   const randomTime = 1634217828;
   const interval = 900;
   assert.equal(
-    plannedTime({
+    plannedSubmissionTime({
       verse: 3,
       referenceVerse: 1,
       referenceTime: randomTime,
@@ -50,7 +51,17 @@ it('plannedTime and plannedVerse', async () => {
     randomTime + 2 * interval,
   );
   assert.equal(
-    plannedVerse({
+    expiresAtTime({
+      verse: 3,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    randomTime + 3 * interval,
+  );
+
+  assert.equal(
+    plannedSubmissionVerse({
       time: randomTime + 2 * interval,
       referenceVerse: 1,
       referenceTime: randomTime,
@@ -59,7 +70,7 @@ it('plannedTime and plannedVerse', async () => {
     3,
   );
   assert.equal(
-    plannedVerse({
+    plannedSubmissionVerse({
       time: randomTime + 2 * interval - 1,
       referenceVerse: 1,
       referenceTime: randomTime,
@@ -68,7 +79,7 @@ it('plannedTime and plannedVerse', async () => {
     3,
   );
   assert.equal(
-    plannedVerse({
+    plannedSubmissionVerse({
       time: randomTime + interval + 1,
       referenceVerse: 1,
       referenceTime: randomTime,
@@ -77,7 +88,7 @@ it('plannedTime and plannedVerse', async () => {
     3,
   );
   assert.equal(
-    plannedVerse({
+    plannedSubmissionVerse({
       time: randomTime + 2 * interval + 1,
       referenceVerse: 1,
       referenceTime: randomTime,

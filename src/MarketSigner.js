@@ -459,7 +459,9 @@ function sign({ digest, web3account }) {
 // - refenceVerse, referenceTime (the timestamp at which a refenceVerse was submitted)
 // - verseInterval, the time planned between verses
 // And then the front can easily compute the timeStamp for any past or future verse.
-function plannedTime({
+// Verses have a planned submission time.
+// They expire as soon as the next verse is submitted.
+function plannedSubmissionTime({
   verse, referenceVerse, referenceTime, verseInterval,
 }) {
   return referenceTime + (verse - referenceVerse) * verseInterval;
@@ -468,10 +470,19 @@ function plannedTime({
 // Since a timestamp may happen between verses, the following function
 // returns the largest of the two, to allow for time variability,
 // as recommended for usage in signing BuyNows/Auctions/Bids.
-function plannedVerse({
+function plannedSubmissionVerse({
   time, referenceVerse, referenceTime, verseInterval,
 }) {
   return Math.ceil((time - referenceTime) / verseInterval) + referenceVerse;
+}
+
+function expiresAtTime({
+  verse, referenceVerse, referenceTime, verseInterval,
+}) {
+  const nextSubmissionVerse = verse + 1;
+  return plannedSubmissionTime({
+    verse: nextSubmissionVerse, referenceVerse, referenceTime, verseInterval,
+  });
 }
 
 module.exports = {
@@ -498,6 +509,7 @@ module.exports = {
   digestOffer,
   getBidder,
   getBuyNowBuyer,
-  plannedTime,
-  plannedVerse,
+  plannedSubmissionTime,
+  plannedSubmissionVerse,
+  expiresAtTime,
 };
