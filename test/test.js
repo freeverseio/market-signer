@@ -52,6 +52,17 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
     }),
     randomTime + 2 * interval,
   );
+
+  assert.equal(
+    plannedSubmissionTime({
+      verse: '3',
+      referenceVerse: '1',
+      referenceTime: randomTime.toString(),
+      verseInterval: interval.toString(),
+    }),
+    randomTime + 2 * interval,
+  );
+
   assert.equal(
     expiresAtTime({
       verse: 3,
