@@ -65,6 +65,16 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
 
   assert.equal(
     expiresAtTime({
+      verse: 1,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    randomTime + interval,
+  );
+
+  assert.equal(
+    expiresAtTime({
       verse: 3,
       referenceVerse: 1,
       referenceTime: randomTime,
@@ -75,15 +85,6 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
 
   assert.equal(
     plannedSubmissionVerse({
-      time: randomTime + 2 * interval,
-      referenceVerse: 1,
-      referenceTime: randomTime,
-      verseInterval: interval,
-    }),
-    3,
-  );
-  assert.equal(
-    plannedSubmissionVerse({
       time: randomTime + 2 * interval - 1,
       referenceVerse: 1,
       referenceTime: randomTime,
@@ -91,14 +92,45 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
     }),
     3,
   );
+
+  assert.equal(
+    plannedSubmissionVerse({
+      time: randomTime - 1,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    1,
+  );
+  assert.equal(
+    plannedSubmissionVerse({
+      time: randomTime + 1,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    2,
+  );
+
   const expirationData = getExpiryData({
-    time: randomTime + 2 * interval,
+    time: randomTime + 2 * interval - 1,
     referenceVerse: 1,
     referenceTime: randomTime,
     verseInterval: interval,
   });
+
   assert.equal(expirationData.lastValidVerse, 2);
-  assert.equal(expirationData.expirationTime, randomTime + 3 * interval);
+  assert.equal(expirationData.expirationTime, randomTime + 2 * interval);
+
+  assert.equal(
+    expiresAtTime({
+      verse: 2,
+      referenceVerse: 1,
+      referenceTime: randomTime,
+      verseInterval: interval,
+    }),
+    expirationData.expirationTime,
+  );
 
   assert.equal(
     plannedSubmissionVerse({

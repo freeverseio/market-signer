@@ -493,7 +493,7 @@ function getExpiryData({
   });
   const lastValidVerse = +submissionVerse - 1;
   const expirationTime = expiresAtTime({
-    verse: submissionVerse, referenceVerse, referenceTime, verseInterval,
+    verse: lastValidVerse, referenceVerse, referenceTime, verseInterval,
   });
   return { lastValidVerse, expirationTime };
 }
