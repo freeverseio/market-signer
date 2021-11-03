@@ -464,7 +464,7 @@ function sign({ digest, web3account }) {
 function plannedSubmissionTime({
   verse, referenceVerse, referenceTime, verseInterval,
 }) {
-  return referenceTime + (verse - referenceVerse) * verseInterval;
+  return +referenceTime + (+verse - +referenceVerse) * (+verseInterval);
 }
 // Conversely, the frontend can obtain the verse that would correspond to a given timestamp
 // Since a timestamp may happen between verses, the following function
@@ -473,13 +473,13 @@ function plannedSubmissionTime({
 function plannedSubmissionVerse({
   time, referenceVerse, referenceTime, verseInterval,
 }) {
-  return Math.ceil((time - referenceTime) / verseInterval) + referenceVerse;
+  return Math.ceil((+time - +referenceTime) / +verseInterval) + +referenceVerse;
 }
 
 function expiresAtTime({
   verse, referenceVerse, referenceTime, verseInterval,
 }) {
-  const nextSubmissionVerse = verse + 1;
+  const nextSubmissionVerse = +verse + 1;
   return plannedSubmissionTime({
     verse: nextSubmissionVerse, referenceVerse, referenceTime, verseInterval,
   });
@@ -491,9 +491,9 @@ function getExpiryData({
   const submissionVerse = plannedSubmissionVerse({
     time, referenceVerse, referenceTime, verseInterval,
   });
-  const lastValidVerse = submissionVerse - 1;
+  const lastValidVerse = +submissionVerse - 1;
   const expirationTime = expiresAtTime({
-    verse: submissionVerse, referenceVerse, referenceTime, verseInterval,
+    verse: lastValidVerse, referenceVerse, referenceTime, verseInterval,
   });
   return { lastValidVerse, expirationTime };
 }
