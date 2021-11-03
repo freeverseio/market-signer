@@ -30,6 +30,7 @@ const {
   plannedSubmissionTime,
   plannedSubmissionVerse,
   expiresAtTime,
+  getExpiryData,
 } = mktSigner;
 
 const concatHash = mktSigner.__get__('concatHash');
@@ -41,6 +42,7 @@ const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF3
 it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () => {
   const randomTime = 1634217828;
   const interval = 900;
+
   assert.equal(
     plannedSubmissionTime({
       verse: 3,
@@ -78,6 +80,15 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
     }),
     3,
   );
+  const expirationData = getExpiryData({
+    time: randomTime + 2 * interval,
+    referenceVerse: 1,
+    referenceTime: randomTime,
+    verseInterval: interval,
+  });
+  assert.equal(expirationData.lastValidVerse, 2);
+  assert.equal(expirationData.expirationTime, randomTime + 3 * interval);
+
   assert.equal(
     plannedSubmissionVerse({
       time: randomTime + interval + 1,

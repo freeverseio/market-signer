@@ -485,6 +485,19 @@ function expiresAtTime({
   });
 }
 
+function getExpiryData({
+  time, referenceVerse, referenceTime, verseInterval,
+}) {
+  const submissionVerse = plannedSubmissionVerse({
+    time, referenceVerse, referenceTime, verseInterval,
+  });
+  const lastValidVerse = submissionVerse - 1;
+  const expirationTime = expiresAtTime({
+    verse: submissionVerse, referenceVerse, referenceTime, verseInterval,
+  });
+  return { lastValidVerse, expirationTime };
+}
+
 module.exports = {
   sign,
   digestLinkId,
@@ -512,4 +525,5 @@ module.exports = {
   plannedSubmissionTime,
   plannedSubmissionVerse,
   expiresAtTime,
+  getExpiryData,
 };
