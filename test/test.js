@@ -258,7 +258,7 @@ it('deterministic auctionId and digest', async () => {
     currencyId,
     price,
     sellerRnd:
-    rnd,
+      rnd,
     assetId,
     validUntil: 0,
     offerValidUntil,
@@ -337,9 +337,9 @@ it('deterministic digestOfferCertified', async () => {
   const offererRnd = 1234;
   const offerValidUntil = 4358487;
   const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
-  const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
+  const assetCID = 'QmS4hPaBVdBsGSQiPPxCiwXLhiGqYtA735S9a2AnmbWyC2';
   const offererAccount = account;
-  const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
+  const expectedSig = '0x00fd42faf2133505e7863019fa09ca6074ec564a02c6dc871ad1395b6fdb62df5f1a0a3a0b23702be655863b8c66d88fa13ce64b0c9c7d1282aa16d72b4560211c';
 
   const digest = digestOfferCertified({
     currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID,
@@ -364,11 +364,11 @@ it('deterministic digestBidCertified', async () => {
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
   const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
-  const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
+  const assetCID = 'QmS4hPaBVdBsGSQiPPxCiwXLhiGqYtA735S9a2AnmbWyC2';
   const extraPrice = 32453;
   const buyerRnd = 435983;
   const buyerAccount = account;
-  const expectedSig = '0x463ec818cbb8a5bb243c982db9b73e5a984256fca534f81f1b92061014c1a02b50175f54c176fbdd68a8928e42e545cbd1ea736789ce63cceb51836153ac6ec11c';
+  const expectedSig = '0x6db0cf3d45f83b11eef29bc42ed623403341da459231ac16b979820eccf7ffb671c93b58d3f803db6964bafa1bd4db92c9b893e4bc85d57cfcf638644675f9301b';
 
   const digest = digestBidCertified({
     currencyId,
@@ -432,7 +432,7 @@ it('deterministic digestBidCertified', async () => {
     assetCID,
     assetId,
   });
-  const expectedDigest = '0x69d15b633acb8e5ae6bd172ebacfa2d16d5468e261751b42b608eb2a1f4166e3';
+  const expectedDigest = '0x33534e48ebe31e9f0572c43126ab673bee4b7f4078e876f75f166ada6593698d';
   assert.equal(digest3, expectedDigest);
 
   // from AuctionId
@@ -467,9 +467,9 @@ it('deterministic buyNow', async () => {
   const price = 345;
   const sellerRnd = 1234;
   const validUntil = 235985749;
-  const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
+  const assetCID = 'QmS4hPaBVdBsGSQiPPxCiwXLhiGqYtA735S9a2AnmbWyC2';
   const buyerAccount = account;
-  const expectedSig = '0x673eb89583014503c5c3237afccfbec8d240974ccf01417c4f02272c9ac281195b14581ac8210748bd2b4cb05fd2e6befd030650a4952aa6803c955d97bb05eb1c';
+  const expectedSig = '0xb3a35bd58cd98f05ebeda044c0412ddba462d8d90d96bbb2c834f979db2a57fe440e645244227457ca4a0efd014425b9d0aff447fe83e3e6283da7b2611ac0ef1b';
 
   const digest = digestBuyNowCertified({
     currencyId,
@@ -524,11 +524,11 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
   const validUntil = 235985749;
   const offerValidUntil = 0;
   const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
-  const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
+  const assetCID = 'QmS4hPaBVdBsGSQiPPxCiwXLhiGqYtA735S9a2AnmbWyC2';
   const extraPrice = 32453;
   const buyerRnd = 435983;
   const buyerAccount = account;
-  const expectedSig = '0xf9d2ca75d8439825ecf5fb79b27076da60bc83d3e17ec493ba8c53204125d872274edf13c3c7abbf21aac190848fc9ddb97baa7c298c99116c7e11c26326e17c1b';
+  const expectedSig = '0x647ba92bfbd3e6a4b325f38d6b1351cee7debdebe6fe9fb0bde4c7bf7244ebfd38890e4fdcdff0bcc84b9800ccbac75d2d44aca4196a696cb3ecc12353103a001c';
 
   const digest = digestBidCertified({
     currencyId,
@@ -574,7 +574,7 @@ it('deterministic digestBidCertified with zero offerValidUntil', async () => {
     assetCID,
     assetId,
   });
-  const expectedDigest = '0xd249c945e520884d659633a0131ee2c3dc4b0a034620f675669262341a3ba745';
+  const expectedDigest = '0xf488f4a373e5c2e3787fdf335c6b73add11c20d2863c56bf1d247c1b855bf0d6';
   assert.equal(digest3, expectedDigest);
 
   const bidderAddress = getBidder({
@@ -601,11 +601,11 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
   const validUntil = 235985749;
   const offerValidUntil = 4358487;
   const versesToPay = 172800; // 1800 days (at a ratio of 4 verses per hour)
-  const assetCID = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
+  const assetCID = 'QmS4hPaBVdBsGSQiPPxCiwXLhiGqYtA735S9a2AnmbWyC2';
   const extraPrice = 0;
   const buyerRnd = 0;
   const buyerAccount = account;
-  const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
+  const expectedSig = '0x00fd42faf2133505e7863019fa09ca6074ec564a02c6dc871ad1395b6fdb62df5f1a0a3a0b23702be655863b8c66d88fa13ce64b0c9c7d1282aa16d72b4560211c';
 
   const digest = digestBidCertified({
     currencyId,
@@ -651,7 +651,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
     assetCID,
     assetId,
   });
-  const expectedDigest = '0xfd1a1f82869d4e47e889f6bbae3df252c4eddf24b02a2fbd1095b08ed0749455';
+  const expectedDigest = '0x8318544f8caf612258adf1fba053aa179530a6ba5718c8f09900e4e6fa9a633c';
   assert.equal(digest3, expectedDigest);
 
   const bidderAddress = getBidder({
