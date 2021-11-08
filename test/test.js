@@ -9,8 +9,7 @@ const {
   sign,
   digestLinkId,
   digestUnlinkId,
-  digestBankTransfer,
-  digestCardTransfer,
+  digestCashout,
   digestChangeIdAlias,
   digestStolenEmail,
   digestPayNow,
@@ -179,29 +178,12 @@ it('deterministic digestPayNow', async () => {
   assert.equal(signature, expected);
 });
 
-it('deterministic digestBankTransfer', async () => {
-  const bankAccount = 'ES6621000418401123456789';
-  const amount = '123.45';
-  const nonce = '234132432';
-  const digest = digestBankTransfer({ bankAccount, amount, marketUserNonce: nonce });
+it('deterministic digestCashout', async () => {
+  // pymentId can refer to either an auctionId or a buyNowId
+  const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
+  const digest = digestCashout({ paymentId });
   const signature = sign({ digest, web3account: account });
-  const expected = '0x66972c147a43ab945a20e3f53779576d633d379d2f5534c6ce7051c430702f522d8936cc1f754c3b84b5437d05e46a165f3f9c090eccab8e280962a2e3c69f8b1c';
-  assert.equal(signature, expected);
-});
-
-it('deterministic digestCardTransfer', async () => {
-  const firstDigits = '6789';
-  const lastFourDigits = '1234';
-  const amount = '123.45';
-  const nonce = '234132432';
-  const digest = digestCardTransfer({
-    firstDigits,
-    lastFourDigits,
-    amount,
-    marketUserNonce: nonce,
-  });
-  const signature = sign({ digest, web3account: account });
-  const expected = '0x96390c4143926c5147eb559efdfbefc9ac9e4400f7a168835c5e210b04ad2b7917ea0606b77feefb1847f902680357271d8f4bcad467d35fc2ff1afec65763721b';
+  const expected = '0x540601c948b2c179cf0536d760b3295cda6c30fa1e17a31630b1a48992748afd4070d6f5969c56cd995ca2e3fd806b1a7966bfff026eb34621c97baf1767d9521b';
   assert.equal(signature, expected);
 });
 
