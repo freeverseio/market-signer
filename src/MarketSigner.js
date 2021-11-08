@@ -231,27 +231,10 @@ function digestPayNow({ auctionId, amount }) {
   });
 }
 
-function digestBankTransfer({ bankAccount, amount, marketUserNonce }) {
+function digestCashout({ paymentId }) {
   return concatHash({
-    types: ['string', 'string', 'uint32'],
-    vals: [bankAccount, amount, marketUserNonce],
-  });
-}
-
-function digestCardTransfer({
-  firstDigits,
-  lastFourDigits,
-  amount,
-  marketUserNonce,
-}) {
-  return concatHash({
-    types: ['string', 'string', 'string', 'uint32'],
-    vals: [
-      lastFourDigits,
-      amount,
-      firstDigits,
-      marketUserNonce,
-    ],
+    types: ['bytes32'],
+    vals: [paymentId],
   });
 }
 
@@ -502,8 +485,7 @@ module.exports = {
   sign,
   digestLinkId,
   digestUnlinkId,
-  digestBankTransfer,
-  digestCardTransfer,
+  digestCashout,
   digestChangeIdAlias,
   digestStolenEmail,
   digestPayNow,
