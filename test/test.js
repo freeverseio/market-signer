@@ -182,6 +182,7 @@ it('deterministic digestCashout', async () => {
   // pymentId can refer to either an auctionId or a buyNowId
   const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
   const digest = digestCashout({ paymentId });
+  assert.equal(digest, '0x8b62565072efe28fa2dec4f2d9b1440f8b25a815f12d0fda9ef151714e926106');
   const signature = sign({ digest, web3account: account });
   const expected = '0x540601c948b2c179cf0536d760b3295cda6c30fa1e17a31630b1a48992748afd4070d6f5969c56cd995ca2e3fd806b1a7966bfff026eb34621c97baf1767d9521b';
   assert.equal(signature, expected);
