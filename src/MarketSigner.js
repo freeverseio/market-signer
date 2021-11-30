@@ -231,10 +231,10 @@ function digestPayNow({ auctionId, amount }) {
   });
 }
 
-function digestCashout({ paymentId }) {
+function digestCashout({ paymentId, iban }) {
   return concatHash({
-    types: ['bytes32'],
-    vals: [paymentId],
+    types: ['bytes32', 'string'],
+    vals: [paymentId, iban],
   });
 }
 
