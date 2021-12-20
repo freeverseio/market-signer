@@ -29,7 +29,7 @@ const Accounts = require('web3-eth-accounts');
  * @param {Number} time time of issue since epoch in seconds
  * @return {String} the token
  */
-const sign = ({ pvk, time }) => {
+const getToken = ({ pvk, time }) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
   }
@@ -50,7 +50,7 @@ const sign = ({ pvk, time }) => {
  * @param {Number} epsilon [time-eplison, time+epsilon] is the validity interval
  * @return {Object} the issuer address and the time of issuace
  */
-const verify = ({ token, time, epsilon }) => {
+const verifyToken = ({ token, time, epsilon }) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
   }
@@ -76,4 +76,4 @@ const verify = ({ token, time, epsilon }) => {
   };
 };
 
-module.exports = { sign, verify };
+module.exports = { getToken, verifyToken };
