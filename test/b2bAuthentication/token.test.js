@@ -8,7 +8,7 @@ describe('b2bAuthentication', () => {
   const publicAddress = accounts.privateKeyToAccount(pvk).address;
   const expectedDigest = '0x3e4201e8f4ef0d11d58e52993d88268f6c912152f5536eb52af937dd0553c4b2';
   const expectedSignature = '0xc09abc8b63d327fac96e8765153edd5e9ffe4fe8f1a7006f340f411e2a90c29c0f2aeb88c9bdf30b4ba2a8f44f27ea05baecc330db16e5000831f46c2b7c8bf61b';
-  const expectedToken = '40:0xc09abc8b63d327fac96e8765153edd5e9ffe4fe8f1a7006f340f411e2a90c29c0f2aeb88c9bdf30b4ba2a8f44f27ea05baecc330db16e5000831f46c2b7c8bf61b';
+  const expectedToken = '40:wJq8i2PTJ/rJbodlFT7dXp/+T+jxpwBvNA9BHiqQwpwPKuuIyb3zC0uiqPRPJ+oFuuzDMNsW5QAIMfRsK3yL9hs=';
 
   it('getTokenDigest', () => {
     const tokenDigest = getTokenDigest({ time: 40 });

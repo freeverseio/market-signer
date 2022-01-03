@@ -56,6 +56,18 @@ const getTokenDigest = ({ time }) => {
 };
 
 /**
+ * revmove 0x from start of a string if it exists
+ *
+ * @method types
+ * @param {String} x: the string to be processed
+ * @return {String} the string without 0x
+ */
+const remove0x = ({ x }) => {
+  if (x.substring(0, 2) === '0x') return x.substring(2);
+  return x;
+};
+
+/**
  * Should be used to create an authentication token
  *
  * @method types
@@ -70,7 +82,8 @@ const composeToken = ({ time, sig }) => {
   if (typeof sig !== 'string') {
     throw new Error('sig is not a string');
   }
-  const token = `${time.toString()}:${sig}`;
+  const sigBase64 = Buffer.from(remove0x({ x: sig }), 'hex').toString('base64');
+  const token = `${time.toString()}:${sigBase64}`;
   return token;
 };
 
@@ -101,7 +114,8 @@ const verifyToken = ({ token, time, epsilon }) => {
 
   const accounts = new Accounts();
   const digest = getTokenDigest({ time: tunix });
-  const address = accounts.recover(digest, s1);
+  const sig = Buffer.from(s1, 'base64').toString('hex');
+  const address = accounts.recover(digest, `0x${sig}`);
   return {
     address,
     time: tunix,
