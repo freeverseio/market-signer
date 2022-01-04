@@ -19,25 +19,55 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+const Utils = require('web3-utils');
 const Accounts = require('web3-eth-accounts');
 
 /**
- * Should be used to create an authentication token
+ * Should be used as first step to create an authentication token.
+ * Returns the digest that needs to be signed by the owner of the privateKey,
+ * and then passed to the composeToken method.
  *
  * @method types
- * @param {String} pvk signer private key
- * @param {Number} time time of issue since epoch in seconds
- * @return {String} the token
+ * @param {Number} time: the time of issue since epoch in seconds
+ * @return {String} the digest to be signed
  */
-const getToken = ({ pvk, time }) => {
+const getTokenDigest = ({ time }) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
   }
+  return Utils.keccak256(`FreeverseB2BTokenSalt${time.toString()}`);
+};
 
-  const accounts = new Accounts();
-  const result = accounts.sign(time.toString(), pvk);
-  const sig = Buffer.from(result.signature.substring(2), 'hex').toString('base64');
-  const token = `${time}:${sig}`;
+/**
+ * removes the 0x prefix of a string if it exists
+ *
+ * @method types
+ * @param {String} x: the string to be processed
+ * @return {String} the string without 0x
+ */
+const remove0x = ({ x }) => {
+  if (x.substring(0, 2) === '0x') return x.substring(2);
+  return x;
+};
+
+/**
+ * Should be used to create an authentication token
+ * after having signed the corresponding digest
+ *
+ * @method types
+ * @param {Number} time: time of issue since epoch in seconds
+ * @param {String} sig: the signature of the token digest
+ * @return {String} the token
+ */
+const composeToken = ({ time, sig }) => {
+  if (typeof time !== 'number') {
+    throw new Error('time is not a number');
+  }
+  if (typeof sig !== 'string') {
+    throw new Error('sig is not a string');
+  }
+  const sigBase64 = Buffer.from(remove0x({ x: sig }), 'hex').toString('base64');
+  const token = `${time.toString()}:${sigBase64}`;
   return token;
 };
 
@@ -47,7 +77,7 @@ const getToken = ({ pvk, time }) => {
  * @method types
  * @param {String} token the token to verify
  * @param {Number} time time which will be used to verify the token
- * @param {Number} epsilon [time-eplison, time+epsilon] is the validity interval
+ * @param {Number} epsilon [time-epsilon, time+epsilon] is the validity interval
  * @return {Object} the issuer address and the time of issuace
  */
 const verifyToken = ({ token, time, epsilon }) => {
@@ -66,14 +96,14 @@ const verifyToken = ({ token, time, epsilon }) => {
     throw new Error(`token out of time ${delta}, epsilon ${epsilon}`);
   }
 
-  const sig = Buffer.from(s1, 'base64').toString('hex');
-
   const accounts = new Accounts();
-  const address = accounts.recover(s0, `0x${sig}`);
+  const digest = getTokenDigest({ time: tunix });
+  const sig = Buffer.from(s1, 'base64').toString('hex');
+  const address = accounts.recover(digest, `0x${sig}`);
   return {
     address,
     time: tunix,
   };
 };
 
-module.exports = { getToken, verifyToken };
+module.exports = { getTokenDigest, composeToken, verifyToken };
