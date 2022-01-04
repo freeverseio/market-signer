@@ -35,7 +35,7 @@ const getTokenDigest = ({ time }) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
   }
-  return Utils.keccak256(`B2BTokenSalt${time.toString()}`);
+  return Utils.keccak256(`FreeverseB2BTokenSalt${time.toString()}`);
 };
 
 /**

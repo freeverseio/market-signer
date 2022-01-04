@@ -6,9 +6,9 @@ describe('b2bAuthentication', () => {
   const pvk = 'c6d398e89bf7cbda7663ca881bd992eb80ad170e4ca0bd65a8b1c719ee02bc67';
   const accounts = new Accounts();
   const publicAddress = accounts.privateKeyToAccount(pvk).address;
-  const expectedDigest = '0x9a8d614bfb9a8b09159202e8efd5bf10f2a2872e8a2d5793a8d4433782dac62b';
-  const expectedSignature = '0xda051587d4db816fe100b382b22406b6ebd2c241e79d2bd9eb2f16bc631ee2181a67a2aea80e52afb685798c1cdf41179db5c47ac4e777446354c763dfe40e9f1b';
-  const expectedToken = '40:2gUVh9TbgW/hALOCsiQGtuvSwkHnnSvZ6y8WvGMe4hgaZ6KuqA5Sr7aFeYwc30EXnbXEesTnd0RjVMdj3+QOnxs=';
+  const expectedDigest = '0xd1c9f4e71e13cebb5ee67eae8715ba8fddcf432e159ebca8f244f9263d1e6c85';
+  const expectedSignature = '0xe1679e3b3830c811dca7e7119f810a179d78b6f4e8aa90c232288eebcf4c081016e26051dc59f0aecfb378e79c8c1490e5932a95c6987baac8f127252fd12da51b';
+  const expectedToken = '40:4WeeOzgwyBHcp+cRn4EKF514tvToqpDCMiiO689MCBAW4mBR3Fnwrs+zeOecjBSQ5ZMqlcaYe6rI8SclL9EtpRs=';
 
   it('getTokenDigest', () => {
     const tokenDigest = getTokenDigest({ time: 40 });
