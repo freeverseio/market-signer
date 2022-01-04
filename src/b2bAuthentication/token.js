@@ -20,25 +20,11 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 const Utils = require('web3-utils');
-const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 
 /**
- * Concats the values in vals array, interpreting them as defined by the types array,
- * and hashes the result using keccak256.
- *
- * @method types
- * @param {Array of Strings} types: the types of the variables
- * @param {Array of Strings} vals: the values to be concatenated
- * @return {String} the hash of the concatenated values
-*/
-function concatHash({ types, vals }) {
-  return Utils.keccak256(Abi.encodeParameters(types, vals));
-}
-
-/**
  * Should be used as first step to create an authentication token.
- * Returns the digest that needs to be signed by owner of privateKey,
+ * Returns the digest that needs to be signed by the owner of the privateKey,
  * and then passed to the composeToken method.
  *
  * @method types
@@ -49,14 +35,11 @@ const getTokenDigest = ({ time }) => {
   if (typeof time !== 'number') {
     throw new Error('time is not a number');
   }
-  return concatHash({
-    types: ['string', 'string'],
-    vals: ['B2BTokenSalt', time.toString()],
-  });
+  return Utils.keccak256(`B2BTokenSalt${time.toString()}`);
 };
 
 /**
- * revmove 0x from start of a string if it exists
+ * removes the 0x prefix of a string if it exists
  *
  * @method types
  * @param {String} x: the string to be processed
@@ -69,6 +52,7 @@ const remove0x = ({ x }) => {
 
 /**
  * Should be used to create an authentication token
+ * after having signed the corresponding digest
  *
  * @method types
  * @param {Number} time: time of issue since epoch in seconds
