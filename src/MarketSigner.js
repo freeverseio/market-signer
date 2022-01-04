@@ -23,7 +23,7 @@
 const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 const Utils = require('web3-utils');
-const { getToken, verifyToken } = require('./b2bAuthentication/token');
+const { getTokenDigest, composeToken, verifyToken } = require('./b2bAuthentication/token');
 
 // *****************************************************************************
 // All time variables are expressed in UNITS OF VERSE, not timestamp
@@ -509,6 +509,7 @@ module.exports = {
   plannedSubmissionVerse,
   expiresAtTime,
   getExpiryData,
-  getToken,
+  getTokenDigest,
+  composeToken,
   verifyToken,
 };
