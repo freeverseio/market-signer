@@ -6,7 +6,6 @@ const fs = require('fs');
 const Contract = require('web3-eth-contract');
 const myTokenJSON = require('../src/contracts/MyToken.json');
 const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
-const IERC20JSON = require('../src/contracts/IERC20.json');
 const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
 
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
@@ -48,11 +47,9 @@ let provider;
 let erc20Contract;
 let erc20Deploy;
 let erc20Addr;
-let erc20;
 let paymentsContract;
 let paymentsDeploy;
 let paymentsAddr;
-let payments;
 let erc20Payments;
 
 describe('Payments in ERC20', () => {
@@ -61,6 +58,7 @@ describe('Payments in ERC20', () => {
     provider.addProvider(ganacheSubprovider);
     provider.start();
     Contract.setProvider(provider);
+
     // deploy MyToken ERC20
     erc20Contract = new Contract(myTokenJSON.abi);
     erc20Deploy = await erc20Contract.deploy({
@@ -68,6 +66,7 @@ describe('Payments in ERC20', () => {
       arguments: [name, symbol],
     }).send({ from: account.address, gas: 1500000, gasPrice: '30000000000000' });
     erc20Addr = erc20Deploy.options.address;
+
     // deploy Payments contract
     paymentsContract = new Contract(PaymentsJSON.abi);
     paymentsDeploy = await paymentsContract.deploy({
@@ -75,10 +74,8 @@ describe('Payments in ERC20', () => {
       arguments: [erc20Addr, currencyDescriptor],
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
-    // use only the contracts as they will be used: after deploy, passing addr as param:
-    erc20 = await new Contract(IERC20JSON.abi, erc20Addr);
-    payments = await new Contract(PaymentsJSON.abi, paymentsAddr);
-    // use the class instead
+
+    // instantiate the payments class
     erc20Payments = new ERC20Payments({ paymentsAddr, erc20Addr });
     await erc20Payments.setupContracts();
   });
@@ -92,41 +89,42 @@ describe('Payments in ERC20', () => {
   });
 
   it('view functions can be called', async () => {
-    assert.equal(await payments.methods.erc20BalanceOf(account.address).call(), '100000000000000000000');
     assert.equal(await erc20Payments.erc20BalanceOf({ address: account.address }), '100000000000000000000');
-    assert.equal(await payments.methods.balanceOf(account.address).call(), '0');
-    assert.equal(await payments.methods.allowance(account.address).call(), '0');
-    assert.equal(await payments.methods.paymentWindow().call(), '864000');
-    assert.equal(await payments.methods.acceptedCurrency().call(), currencyDescriptor);
-    assert.equal(await payments.methods.isRegisteredSeller(account.address).call(), false);
-    assert.equal(await payments.methods.paymentState(account.address).call(), STATE.NotStarted);
+    assert.equal(await erc20Payments.balanceOf({ address: account.address }), '0');
+    assert.equal(await erc20Payments.allowance({ address: account.address }), '0');
+    assert.equal(await erc20Payments.paymentWindow(), '864000');
+    assert.equal(await erc20Payments.acceptedCurrency(), currencyDescriptor);
+    assert.equal(await erc20Payments.isRegisteredSeller({ address: account.address }), false);
+    const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
+    assert.equal(await erc20Payments.paymentState({ paymentId }), STATE.NotStarted);
     assert.equal(
-      await payments.methods.enoughFundsAvailable(account.address, 1).call(),
+      await erc20Payments.enoughFundsAvailable({ address: account.address, amount: 1 }),
       false,
     );
-    assert.equal(await payments.methods.maxFundsAvailable(account.address).call(), '0');
-    assert.equal(await payments.methods.computeFeeAmount(100, 100).call(), '1');
-    const split = await payments.methods.splitFundingSources(account.address, 100).call();
+    assert.equal(await erc20Payments.maxFundsAvailable({ address: account.address }), '0');
+    assert.equal(await erc20Payments.computeFeeAmount({ amount: 100, feeBPS: 100 }), '1');
+    const split = await erc20Payments.splitFundingSources({
+      address: account.address,
+      amount: 100,
+    });
     assert.equal(split.externalFunds, '100');
     assert.equal(split.localFunds, '0');
   });
 
   it('approve', async () => {
-    await erc20.methods.approve(
-      paymentsAddr, 200,
-    ).send({ from: account.address });
-    assert.equal(await payments.methods.maxFundsAvailable(account.address).call(), '200');
+    await erc20Payments.approve({ spender: paymentsAddr, amount: 200, from: account.address });
+    assert.equal(await erc20Payments.maxFundsAvailable({ address: account.address }), '200');
   });
 
   it('registerAsSeller', async () => {
-    await payments.methods.registerAsSeller().send({ from: account.address });
-    assert.equal(await payments.methods.isRegisteredSeller(account.address).call(), true);
+    await erc20Payments.registerAsSeller({ from: account.address });
+    assert.equal(await erc20Payments.isRegisteredSeller({ address: account.address }), true);
   });
 
   it('withdraw', async () => {
     let err = new Error();
     try {
-      await payments.methods.withdraw().send({ from: account.address });
+      await erc20Payments.withdraw({ from: account.address });
     } catch (_err) {
       err = _err;
     }
@@ -167,7 +165,7 @@ describe('Payments in ERC20', () => {
     assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), true);
     let err = new Error();
     try {
-      await payments.methods.pay(data, signature).send({ from: account.address });
+      await erc20Payments.pay({ paymentData: data, signature, from: account.address });
     } catch (_err) {
       err = _err;
     }

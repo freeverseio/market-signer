@@ -37,9 +37,75 @@ class ERC20Payments {
     this.paymentsContract = await new Contract(PaymentsJSON.abi, this.paymentsAddr);
   }
 
+  async registerAsSeller({ from }) {
+    await this.paymentsContract.methods.registerAsSeller().send({ from });
+  }
+
+  async withdraw({ from }) {
+    await this.paymentsContract.methods.withdraw().send({ from });
+  }
+
+  async pay({ paymentData, signature, from }) {
+    await this.paymentsContract.methods.pay(paymentData, signature).send({ from });
+  }
+
+  async approve({ spender, amount, from }) {
+    await this.erc20Contract.methods.approve(spender, amount).send({ from });
+  }
+
   async erc20BalanceOf({ address }) {
     const balance = await this.paymentsContract.methods.erc20BalanceOf(address).call();
     return balance;
+  }
+
+  async balanceOf({ address }) {
+    const balance = await this.paymentsContract.methods.balanceOf(address).call();
+    return balance;
+  }
+
+  async allowance({ address }) {
+    const allnc = await this.paymentsContract.methods.allowance(address).call();
+    return allnc;
+  }
+
+  async isRegisteredSeller({ address }) {
+    const is = await this.paymentsContract.methods.isRegisteredSeller(address).call();
+    return is;
+  }
+
+  async enoughFundsAvailable({ address, amount }) {
+    const enough = await this.paymentsContract.methods.enoughFundsAvailable(address, amount).call();
+    return enough;
+  }
+
+  async maxFundsAvailable({ address }) {
+    const max = await this.paymentsContract.methods.maxFundsAvailable(address).call();
+    return max;
+  }
+
+  async computeFeeAmount({ amount, feeBPS }) {
+    const feeAmount = await this.paymentsContract.methods.computeFeeAmount(amount, feeBPS).call();
+    return feeAmount;
+  }
+
+  async splitFundingSources({ address, amount }) {
+    const split = await this.paymentsContract.methods.splitFundingSources(address, amount).call();
+    return split;
+  }
+
+  async paymentState({ paymentId }) {
+    const state = await this.paymentsContract.methods.paymentState(paymentId).call();
+    return state;
+  }
+
+  async paymentWindow() {
+    const allnc = await this.paymentsContract.methods.paymentWindow().call();
+    return allnc;
+  }
+
+  async acceptedCurrency() {
+    const curr = await this.paymentsContract.methods.acceptedCurrency().call();
+    return curr;
   }
 
   static isValidPaymentData({ paymentData }) {
