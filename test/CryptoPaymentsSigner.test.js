@@ -4,7 +4,7 @@ const Accounts = require('web3-eth-accounts');
 const { Web3ProviderEngine, GanacheSubprovider } = require('@0x/subproviders');
 const Contract = require('web3-eth-contract');
 const fs = require('fs');
-const myTokenJSON = require('../src/contracts/MyToken.json');
+const myTokenJSON = require('./contracts/MyToken.json');
 const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
 const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
 
