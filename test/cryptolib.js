@@ -6,6 +6,8 @@ const fs = require('fs');
 const Contract = require('web3-eth-contract');
 const myTokenJSON = require('../src/contracts/MyToken.json');
 const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
+const IERC20JSON = require('../src/contracts/IERC20.json');
+const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
 
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
 const account = new Accounts().privateKeyToAccount(pvk);
@@ -16,19 +18,6 @@ const STATE = {
   Failed: 2,
   Paid: 3,
 };
-
-function isValidPaymentData({ paymentData }) {
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'paymentId')) return false;
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'amount')) return false;
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'feeBPS')) return false;
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'universeId')) return false;
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'validUntil')) return false;
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'buyer')) return false;
-  if (!Object.prototype.hasOwnProperty.call(paymentData, 'seller')) return false;
-  if (paymentData.feeBPS > 10000) return false;
-  if (paymentData.buyer === paymentData.seller) return false;
-  return true;
-}
 
 const configs = {
   port: 8545,
@@ -64,6 +53,7 @@ let paymentsContract;
 let paymentsDeploy;
 let paymentsAddr;
 let payments;
+let erc20Payments;
 
 describe('Payments in ERC20', () => {
   beforeEach(async () => {
@@ -86,8 +76,11 @@ describe('Payments in ERC20', () => {
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
     // use only the contracts as they will be used: after deploy, passing addr as param:
-    erc20 = await new Contract(myTokenJSON.abi, erc20Addr);
+    erc20 = await new Contract(IERC20JSON.abi, erc20Addr);
     payments = await new Contract(PaymentsJSON.abi, paymentsAddr);
+    // use the class instead
+    erc20Payments = new ERC20Payments({ paymentsAddr, erc20Addr });
+    await erc20Payments.setupContracts();
   });
   afterEach(async () => {
     provider.stop();
@@ -100,6 +93,7 @@ describe('Payments in ERC20', () => {
 
   it('view functions can be called', async () => {
     assert.equal(await payments.methods.erc20BalanceOf(account.address).call(), '100000000000000000000');
+    assert.equal(await erc20Payments.erc20BalanceOf({ address: account.address }), '100000000000000000000');
     assert.equal(await payments.methods.balanceOf(account.address).call(), '0');
     assert.equal(await payments.methods.allowance(account.address).call(), '0');
     assert.equal(await payments.methods.paymentWindow().call(), '864000');
@@ -139,7 +133,7 @@ describe('Payments in ERC20', () => {
     assert.equal(JSON.stringify(err.results).includes('balance is zero'), true);
   });
 
-  it('isValidPaymentData', async () => {
+  it('ERC20Payments.isValidPaymentData', async () => {
     const data = {
       paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
       amount: '32',
@@ -149,14 +143,14 @@ describe('Payments in ERC20', () => {
       buyer: '0x223',
       seller: '0x2223',
     };
-    assert.equal(isValidPaymentData({ paymentData: data }), true);
+    assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), true);
     data.feeBPS = 10000;
-    assert.equal(isValidPaymentData({ paymentData: data }), true);
+    assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), true);
     data.feeBPS = 10001;
-    assert.equal(isValidPaymentData({ paymentData: data }), false);
+    assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), false);
     data.feeBPS = 10000;
     delete data.universeId;
-    assert.equal(isValidPaymentData({ paymentData: data }), false);
+    assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), false);
   });
 
   it('send TX', async () => {
@@ -170,7 +164,7 @@ describe('Payments in ERC20', () => {
       seller: '0x4f97a6d1fcf56be844d6b7510a21f407e9101d1e',
     };
     const signature = '0x009a76c8f1c6f4286eb295ddc60d1fbe306880cbc5d36178c67e97d4993d6bfc112c56ff9b4d988af904cd107cdcc61f11461d6a436e986b665bb88e1b6d32c81c';
-    assert.equal(isValidPaymentData({ paymentData: data }), true);
+    assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), true);
     let err = new Error();
     try {
       await payments.methods.pay(data, signature).send({ from: account.address });
