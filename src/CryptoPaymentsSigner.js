@@ -25,16 +25,16 @@ const IERC20JSON = require('./contracts/IERC20.json');
 const PaymentsJSON = require('./contracts/PaymentsERC20.json');
 
 class ERC20Payments {
-  constructor({ paymentsAddr, erc20Addr }) {
-    this.paymentsAddr = paymentsAddr;
-    this.erc20Addr = erc20Addr;
+  constructor() {
     this.erc20Contract = {};
     this.paymentsContract = {};
   }
 
-  async setupContracts() {
-    this.erc20Contract = await new Contract(IERC20JSON.abi, this.erc20Addr);
-    this.paymentsContract = await new Contract(PaymentsJSON.abi, this.paymentsAddr);
+  async setupContracts({ paymentsAddr, erc20Addr, provider }) {
+    this.erc20Contract = await new Contract(IERC20JSON.abi, erc20Addr);
+    this.paymentsContract = await new Contract(PaymentsJSON.abi, paymentsAddr);
+    this.erc20Contract.setProvider(provider);
+    this.paymentsContract.setProvider(provider);
   }
 
   async registerAsSeller({ from }) {

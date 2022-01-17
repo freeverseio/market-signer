@@ -2,8 +2,8 @@
 const { assert } = require('chai');
 const Accounts = require('web3-eth-accounts');
 const { Web3ProviderEngine, GanacheSubprovider } = require('@0x/subproviders');
-const fs = require('fs');
 const Contract = require('web3-eth-contract');
+const fs = require('fs');
 const myTokenJSON = require('../src/contracts/MyToken.json');
 const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
 const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
@@ -51,10 +51,10 @@ describe('Payments in ERC20', () => {
     provider = new Web3ProviderEngine();
     provider.addProvider(ganacheSubprovider);
     provider.start();
-    Contract.setProvider(provider);
 
     // deploy MyToken ERC20
     erc20Contract = new Contract(myTokenJSON.abi);
+    erc20Contract.setProvider(provider);
     erc20Deploy = await erc20Contract.deploy({
       data: myTokenJSON.bytecode,
       arguments: [name, symbol],
@@ -63,6 +63,7 @@ describe('Payments in ERC20', () => {
 
     // deploy Payments contract
     paymentsContract = new Contract(PaymentsJSON.abi);
+    paymentsContract.setProvider(provider);
     paymentsDeploy = await paymentsContract.deploy({
       data: PaymentsJSON.bytecode,
       arguments: [erc20Addr, currencyDescriptor],
@@ -70,8 +71,8 @@ describe('Payments in ERC20', () => {
     paymentsAddr = paymentsDeploy.options.address;
 
     // instantiate the payments class
-    erc20Payments = new ERC20Payments({ paymentsAddr, erc20Addr });
-    await erc20Payments.setupContracts();
+    erc20Payments = new ERC20Payments();
+    await erc20Payments.setupContracts({ paymentsAddr, erc20Addr, provider });
   });
   afterEach(async () => {
     provider.stop();
