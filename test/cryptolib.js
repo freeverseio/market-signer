@@ -89,4 +89,11 @@ describe('Payments in ERC20', () => {
     assert.equal(split.externalFunds, '100');
     assert.equal(split.localFunds, '0');
   });
+
+  it('approve', async () => {
+    await erc20Deploy.methods.approve(
+      paymentsAddr, 200,
+    ).send({ from: account.address });
+    assert.equal(await paymentsDeploy.methods.maxFundsAvailable(account.address).call(), '200');
+  });
 });
