@@ -17,25 +17,18 @@ const STATE = {
   Paid: 3,
 };
 
-// function paymentData({
-//   paymentId,
-//   amount,
-//   feeBPS,
-//   universeId,
-//   validUntil,
-//   buyer,
-//   seller,
-// }) {
-//   return {
-//     paymentId,
-//     amount,
-//     feeBPS,
-//     universeId,
-//     validUntil,
-//     buyer,
-//     seller,
-//   };
-// }
+function isValidPaymentData({ paymentData }) {
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'paymentId')) return false;
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'amount')) return false;
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'feeBPS')) return false;
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'universeId')) return false;
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'validUntil')) return false;
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'buyer')) return false;
+  if (!Object.prototype.hasOwnProperty.call(paymentData, 'seller')) return false;
+  if (paymentData.feeBPS > 10000) return false;
+  if (paymentData.buyer === paymentData.seller) return false;
+  return true;
+}
 
 const configs = {
   port: 8545,
@@ -144,5 +137,25 @@ describe('Payments in ERC20', () => {
       err = _err;
     }
     assert.equal(JSON.stringify(err.results).includes('balance is zero'), true);
+  });
+
+  it('isValidPaymentData', async () => {
+    const data = {
+      paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
+      amount: '32',
+      feeBPS: 42,
+      universeId: '1',
+      validUntil: '24214',
+      buyer: '0x223',
+      seller: '0x2223',
+    };
+    assert.equal(isValidPaymentData({ paymentData: data }), true);
+    data.feeBPS = 10000;
+    assert.equal(isValidPaymentData({ paymentData: data }), true);
+    data.feeBPS = 10001;
+    assert.equal(isValidPaymentData({ paymentData: data }), false);
+    data.feeBPS = 10000;
+    delete data.universeId;
+    assert.equal(isValidPaymentData({ paymentData: data }), false);
   });
 });
