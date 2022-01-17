@@ -158,4 +158,25 @@ describe('Payments in ERC20', () => {
     delete data.universeId;
     assert.equal(isValidPaymentData({ paymentData: data }), false);
   });
+
+  it('send TX', async () => {
+    const data = {
+      paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
+      amount: '32',
+      feeBPS: 42,
+      universeId: '1',
+      validUntil: '24214',
+      buyer: '0x56270bf851453EF41A060fb3C7427B9c3Cc0cde5',
+      seller: '0x4f97a6d1fcf56be844d6b7510a21f407e9101d1e',
+    };
+    const signature = '0x009a76c8f1c6f4286eb295ddc60d1fbe306880cbc5d36178c67e97d4993d6bfc112c56ff9b4d988af904cd107cdcc61f11461d6a436e986b665bb88e1b6d32c81c';
+    assert.equal(isValidPaymentData({ paymentData: data }), true);
+    let err = new Error();
+    try {
+      await payments.methods.pay(data, signature).send({ from: account.address });
+    } catch (_err) {
+      err = _err;
+    }
+    assert.equal(JSON.stringify(err.results).includes('only buyer can execute this function'), true);
+  });
 });
