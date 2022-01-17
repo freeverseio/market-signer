@@ -10,6 +10,33 @@ const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
 const account = new Accounts().privateKeyToAccount(pvk);
 
+const STATE = {
+  NotStarted: 0,
+  AssetTransferring: 1,
+  Failed: 2,
+  Paid: 3,
+};
+
+// function paymentData({
+//   paymentId,
+//   amount,
+//   feeBPS,
+//   universeId,
+//   validUntil,
+//   buyer,
+//   seller,
+// }) {
+//   return {
+//     paymentId,
+//     amount,
+//     feeBPS,
+//     universeId,
+//     validUntil,
+//     buyer,
+//     seller,
+//   };
+// }
+
 const configs = {
   port: 8545,
   networkId: 50,
@@ -84,6 +111,8 @@ describe('Payments in ERC20', () => {
     assert.equal(await payments.methods.allowance(account.address).call(), '0');
     assert.equal(await payments.methods.paymentWindow().call(), '864000');
     assert.equal(await payments.methods.acceptedCurrency().call(), currencyDescriptor);
+    assert.equal(await payments.methods.isRegisteredSeller(account.address).call(), false);
+    assert.equal(await payments.methods.paymentState(account.address).call(), STATE.NotStarted);
     assert.equal(
       await payments.methods.enoughFundsAvailable(account.address, 1).call(),
       false,
@@ -100,5 +129,20 @@ describe('Payments in ERC20', () => {
       paymentsAddr, 200,
     ).send({ from: account.address });
     assert.equal(await payments.methods.maxFundsAvailable(account.address).call(), '200');
+  });
+
+  it('registerAsSeller', async () => {
+    await payments.methods.registerAsSeller().send({ from: account.address });
+    assert.equal(await payments.methods.isRegisteredSeller(account.address).call(), true);
+  });
+
+  it('withdraw', async () => {
+    let err = new Error();
+    try {
+      await payments.methods.withdraw().send({ from: account.address });
+    } catch (_err) {
+      err = _err;
+    }
+    assert.equal(JSON.stringify(err.results).includes('balance is zero'), true);
   });
 });
