@@ -73,17 +73,18 @@ describe('Payments in ERC20', () => {
     assert.equal(paymentsAddr === undefined, false);
   });
 
-  it('balances can be queried', async () => {
+  it('view functions can be called', async () => {
     assert.equal(await paymentsDeploy.methods.erc20BalanceOf(account.address).call(), '100000000000000000000');
     assert.equal(await paymentsDeploy.methods.balanceOf(account.address).call(), '0');
     assert.equal(await paymentsDeploy.methods.allowance(account.address).call(), '0');
     assert.equal(await paymentsDeploy.methods.paymentWindow().call(), '864000');
     assert.equal(await paymentsDeploy.methods.acceptedCurrency().call(), currencyDescriptor);
     assert.equal(
-      await paymentsDeploy.methods.enoughFundsAvailable(account.address, 1).call(), 
+      await paymentsDeploy.methods.enoughFundsAvailable(account.address, 1).call(),
       false,
     );
     assert.equal(await paymentsDeploy.methods.maxFundsAvailable(account.address).call(), '0');
+    assert.equal(await paymentsDeploy.methods.computeFeeAmount(100, 100).call(), '1');
     const split = await paymentsDeploy.methods.splitFundingSources(account.address, 100).call();
     assert.equal(split.externalFunds, '100');
     assert.equal(split.localFunds, '0');
