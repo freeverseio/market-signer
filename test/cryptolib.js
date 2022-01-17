@@ -8,15 +8,9 @@ const myTokenJSON = require('../src/contracts/MyToken.json');
 const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
 const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
 
+// This is the private key of the first account created with Ganache given the mnemonic below
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
 const account = new Accounts().privateKeyToAccount(pvk);
-
-const STATE = {
-  NotStarted: 0,
-  AssetTransferring: 1,
-  Failed: 2,
-  Paid: 3,
-};
 
 const configs = {
   port: 8545,
@@ -96,7 +90,8 @@ describe('Payments in ERC20', () => {
     assert.equal(await erc20Payments.acceptedCurrency(), currencyDescriptor);
     assert.equal(await erc20Payments.isRegisteredSeller({ address: account.address }), false);
     const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
-    assert.equal(await erc20Payments.paymentState({ paymentId }), STATE.NotStarted);
+    const STATES = ERC20Payments.PaymentStates();
+    assert.equal(await erc20Payments.paymentState({ paymentId }), STATES.NotStarted);
     assert.equal(
       await erc20Payments.enoughFundsAvailable({ address: account.address, amount: 1 }),
       false,
