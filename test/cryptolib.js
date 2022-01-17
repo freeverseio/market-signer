@@ -3,12 +3,11 @@ const { assert } = require('chai');
 const Accounts = require('web3-eth-accounts');
 const { Web3ProviderEngine, GanacheSubprovider } = require('@0x/subproviders');
 const fs = require('fs');
-const Eth = require('web3-eth');
 const Contract = require('web3-eth-contract');
 const myTokenJSON = require('../src/contracts/MyToken.json');
 const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
-const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
 
+const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
 const account = new Accounts().privateKeyToAccount(pvk);
 
 const configs = {
@@ -45,7 +44,6 @@ let paymentsDeploy;
 let paymentsAddr;
 
 describe('Payments in ERC20', () => {
-
   beforeEach(async () => {
     provider = new Web3ProviderEngine();
     provider.addProvider(ganacheSubprovider);
@@ -73,5 +71,21 @@ describe('Payments in ERC20', () => {
   it('deploys contracts', async () => {
     assert.equal(erc20Addr === undefined, false);
     assert.equal(paymentsAddr === undefined, false);
+  });
+
+  it('balances can be queried', async () => {
+    assert.equal(await paymentsDeploy.methods.erc20BalanceOf(account.address).call(), '100000000000000000000');
+    assert.equal(await paymentsDeploy.methods.balanceOf(account.address).call(), '0');
+    assert.equal(await paymentsDeploy.methods.allowance(account.address).call(), '0');
+    assert.equal(await paymentsDeploy.methods.paymentWindow().call(), '864000');
+    assert.equal(await paymentsDeploy.methods.acceptedCurrency().call(), currencyDescriptor);
+    assert.equal(
+      await paymentsDeploy.methods.enoughFundsAvailable(account.address, 1).call(), 
+      false,
+    );
+    assert.equal(await paymentsDeploy.methods.maxFundsAvailable(account.address).call(), '0');
+    const split = await paymentsDeploy.methods.splitFundingSources(account.address, 100).call();
+    assert.equal(split.externalFunds, '100');
+    assert.equal(split.localFunds, '0');
   });
 });
