@@ -51,53 +51,43 @@ class ERC20Payments {
   }
 
   async balanceOf({ address }) {
-    const balance = await this.paymentsContract.methods.balanceOf(address).call();
-    return balance;
+    return this.paymentsContract.methods.balanceOf(address).call();
   }
 
   async allowance({ address }) {
-    const allnc = await this.paymentsContract.methods.allowance(address).call();
-    return allnc;
+    return this.paymentsContract.methods.allowance(address).call();
   }
 
   async isRegisteredSeller({ address }) {
-    const is = await this.paymentsContract.methods.isRegisteredSeller(address).call();
-    return is;
+    return this.paymentsContract.methods.isRegisteredSeller(address).call();
   }
 
   async enoughFundsAvailable({ address, amount }) {
-    const enough = await this.paymentsContract.methods.enoughFundsAvailable(address, amount).call();
-    return enough;
+    return this.paymentsContract.methods.enoughFundsAvailable(address, amount).call();
   }
 
   async maxFundsAvailable({ address }) {
-    const max = await this.paymentsContract.methods.maxFundsAvailable(address).call();
-    return max;
+    return this.paymentsContract.methods.maxFundsAvailable(address).call();
   }
 
   async computeFeeAmount({ amount, feeBPS }) {
-    const feeAmount = await this.paymentsContract.methods.computeFeeAmount(amount, feeBPS).call();
-    return feeAmount;
+    return this.paymentsContract.methods.computeFeeAmount(amount, feeBPS).call();
   }
 
   async splitFundingSources({ address, amount }) {
-    const split = await this.paymentsContract.methods.splitFundingSources(address, amount).call();
-    return split;
+    return this.paymentsContract.methods.splitFundingSources(address, amount).call();
   }
 
   async paymentState({ paymentId }) {
-    const state = await this.paymentsContract.methods.paymentState(paymentId).call();
-    return state;
+    return this.paymentsContract.methods.paymentState(paymentId).call();
   }
 
   async paymentWindow() {
-    const allnc = await this.paymentsContract.methods.paymentWindow().call();
-    return allnc;
+    return this.paymentsContract.methods.paymentWindow().call();
   }
 
   async acceptedCurrency() {
-    const curr = await this.paymentsContract.methods.acceptedCurrency().call();
-    return curr;
+    return this.paymentsContract.methods.acceptedCurrency().call();
   }
 
   static isValidPaymentData({ paymentData }) {
