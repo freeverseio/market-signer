@@ -21,7 +21,7 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 const IERC20JSON = require('./contracts/IERC20.json');
-const PaymentsJSON = require('./contracts/PaymentsERC20.json');
+const PaymentsJSON = require('./contracts/IPaymentsERC20.json');
 
 class ERC20Payments {
   constructor({ paymentsAddr, erc20Addr, eth }) {

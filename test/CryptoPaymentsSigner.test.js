@@ -11,7 +11,7 @@ const Contract = require('web3-eth-contract');
 const Eth = require('web3-eth');
 const fs = require('fs');
 const myTokenJSON = require('./contracts/MyToken.json');
-const PaymentsJSON = require('../src/contracts/PaymentsERC20.json');
+const PaymentsJSON = require('./contracts/PaymentsERC20.json');
 const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
