@@ -20,21 +20,13 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-const Contract = require('web3-eth-contract');
 const IERC20JSON = require('./contracts/IERC20.json');
 const PaymentsJSON = require('./contracts/PaymentsERC20.json');
 
 class ERC20Payments {
-  constructor() {
-    this.erc20Contract = {};
-    this.paymentsContract = {};
-  }
-
-  async setupContracts({ paymentsAddr, erc20Addr, provider }) {
-    this.erc20Contract = await new Contract(IERC20JSON.abi, erc20Addr);
-    this.paymentsContract = await new Contract(PaymentsJSON.abi, paymentsAddr);
-    this.erc20Contract.setProvider(provider);
-    this.paymentsContract.setProvider(provider);
+  constructor({ paymentsAddr, erc20Addr, eth }) {
+    this.erc20Contract = new eth.Contract(IERC20JSON.abi, erc20Addr);
+    this.paymentsContract = new eth.Contract(PaymentsJSON.abi, paymentsAddr);
   }
 
   async registerAsSeller({ from }) {
