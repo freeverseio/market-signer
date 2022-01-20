@@ -30,24 +30,23 @@ class ERC20Payments {
   }
 
   async registerAsSeller({ from }) {
-    await this.paymentsContract.methods.registerAsSeller().send({ from });
+    return this.paymentsContract.methods.registerAsSeller().send({ from });
   }
 
   async withdraw({ from }) {
-    await this.paymentsContract.methods.withdraw().send({ from });
+    return this.paymentsContract.methods.withdraw().send({ from });
   }
 
   async pay({ paymentData, signature, from }) {
-    await this.paymentsContract.methods.pay(paymentData, signature).send({ from });
+    return this.paymentsContract.methods.pay(paymentData, signature).send({ from });
   }
 
   async approve({ spender, amount, from }) {
-    await this.erc20Contract.methods.approve(spender, amount).send({ from });
+    return this.erc20Contract.methods.approve(spender, amount).send({ from });
   }
 
   async erc20BalanceOf({ address }) {
-    const balance = await this.paymentsContract.methods.erc20BalanceOf(address).call();
-    return balance;
+    return this.paymentsContract.methods.erc20BalanceOf(address).call();
   }
 
   async balanceOf({ address }) {
