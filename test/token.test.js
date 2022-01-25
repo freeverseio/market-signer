@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const Accounts = require('web3-eth-accounts');
-const { getTokenDigest, composeToken, verifyToken } = require('../../src/b2bAuthentication/token');
+const { getTokenDigest, composeToken, verifyToken } = require('../src/token');
 
 describe('b2bAuthentication', () => {
   const pvk = 'c6d398e89bf7cbda7663ca881bd992eb80ad170e4ca0bd65a8b1c719ee02bc67';
