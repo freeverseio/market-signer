@@ -1,6 +1,6 @@
 {
     "name": "freeverse-marketsigner-js",
-    "version": "1.1.9",
+    "version": "1.2.0",
     "main": "src/MarketSigner.js",
     "description": "Library for signing API calls to Living Assets market",
     "homepage": "https://www.freeverse.io/",
@@ -13,8 +13,8 @@
     "private": false,
     "dependencies": {
         "web3-eth-abi": "^1.5.2",
-        "web3-utils": "^1.5.2",
-        "web3-eth-accounts": "^1.5.2"
+        "web3-eth-accounts": "^1.5.2",
+        "web3-utils": "^1.5.2"
     },
     "scripts": {
         "test": "./node_modules/.bin/mocha \"test/**/*.js\" && npx eslint ."
@@ -24,7 +24,7 @@
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-plugin-import": "^2.24.2",
-        "mocha": "^9.1.1",
+        "mocha": "^9.2.0",
         "rewire": "^5.0.0"
     }
 }
