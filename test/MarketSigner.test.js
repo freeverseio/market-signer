@@ -2,11 +2,7 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
-const { digestBuyNowFromBuyNowId, digestBuyNowFromBuyNowIdCertified } = require('../src/MarketSigner');
-
-const mktSigner = rewire('../src/MarketSigner');
-const {
-  sign,
+const { digestBuyNowFromBuyNowId, digestBuyNowFromBuyNowIdCertified, sign,
   digestLinkId,
   digestUnlinkId,
   digestCashout,
@@ -29,8 +25,9 @@ const {
   plannedSubmissionTime,
   plannedSubmissionVerse,
   expiresAtTime,
-  getExpiryData,
-} = mktSigner;
+  getExpiryData, } = require('../dist/main');
+
+const mktSigner = rewire('../src/MarketSigner');
 
 const concatHash = mktSigner.__get__('concatHash');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
