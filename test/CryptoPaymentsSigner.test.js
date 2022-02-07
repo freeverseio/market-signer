@@ -12,7 +12,7 @@ const Eth = require('web3-eth');
 const fs = require('fs');
 const myTokenJSON = require('./contracts/MyToken.json');
 const PaymentsJSON = require('./contracts/PaymentsERC20.json');
-const { ERC20Payments } = require('../src/CryptoPaymentsSigner');
+const { ERC20Payments } = require('../dist/main');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
