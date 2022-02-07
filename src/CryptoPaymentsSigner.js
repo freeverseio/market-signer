@@ -20,6 +20,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+const Utils = require('web3-utils');
 const IERC20JSON = require('./contracts/IERC20.json');
 const PaymentsJSON = require('./contracts/IPaymentsERC20.json');
 
@@ -49,7 +50,7 @@ class ERC20Payments {
   }
 
   async approveInfinite({ from }) {
-    const MAX_UINT = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+    const MAX_UINT = Utils.toTwosComplement('-1');
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
       MAX_UINT,
@@ -111,6 +112,16 @@ class ERC20Payments {
     if (paymentData.feeBPS > 10000) return false;
     if (paymentData.buyer === paymentData.seller) return false;
     return true;
+  }
+
+  static isAllowanceUnrestricted({ allowance }) {
+    if (typeof allowance !== 'string') {
+      throw new Error('allowance is not a string');
+    }
+    const allowanceBN = Utils.toBN(allowance);
+    const MAX_UINT = Utils.toTwosComplement('-1');
+    const LARGER_IS_CONSIDERED_INFINITE = Utils.toBN(MAX_UINT).div(Utils.toBN(10));
+    return allowanceBN.cmp(LARGER_IS_CONSIDERED_INFINITE) === 1;
   }
 
   static PaymentStates() {

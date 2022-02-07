@@ -119,6 +119,8 @@ describe('Payments in ERC20', () => {
     await erc20Payments.approve({ amount: 200, from: account.address });
     assert.equal(await erc20Payments.maxFundsAvailable({ address: account.address }), '200');
     assert.equal(await erc20Payments.allowance({ address: account.address }), '200');
+    const allowance = await erc20Payments.allowance({ address: account.address });
+    assert.equal(await ERC20Payments.isAllowanceUnrestricted({ allowance }), false);
   });
 
   it('approveInfinite', async () => {
@@ -126,6 +128,8 @@ describe('Payments in ERC20', () => {
     assert.equal(await erc20Payments.maxFundsAvailable({ address: account.address }), '100000000000000000000');
     const MAX_UINT = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
     assert.equal(await erc20Payments.allowance({ address: account.address }), MAX_UINT);
+    const allowance = await erc20Payments.allowance({ address: account.address });
+    assert.equal(await ERC20Payments.isAllowanceUnrestricted({ allowance }), true);
   });
 
   it('change provider reflects in the instance of the class automatically', async () => {
