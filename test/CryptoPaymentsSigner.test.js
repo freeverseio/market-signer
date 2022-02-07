@@ -116,8 +116,16 @@ describe('Payments in ERC20', () => {
   });
 
   it('approve', async () => {
-    await erc20Payments.approve({ spender: paymentsAddr, amount: 200, from: account.address });
+    await erc20Payments.approve({ amount: 200, from: account.address });
     assert.equal(await erc20Payments.maxFundsAvailable({ address: account.address }), '200');
+    assert.equal(await erc20Payments.allowance({ address: account.address }), '200');
+  });
+
+  it('approveInfinite', async () => {
+    await erc20Payments.approveInfinite({ from: account.address });
+    assert.equal(await erc20Payments.maxFundsAvailable({ address: account.address }), '100000000000000000000');
+    const MAX_UINT = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+    assert.equal(await erc20Payments.allowance({ address: account.address }), MAX_UINT);
   });
 
   it('change provider reflects in the instance of the class automatically', async () => {

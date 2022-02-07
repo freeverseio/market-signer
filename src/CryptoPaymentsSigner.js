@@ -41,8 +41,19 @@ class ERC20Payments {
     return this.paymentsContract.methods.pay(paymentData, signature).send({ from });
   }
 
-  async approve({ spender, amount, from }) {
-    return this.erc20Contract.methods.approve(spender, amount).send({ from });
+  async approve({ amount, from }) {
+    return this.erc20Contract.methods.approve(
+      this.paymentsContract.options.address,
+      amount,
+    ).send({ from });
+  }
+
+  async approveInfinite({ from }) {
+    const MAX_UINT = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+    return this.erc20Contract.methods.approve(
+      this.paymentsContract.options.address,
+      MAX_UINT,
+    ).send({ from });
   }
 
   async erc20BalanceOf({ address }) {
