@@ -20,7 +20,7 @@
         "web3-utils": "^1.5.2"
     },
     "scripts": {
-        "test": "./node_modules/.bin/mocha \"test/**/*.js\" && npx eslint ./src && npx eslint ./test",
+        "test": "npm run build && ./node_modules/.bin/mocha \"test/**/*.js\" && npx eslint ./src && npx eslint ./test",
         "watch": "parcel watch",
         "build": "parcel build",
         "prepublish": "npm run build"
