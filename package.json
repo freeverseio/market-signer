@@ -23,7 +23,7 @@
         "test": "npm run build && ./node_modules/.bin/mocha \"test/**/*.js\" && npx eslint ./src && npx eslint ./test",
         "watch": "parcel watch",
         "build": "parcel build",
-        "prepublish": "npm run build"
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "@0x/subproviders": "^6.6.1",
