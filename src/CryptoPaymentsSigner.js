@@ -35,6 +35,13 @@ class ERC20Payments {
     this.paymentsContract = new this.eth.Contract(PaymentsJSON.abi, paymentsAddr);
   }
 
+  getAddresses() {
+    return {
+      paymentsAddr: this.paymentsContract.options.address,
+      erc20Addr: this.erc20Contract.options.address,
+    };
+  }
+
   async registerAsSeller({ from }) {
     return this.paymentsContract.methods.registerAsSeller().send({ from });
   }
