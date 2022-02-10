@@ -23,6 +23,7 @@
 const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 const Utils = require('web3-utils');
+
 const abi = Abi; // this is necessary to avoid parcel tree-shaking breaking the eth-abi module
 
 // *****************************************************************************
