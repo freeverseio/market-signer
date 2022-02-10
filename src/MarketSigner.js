@@ -24,6 +24,8 @@ const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 const Utils = require('web3-utils');
 
+const abi = Abi; // this is necessary to avoid parcel tree-shaking breaking the eth-abi module
+
 // *****************************************************************************
 // All time variables are expressed in UNITS OF VERSE, not timestamp
 // In particular: validUntil, offerValidUntil and versesToPay
@@ -39,7 +41,7 @@ const Utils = require('web3-utils');
 // Concats values in vals array, interpreting them as defined by the types array
 // and hashes the result using keccak256
 function concatHash({ types, vals }) {
-  return Utils.keccak256(Abi.encodeParameters(types, vals));
+  return Utils.keccak256(abi.encodeParameters(types, vals));
 }
 
 function digestLinkId({ email, freeverseId }) {
