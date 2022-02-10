@@ -26,8 +26,13 @@ const PaymentsJSON = require('./contracts/IPaymentsERC20.json');
 
 class ERC20Payments {
   constructor({ paymentsAddr, erc20Addr, eth }) {
-    this.erc20Contract = new eth.Contract(IERC20JSON.abi, erc20Addr);
-    this.paymentsContract = new eth.Contract(PaymentsJSON.abi, paymentsAddr);
+    this.eth = eth;
+    this.setAddresses({ paymentsAddr, erc20Addr });
+  }
+
+  setAddresses({ paymentsAddr, erc20Addr }) {
+    this.erc20Contract = new this.eth.Contract(IERC20JSON.abi, erc20Addr);
+    this.paymentsContract = new this.eth.Contract(PaymentsJSON.abi, paymentsAddr);
   }
 
   async registerAsSeller({ from }) {
