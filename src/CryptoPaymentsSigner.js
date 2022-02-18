@@ -42,26 +42,26 @@ class ERC20Payments {
     };
   }
 
-  async registerAsSeller({ from }) {
+  registerAsSeller({ from }) {
     return this.paymentsContract.methods.registerAsSeller().send({ from });
   }
 
-  async withdraw({ from }) {
+  withdraw({ from }) {
     return this.paymentsContract.methods.withdraw().send({ from });
   }
 
-  async pay({ paymentData, signature, from }) {
+  pay({ paymentData, signature, from }) {
     return this.paymentsContract.methods.pay(paymentData, signature).send({ from });
   }
 
-  async approve({ amount, from }) {
+  approve({ amount, from }) {
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
       amount,
     ).send({ from });
   }
 
-  async approveInfinite({ from }) {
+  approveInfinite({ from }) {
     const MAX_UINT = Utils.toTwosComplement('-1');
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
@@ -69,47 +69,47 @@ class ERC20Payments {
     ).send({ from });
   }
 
-  async erc20BalanceOf({ address }) {
+  erc20BalanceOf({ address }) {
     return this.paymentsContract.methods.erc20BalanceOf(address).call();
   }
 
-  async balanceOf({ address }) {
+  balanceOf({ address }) {
     return this.paymentsContract.methods.balanceOf(address).call();
   }
 
-  async allowance({ address }) {
+  allowance({ address }) {
     return this.paymentsContract.methods.allowance(address).call();
   }
 
-  async isRegisteredSeller({ address }) {
+  isRegisteredSeller({ address }) {
     return this.paymentsContract.methods.isRegisteredSeller(address).call();
   }
 
-  async enoughFundsAvailable({ address, amount }) {
+  enoughFundsAvailable({ address, amount }) {
     return this.paymentsContract.methods.enoughFundsAvailable(address, amount).call();
   }
 
-  async maxFundsAvailable({ address }) {
+  maxFundsAvailable({ address }) {
     return this.paymentsContract.methods.maxFundsAvailable(address).call();
   }
 
-  async computeFeeAmount({ amount, feeBPS }) {
+  computeFeeAmount({ amount, feeBPS }) {
     return this.paymentsContract.methods.computeFeeAmount(amount, feeBPS).call();
   }
 
-  async splitFundingSources({ address, amount }) {
+  splitFundingSources({ address, amount }) {
     return this.paymentsContract.methods.splitFundingSources(address, amount).call();
   }
 
-  async paymentState({ paymentId }) {
+  paymentState({ paymentId }) {
     return this.paymentsContract.methods.paymentState(paymentId).call();
   }
 
-  async paymentWindow() {
+  paymentWindow() {
     return this.paymentsContract.methods.paymentWindow().call();
   }
 
-  async acceptedCurrency() {
+  acceptedCurrency() {
     return this.paymentsContract.methods.acceptedCurrency().call();
   }
 
