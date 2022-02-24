@@ -206,7 +206,7 @@ describe('Payments in ERC20', () => {
     assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), false);
   });
 
-  it('send TX', async () => {
+  it('pay fails if not buyer', async () => {
     const data = {
       paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
       amount: '32',

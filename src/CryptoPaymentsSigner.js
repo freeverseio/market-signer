@@ -54,6 +54,10 @@ class ERC20Payments {
     return this.paymentsContract.methods.pay(paymentData, signature).send({ from });
   }
 
+  finalize({ assetTransferData, signature, from }) {
+    return this.paymentsContract.methods.finalize(assetTransferData, signature).send({ from });
+  }
+
   approve({ amount, from }) {
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
@@ -105,6 +109,10 @@ class ERC20Payments {
     return this.paymentsContract.methods.paymentState(paymentId).call();
   }
 
+  acceptsRefunds({ paymentId }) {
+    return this.paymentsContract.methods.acceptsRefunds(paymentId).call();
+  }
+
   paymentWindow() {
     return this.paymentsContract.methods.paymentWindow().call();
   }
@@ -123,6 +131,12 @@ class ERC20Payments {
     if (!Object.prototype.hasOwnProperty.call(paymentData, 'seller')) return false;
     if (paymentData.feeBPS > 10000) return false;
     if (paymentData.buyer === paymentData.seller) return false;
+    return true;
+  }
+
+  static isValidAssetTransferData({ assetTransferData }) {
+    if (!Object.prototype.hasOwnProperty.call(assetTransferData, 'paymentId')) return false;
+    if (!Object.prototype.hasOwnProperty.call(assetTransferData, 'wasSuccessful')) return false;
     return true;
   }
 
