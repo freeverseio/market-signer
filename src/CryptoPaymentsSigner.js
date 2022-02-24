@@ -140,7 +140,7 @@ class ERC20Payments {
     return {
       NotStarted: 0,
       AssetTransferring: 1,
-      Failed: 2,
+      Refunded: 2,
       Paid: 3,
     };
   }
