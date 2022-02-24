@@ -109,7 +109,7 @@ describe('Payments in ERC20', () => {
     assert.equal(await erc20Payments.erc20BalanceOf({ address: account.address }), '100000000000000000000');
     assert.equal(await erc20Payments.balanceOf({ address: account.address }), '0');
     assert.equal(await erc20Payments.allowance({ address: account.address }), '0');
-    assert.equal(await erc20Payments.paymentWindow(), '864000');
+    assert.equal(await erc20Payments.paymentWindow(), '2592000');
     assert.equal(await erc20Payments.acceptedCurrency(), currencyDescriptor);
     assert.equal(await erc20Payments.isRegisteredSeller({ address: account.address }), false);
     const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
@@ -192,7 +192,7 @@ describe('Payments in ERC20', () => {
       amount: '32',
       feeBPS: 42,
       universeId: '1',
-      validUntil: '24214',
+      deadline: '24214',
       buyer: '0x223',
       seller: '0x2223',
     };
@@ -212,7 +212,7 @@ describe('Payments in ERC20', () => {
       amount: '32',
       feeBPS: 42,
       universeId: '1',
-      validUntil: '24214',
+      deadline: '24214',
       buyer: '0x56270bf851453EF41A060fb3C7427B9c3Cc0cde5',
       seller: '0x4f97a6d1fcf56be844d6b7510a21f407e9101d1e',
     };

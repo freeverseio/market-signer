@@ -126,7 +126,7 @@ class ERC20Payments {
     if (!Object.prototype.hasOwnProperty.call(paymentData, 'amount')) return false;
     if (!Object.prototype.hasOwnProperty.call(paymentData, 'feeBPS')) return false;
     if (!Object.prototype.hasOwnProperty.call(paymentData, 'universeId')) return false;
-    if (!Object.prototype.hasOwnProperty.call(paymentData, 'validUntil')) return false;
+    if (!Object.prototype.hasOwnProperty.call(paymentData, 'deadline')) return false;
     if (!Object.prototype.hasOwnProperty.call(paymentData, 'buyer')) return false;
     if (!Object.prototype.hasOwnProperty.call(paymentData, 'seller')) return false;
     if (paymentData.feeBPS > 10000) return false;
