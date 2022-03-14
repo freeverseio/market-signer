@@ -43,26 +43,27 @@ class ERC20Payments {
   }
 
   registerAsSeller({ from }) {
-    return this.paymentsContract.methods.registerAsSeller().send({ from });
+    return this.paymentsContract.methods.registerAsSeller().send({ from, value: 0 });
   }
 
   withdraw({ from }) {
-    return this.paymentsContract.methods.withdraw().send({ from });
+    return this.paymentsContract.methods.withdraw().send({ from, value: 0 });
   }
 
   pay({ paymentData, signature, from }) {
-    return this.paymentsContract.methods.pay(paymentData, signature).send({ from });
+    return this.paymentsContract.methods.pay(paymentData, signature).send({ from, value: 0 });
   }
 
   finalize({ assetTransferData, signature, from }) {
-    return this.paymentsContract.methods.finalize(assetTransferData, signature).send({ from });
+    return this.paymentsContract.methods
+      .finalize(assetTransferData, signature).send({ from, value: 0 });
   }
 
   approve({ amount, from }) {
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
       amount,
-    ).send({ from });
+    ).send({ from, value: 0 });
   }
 
   approveInfinite({ from }) {
@@ -70,7 +71,7 @@ class ERC20Payments {
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
       MAX_UINT,
-    ).send({ from });
+    ).send({ from, value: 0 });
   }
 
   erc20BalanceOf({ address }) {
