@@ -50,6 +50,11 @@ class ERC20Payments {
     return this.paymentsContract.methods.withdraw().send({ from, value: 0 });
   }
 
+  finalizeAndWithdraw({ assetTransferData, signature, from }) {
+    return this.paymentsContract.methods
+      .finalizeAndWithdraw(assetTransferData, signature).send({ from, value: 0 });
+  }
+
   pay({ paymentData, signature, from }) {
     return this.paymentsContract.methods.pay(paymentData, signature).send({ from, value: 0 });
   }
