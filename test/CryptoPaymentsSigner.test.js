@@ -105,6 +105,37 @@ describe('Payments in ERC20', () => {
     assert.equal(addresses1.paymentsAddr, rndAddress);
   });
 
+  it('default ConfirmationBlocks works', async () => {
+    const initConfirmationsDefault = erc20Payments.eth.transactionConfirmationBlocks;
+    const initConfirmationsContr1 = erc20Payments.erc20Contract.transactionConfirmationBlocks;
+    const initConfirmationsContr2 = erc20Payments.paymentsContract.transactionConfirmationBlocks;
+    assert.equal(initConfirmationsDefault, initConfirmationsContr1);
+    assert.equal(initConfirmationsDefault, initConfirmationsContr2);
+    assert.equal(initConfirmationsDefault, 24);
+  });
+
+  it('init ConfirmationBlocks works', async () => {
+    const erc20Payments2 = new ERC20Payments({
+      paymentsAddr, erc20Addr, eth, confirmationBlocks: 3,
+    });
+    const initConfirmationsDefault = erc20Payments2.eth.transactionConfirmationBlocks;
+    const initConfirmationsContr1 = erc20Payments2.erc20Contract.transactionConfirmationBlocks;
+    const initConfirmationsContr2 = erc20Payments2.paymentsContract.transactionConfirmationBlocks;
+    assert.equal(initConfirmationsDefault, 24);
+    assert.equal(initConfirmationsContr1, 3);
+    assert.equal(initConfirmationsContr2, 3);
+  });
+
+  it('set new ConfirmationBlocks works', async () => {
+    erc20Payments.setConfirmationBlocks({ confirmationBlocks: 4 });
+    const initConfirmationsDefault = erc20Payments.eth.transactionConfirmationBlocks;
+    const initConfirmationsContr1 = erc20Payments.erc20Contract.transactionConfirmationBlocks;
+    const initConfirmationsContr2 = erc20Payments.paymentsContract.transactionConfirmationBlocks;
+    assert.equal(initConfirmationsDefault, 24);
+    assert.equal(initConfirmationsContr1, 4);
+    assert.equal(initConfirmationsContr2, 4);
+  });
+
   it('view functions can be called', async () => {
     assert.equal(await erc20Payments.erc20BalanceOf({ address: account.address }), '100000000000000000000');
     assert.equal(await erc20Payments.balanceOf({ address: account.address }), '0');

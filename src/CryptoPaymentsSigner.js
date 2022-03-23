@@ -25,14 +25,24 @@ const IERC20JSON = require('./contracts/IERC20.json');
 const PaymentsJSON = require('./contracts/IPaymentsERC20.json');
 
 class ERC20Payments {
-  constructor({ paymentsAddr, erc20Addr, eth }) {
+  constructor({
+    paymentsAddr, erc20Addr, eth, confirmationBlocks,
+  }) {
     this.eth = eth;
     this.setAddresses({ paymentsAddr, erc20Addr });
+    this.setConfirmationBlocks({
+      confirmationBlocks: confirmationBlocks || eth.transactionConfirmationBlocks,
+    });
   }
 
   setAddresses({ paymentsAddr, erc20Addr }) {
     this.erc20Contract = new this.eth.Contract(IERC20JSON.abi, erc20Addr);
     this.paymentsContract = new this.eth.Contract(PaymentsJSON.abi, paymentsAddr);
+  }
+
+  setConfirmationBlocks({ confirmationBlocks }) {
+    this.erc20Contract.transactionConfirmationBlocks = confirmationBlocks;
+    this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
   }
 
   getAddresses() {
