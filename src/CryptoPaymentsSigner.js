@@ -30,9 +30,7 @@ class ERC20Payments {
   }) {
     this.eth = eth;
     this.setAddresses({ paymentsAddr, erc20Addr });
-    this.setConfirmationBlocks({
-      confirmationBlocks: confirmationBlocks || eth.transactionConfirmationBlocks,
-    });
+    this.setConfirmationBlocks({ confirmationBlocks });
   }
 
   setAddresses({ paymentsAddr, erc20Addr }) {
@@ -41,8 +39,9 @@ class ERC20Payments {
   }
 
   setConfirmationBlocks({ confirmationBlocks }) {
-    this.erc20Contract.transactionConfirmationBlocks = confirmationBlocks;
-    this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
+    const conf = confirmationBlocks || this.eth.transactionConfirmationBlocks;
+    this.erc20Contract.transactionConfirmationBlocks = conf;
+    this.paymentsContract.transactionConfirmationBlocks = conf;
   }
 
   getAddresses() {
