@@ -41,8 +41,8 @@ class NativeCryptoPayments {
     this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
   }
 
-  getAddress() {
-    return { paymentsAddr: this.paymentsContract.options.address };
+  getPaymentsAddr() {
+    return this.paymentsContract.options.address;
   }
 
   registerAsSeller({ from }) {

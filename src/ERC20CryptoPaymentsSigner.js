@@ -47,11 +47,8 @@ class ERC20Payments extends NativeCryptoPayments {
     this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
   }
 
-  getAddress() {
-    return {
-      paymentsAddr: this.paymentsContract.options.address,
-      erc20Addr: this.erc20Contract.options.address,
-    };
+  getERC20Addr() {
+    return this.erc20Contract.options.address;
   }
 
   pay({ paymentData, signature, from }) {

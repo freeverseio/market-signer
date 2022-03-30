@@ -92,17 +92,15 @@ describe('Payments in ERC20', () => {
   });
 
   it('setAddress works', async () => {
-    const addresses0 = erc20Payments.getAddress();
-    assert.equal(addresses0.erc20Addr, erc20Addr);
-    assert.equal(addresses0.paymentsAddr, paymentsAddr);
+    assert.equal(erc20Payments.getPaymentsAddr(), paymentsAddr);
+    assert.equal(erc20Payments.getERC20Addr(), erc20Addr);
     const rndAddress = '0x0A7817021EDd5BDbD1025c3aB73be9177faF7000';
     erc20Payments.setAddress({
       paymentsAddr: rndAddress,
       erc20Addr: rndAddress,
     });
-    const addresses1 = erc20Payments.getAddress();
-    assert.equal(addresses1.erc20Addr, rndAddress);
-    assert.equal(addresses1.paymentsAddr, rndAddress);
+    assert.equal(erc20Payments.getPaymentsAddr(), rndAddress);
+    assert.equal(erc20Payments.getERC20Addr(), rndAddress);
   });
 
   it('default ConfirmationBlocks works', async () => {
