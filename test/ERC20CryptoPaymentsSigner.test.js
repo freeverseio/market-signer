@@ -91,16 +91,16 @@ describe('Payments in ERC20', () => {
     assert.equal(paymentsAddr === undefined, false);
   });
 
-  it('setAddresses works', async () => {
-    const addresses0 = erc20Payments.getAddresses();
+  it('setAddress works', async () => {
+    const addresses0 = erc20Payments.getAddress();
     assert.equal(addresses0.erc20Addr, erc20Addr);
     assert.equal(addresses0.paymentsAddr, paymentsAddr);
     const rndAddress = '0x0A7817021EDd5BDbD1025c3aB73be9177faF7000';
-    erc20Payments.setAddresses({
+    erc20Payments.setAddress({
       paymentsAddr: rndAddress,
       erc20Addr: rndAddress,
     });
-    const addresses1 = erc20Payments.getAddresses();
+    const addresses1 = erc20Payments.getAddress();
     assert.equal(addresses1.erc20Addr, rndAddress);
     assert.equal(addresses1.paymentsAddr, rndAddress);
   });

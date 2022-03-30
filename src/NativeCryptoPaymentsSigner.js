@@ -20,36 +20,29 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-const Utils = require('web3-utils');
-const IERC20JSON = require('./contracts/IERC20.json');
-const PaymentsJSON = require('./contracts/IPaymentsERC20.json');
+const NativePaymentsJSON = require('./contracts/IPaymentsNative.json');
 
-class ERC20Payments {
+class NativeCryptoPayments {
   constructor({
-    paymentsAddr, erc20Addr, eth, confirmationBlocks,
+    paymentsAddr, eth, confirmationBlocks,
   }) {
     this.eth = eth;
-    this.setAddresses({ paymentsAddr, erc20Addr });
+    this.setAddress({ paymentsAddr });
     this.setConfirmationBlocks({
       confirmationBlocks: confirmationBlocks || eth.transactionConfirmationBlocks,
     });
   }
 
-  setAddresses({ paymentsAddr, erc20Addr }) {
-    this.erc20Contract = new this.eth.Contract(IERC20JSON.abi, erc20Addr);
-    this.paymentsContract = new this.eth.Contract(PaymentsJSON.abi, paymentsAddr);
+  setAddress({ paymentsAddr }) {
+    this.paymentsContract = new this.eth.Contract(NativePaymentsJSON.abi, paymentsAddr);
   }
 
   setConfirmationBlocks({ confirmationBlocks }) {
-    this.erc20Contract.transactionConfirmationBlocks = confirmationBlocks;
     this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
   }
 
-  getAddresses() {
-    return {
-      paymentsAddr: this.paymentsContract.options.address,
-      erc20Addr: this.erc20Contract.options.address,
-    };
+  getAddress() {
+    return { paymentsAddr: this.paymentsContract.options.address };
   }
 
   registerAsSeller({ from }) {
@@ -74,31 +67,8 @@ class ERC20Payments {
       .finalize(assetTransferData, signature).send({ from, value: 0 });
   }
 
-  approve({ amount, from }) {
-    return this.erc20Contract.methods.approve(
-      this.paymentsContract.options.address,
-      amount,
-    ).send({ from, value: 0 });
-  }
-
-  approveInfinite({ from }) {
-    const MAX_UINT = Utils.toTwosComplement('-1');
-    return this.erc20Contract.methods.approve(
-      this.paymentsContract.options.address,
-      MAX_UINT,
-    ).send({ from, value: 0 });
-  }
-
-  erc20BalanceOf({ address }) {
-    return this.paymentsContract.methods.erc20BalanceOf(address).call();
-  }
-
   balanceOf({ address }) {
     return this.paymentsContract.methods.balanceOf(address).call();
-  }
-
-  allowance({ address }) {
-    return this.paymentsContract.methods.allowance(address).call();
   }
 
   isRegisteredSeller({ address }) {
@@ -156,16 +126,6 @@ class ERC20Payments {
     return true;
   }
 
-  static isAllowanceUnrestricted({ allowance }) {
-    if (typeof allowance !== 'string') {
-      throw new Error('allowance is not a string');
-    }
-    const allowanceBN = Utils.toBN(allowance);
-    const MAX_UINT = Utils.toTwosComplement('-1');
-    const LARGER_IS_CONSIDERED_INFINITE = Utils.toBN(MAX_UINT).div(Utils.toBN(10));
-    return allowanceBN.cmp(LARGER_IS_CONSIDERED_INFINITE) === 1;
-  }
-
   static PaymentStates() {
     return {
       NotStarted: 0,
@@ -176,4 +136,4 @@ class ERC20Payments {
   }
 }
 
-module.exports = { ERC20Payments };
+module.exports = { NativeCryptoPayments };

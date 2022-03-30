@@ -1,5 +1,6 @@
 const { getTokenDigest, composeToken, verifyToken } = require('./token');
-const { ERC20Payments } = require('./CryptoPaymentsSigner');
+const { NativeCryptoPayments } = require('./NativeCryptoPaymentsSigner');
+const { ERC20Payments } = require('./ERC20CryptoPaymentsSigner');
 const {
   sign,
   digestLinkId,
@@ -30,6 +31,7 @@ const {
 } = require('./MarketSigner');
 
 module.exports = {
+  NativeCryptoPayments,
   ERC20Payments,
   sign,
   digestLinkId,
