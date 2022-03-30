@@ -11,7 +11,7 @@ const Contract = require('web3-eth-contract');
 const Eth = require('web3-eth');
 const fs = require('fs');
 const myTokenJSON = require('./contracts/MyToken.json');
-const PaymentsJSON = require('./contracts/PaymentsERC20.json');
+const PaymentsERC20JSON = require('./contracts/PaymentsERC20.json');
 const { ERC20Payments } = require('../dist/main');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
@@ -71,10 +71,10 @@ describe('Payments in ERC20', () => {
     erc20Addr = erc20Deploy.options.address;
 
     // deploy Payments contract
-    paymentsContract = new Contract(PaymentsJSON.abi);
+    paymentsContract = new Contract(PaymentsERC20JSON.abi);
     paymentsContract.setProvider(provider);
     paymentsDeploy = await paymentsContract.deploy({
-      data: PaymentsJSON.bytecode,
+      data: PaymentsERC20JSON.bytecode,
       arguments: [erc20Addr, currencyDescriptor],
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
