@@ -31,20 +31,15 @@ class ERC20Payments extends NativeCryptoPayments {
   }) {
     super({ paymentsAddr, eth, confirmationBlocks });
     this.eth = eth;
-    this.setAddress({ paymentsAddr, erc20Addr });
-    this.setConfirmationBlocks({
-      confirmationBlocks: confirmationBlocks || eth.transactionConfirmationBlocks,
-    });
+    this.configure({ paymentsAddr, erc20Addr, confirmationBlocks });
   }
 
-  setAddress({ paymentsAddr, erc20Addr }) {
+  configure({ paymentsAddr, erc20Addr, confirmationBlocks }) {
     this.erc20Contract = new this.eth.Contract(IERC20JSON.abi, erc20Addr);
     this.paymentsContract = new this.eth.Contract(ERC20PaymentsJSON.abi, paymentsAddr);
-  }
-
-  setConfirmationBlocks({ confirmationBlocks }) {
-    this.erc20Contract.transactionConfirmationBlocks = confirmationBlocks;
-    this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
+    const blocks = confirmationBlocks || this.eth.transactionConfirmationBlocks;
+    this.erc20Contract.transactionConfirmationBlocks = blocks;
+    this.paymentsContract.transactionConfirmationBlocks = blocks;
   }
 
   getERC20Addr() {

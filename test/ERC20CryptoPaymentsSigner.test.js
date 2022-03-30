@@ -95,7 +95,7 @@ describe('Payments in ERC20', () => {
     assert.equal(erc20Payments.getPaymentsAddr(), paymentsAddr);
     assert.equal(erc20Payments.getERC20Addr(), erc20Addr);
     const rndAddress = '0x0A7817021EDd5BDbD1025c3aB73be9177faF7000';
-    erc20Payments.setAddress({
+    erc20Payments.configure({
       paymentsAddr: rndAddress,
       erc20Addr: rndAddress,
     });
@@ -125,7 +125,7 @@ describe('Payments in ERC20', () => {
   });
 
   it('set new ConfirmationBlocks works', async () => {
-    erc20Payments.setConfirmationBlocks({ confirmationBlocks: 4 });
+    erc20Payments.configure({ confirmationBlocks: 4 });
     const initConfirmationsDefault = erc20Payments.eth.transactionConfirmationBlocks;
     const initConfirmationsContr1 = erc20Payments.erc20Contract.transactionConfirmationBlocks;
     const initConfirmationsContr2 = erc20Payments.paymentsContract.transactionConfirmationBlocks;

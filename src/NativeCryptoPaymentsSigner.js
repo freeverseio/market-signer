@@ -27,18 +27,13 @@ class NativeCryptoPayments {
     paymentsAddr, eth, confirmationBlocks,
   }) {
     this.eth = eth;
-    this.setAddress({ paymentsAddr });
-    this.setConfirmationBlocks({
-      confirmationBlocks: confirmationBlocks || eth.transactionConfirmationBlocks,
-    });
+    this.configure({ paymentsAddr, confirmationBlocks });
   }
 
-  setAddress({ paymentsAddr }) {
+  configure({ paymentsAddr, confirmationBlocks }) {
     this.paymentsContract = new this.eth.Contract(NativePaymentsJSON.abi, paymentsAddr);
-  }
-
-  setConfirmationBlocks({ confirmationBlocks }) {
-    this.paymentsContract.transactionConfirmationBlocks = confirmationBlocks;
+    const blocks = confirmationBlocks || this.eth.transactionConfirmationBlocks;
+    this.paymentsContract.transactionConfirmationBlocks = blocks;
   }
 
   getPaymentsAddr() {

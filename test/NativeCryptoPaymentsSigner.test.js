@@ -77,7 +77,7 @@ describe('Payments in Native Cryptocurrencies', () => {
   it('setAddress works', async () => {
     assert.equal(nativePayments.getPaymentsAddr(), paymentsAddr);
     const rndAddress = '0x0A7817021EDd5BDbD1025c3aB73be9177faF7000';
-    nativePayments.setAddress({
+    nativePayments.configure({
       paymentsAddr: rndAddress,
     });
     assert.equal(nativePayments.getPaymentsAddr(), rndAddress);
@@ -101,7 +101,7 @@ describe('Payments in Native Cryptocurrencies', () => {
   });
 
   it('set new ConfirmationBlocks works', async () => {
-    nativePayments.setConfirmationBlocks({ confirmationBlocks: 4 });
+    nativePayments.configure({ confirmationBlocks: 4 });
     const initConfirmationsDefault = nativePayments.eth.transactionConfirmationBlocks;
     const initConfirmationsContr2 = nativePayments.paymentsContract.transactionConfirmationBlocks;
     assert.equal(initConfirmationsDefault, 24);
