@@ -11,7 +11,7 @@ const Contract = require('web3-eth-contract');
 const Eth = require('web3-eth');
 const fs = require('fs');
 const myTokenJSON = require('./contracts/MyToken.json');
-const PaymentsJSON = require('./contracts/PaymentsERC20.json');
+const PaymentsERC20JSON = require('./contracts/PaymentsERC20.json');
 const { ERC20Payments } = require('../dist/main');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
@@ -71,10 +71,10 @@ describe('Payments in ERC20', () => {
     erc20Addr = erc20Deploy.options.address;
 
     // deploy Payments contract
-    paymentsContract = new Contract(PaymentsJSON.abi);
+    paymentsContract = new Contract(PaymentsERC20JSON.abi);
     paymentsContract.setProvider(provider);
     paymentsDeploy = await paymentsContract.deploy({
-      data: PaymentsJSON.bytecode,
+      data: PaymentsERC20JSON.bytecode,
       arguments: [erc20Addr, currencyDescriptor],
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
@@ -91,18 +91,16 @@ describe('Payments in ERC20', () => {
     assert.equal(paymentsAddr === undefined, false);
   });
 
-  it('setAddresses works', async () => {
-    const addresses0 = erc20Payments.getAddresses();
-    assert.equal(addresses0.erc20Addr, erc20Addr);
-    assert.equal(addresses0.paymentsAddr, paymentsAddr);
+  it('setAddress works', async () => {
+    assert.equal(erc20Payments.getPaymentsAddr(), paymentsAddr);
+    assert.equal(erc20Payments.getERC20Addr(), erc20Addr);
     const rndAddress = '0x0A7817021EDd5BDbD1025c3aB73be9177faF7000';
-    erc20Payments.setAddresses({
+    erc20Payments.configure({
       paymentsAddr: rndAddress,
       erc20Addr: rndAddress,
     });
-    const addresses1 = erc20Payments.getAddresses();
-    assert.equal(addresses1.erc20Addr, rndAddress);
-    assert.equal(addresses1.paymentsAddr, rndAddress);
+    assert.equal(erc20Payments.getPaymentsAddr(), rndAddress);
+    assert.equal(erc20Payments.getERC20Addr(), rndAddress);
   });
 
   it('default ConfirmationBlocks works', async () => {
@@ -127,7 +125,7 @@ describe('Payments in ERC20', () => {
   });
 
   it('set new ConfirmationBlocks works', async () => {
-    erc20Payments.setConfirmationBlocks({ confirmationBlocks: 4 });
+    erc20Payments.configure({ confirmationBlocks: 4 });
     const initConfirmationsDefault = erc20Payments.eth.transactionConfirmationBlocks;
     const initConfirmationsContr1 = erc20Payments.erc20Contract.transactionConfirmationBlocks;
     const initConfirmationsContr2 = erc20Payments.paymentsContract.transactionConfirmationBlocks;
