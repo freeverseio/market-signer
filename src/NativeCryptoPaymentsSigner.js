@@ -54,7 +54,8 @@ class NativeCryptoPayments {
   }
 
   pay({ paymentData, signature, from }) {
-    return this.paymentsContract.methods.pay(paymentData, signature).send({ from, value: 0 });
+    return this.paymentsContract.methods.pay(paymentData, signature)
+      .send({ from, value: paymentData.amount });
   }
 
   finalize({ assetTransferData, signature, from }) {
