@@ -47,14 +47,15 @@ class ERC20Payments extends NativeCryptoPayments {
   }
 
   pay({ paymentData, signature, from }) {
-    return this.paymentsContract.methods.pay(paymentData, signature).send({ from, value: 0 });
+    return this.paymentsContract.methods.pay(paymentData, signature)
+      .send({ from, value: 0, gas: 400000 });
   }
 
   approve({ amount, from }) {
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
       amount,
-    ).send({ from, value: 0 });
+    ).send({ from, value: 0, gas: 200000 });
   }
 
   approveInfinite({ from }) {
@@ -62,7 +63,7 @@ class ERC20Payments extends NativeCryptoPayments {
     return this.erc20Contract.methods.approve(
       this.paymentsContract.options.address,
       MAX_UINT,
-    ).send({ from, value: 0 });
+    ).send({ from, value: 0, gas: 200000 });
   }
 
   erc20BalanceOf({ address }) {
