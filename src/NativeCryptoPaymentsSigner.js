@@ -41,26 +41,26 @@ class NativeCryptoPayments {
   }
 
   registerAsSeller({ from }) {
-    return this.paymentsContract.methods.registerAsSeller().send({ from, value: 0 });
+    return this.paymentsContract.methods.registerAsSeller().send({ from, value: 0, gas: 200000 });
   }
 
   withdraw({ from }) {
-    return this.paymentsContract.methods.withdraw().send({ from, value: 0 });
+    return this.paymentsContract.methods.withdraw().send({ from, value: 0, gas: 400000 });
   }
 
   finalizeAndWithdraw({ assetTransferData, signature, from }) {
     return this.paymentsContract.methods
-      .finalizeAndWithdraw(assetTransferData, signature).send({ from, value: 0 });
+      .finalizeAndWithdraw(assetTransferData, signature).send({ from, value: 0, gas: 400000 });
   }
 
   pay({ paymentData, signature, from }) {
     return this.paymentsContract.methods.pay(paymentData, signature)
-      .send({ from, value: paymentData.amount });
+      .send({ from, value: paymentData.amount, gas: 400000 });
   }
 
   finalize({ assetTransferData, signature, from }) {
     return this.paymentsContract.methods
-      .finalize(assetTransferData, signature).send({ from, value: 0 });
+      .finalize(assetTransferData, signature).send({ from, value: 0, gas: 400000 });
   }
 
   balanceOf({ address }) {
