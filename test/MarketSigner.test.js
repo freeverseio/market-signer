@@ -42,6 +42,7 @@ const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF3
 it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () => {
   const randomTime = 1634217828;
   const interval = 900;
+  const safetyMargin = 300;
 
   assert.equal(
     plannedSubmissionTime({
@@ -69,8 +70,9 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
       referenceVerse: 1,
       referenceTime: randomTime,
       verseInterval: interval,
+      safetyMargin,
     }),
-    randomTime + interval,
+    randomTime + interval - safetyMargin,
   );
 
   assert.equal(
@@ -79,8 +81,9 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
       referenceVerse: 1,
       referenceTime: randomTime,
       verseInterval: interval,
+      safetyMargin,
     }),
-    randomTime + 3 * interval,
+    randomTime + 3 * interval - safetyMargin,
   );
 
   assert.equal(
@@ -117,10 +120,11 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
     referenceVerse: 1,
     referenceTime: randomTime,
     verseInterval: interval,
+    safetyMargin,
   });
 
   assert.equal(expirationData.lastValidVerse, 2);
-  assert.equal(expirationData.expirationTime, randomTime + 2 * interval);
+  assert.equal(expirationData.expirationTime, randomTime + 2 * interval - safetyMargin);
 
   assert.equal(
     expiresAtTime({
@@ -128,6 +132,7 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
       referenceVerse: 1,
       referenceTime: randomTime,
       verseInterval: interval,
+      safetyMargin,
     }),
     expirationData.expirationTime,
   );
