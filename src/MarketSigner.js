@@ -462,23 +462,23 @@ function plannedSubmissionVerse({
 }
 
 function expiresAtTime({
-  verse, referenceVerse, referenceTime, verseInterval,
+  verse, referenceVerse, referenceTime, verseInterval, safetyMargin,
 }) {
   const nextSubmissionVerse = +verse + 1;
   return plannedSubmissionTime({
     verse: nextSubmissionVerse, referenceVerse, referenceTime, verseInterval,
-  });
+  }) - safetyMargin;
 }
 
 function getExpiryData({
-  time, referenceVerse, referenceTime, verseInterval,
+  time, referenceVerse, referenceTime, verseInterval, safetyMargin,
 }) {
   const submissionVerse = plannedSubmissionVerse({
     time, referenceVerse, referenceTime, verseInterval,
   });
   const lastValidVerse = +submissionVerse - 1;
   const expirationTime = expiresAtTime({
-    verse: lastValidVerse, referenceVerse, referenceTime, verseInterval,
+    verse: lastValidVerse, referenceVerse, referenceTime, verseInterval, safetyMargin,
   });
   return { lastValidVerse, expirationTime };
 }
