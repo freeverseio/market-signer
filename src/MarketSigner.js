@@ -465,9 +465,10 @@ function expiresAtTime({
   verse, referenceVerse, referenceTime, verseInterval, safetyMargin,
 }) {
   const nextSubmissionVerse = +verse + 1;
+  const defaultSafetyMargin = 300;
   return plannedSubmissionTime({
     verse: nextSubmissionVerse, referenceVerse, referenceTime, verseInterval,
-  }) - safetyMargin;
+  }) - (safetyMargin || defaultSafetyMargin);
 }
 
 function getExpiryData({
@@ -477,8 +478,13 @@ function getExpiryData({
     time, referenceVerse, referenceTime, verseInterval,
   });
   const lastValidVerse = +submissionVerse - 1;
+  const defaultSafetyMargin = 300;
   const expirationTime = expiresAtTime({
-    verse: lastValidVerse, referenceVerse, referenceTime, verseInterval, safetyMargin,
+    verse: lastValidVerse,
+    referenceVerse,
+    referenceTime,
+    verseInterval,
+    safetyMargin: safetyMargin || defaultSafetyMargin,
   });
   return { lastValidVerse, expirationTime };
 }
