@@ -11,6 +11,7 @@ const {
   digestCashout,
   digestChangeIdAlias,
   digestStolenEmail,
+  digestCancelBuyNow,
   digestPayNow,
   digestPutForSaleAuction,
   digestPutForSaleBuyNow,
@@ -221,6 +222,14 @@ it('deterministic digestStolenEmail', async () => {
   const digest = digestStolenEmail({ freeverseId });
   const signature = sign({ digest, web3account: account });
   const expected = '0x2808a64c2e34edcf78448345aeed8bc93e5b305f7f1b6536d2f8c3c4b94f01153c294de2c054ef46dfd51d35dc9cb7c23a87f807f6028ed0147b78dd3a78fb0c1c';
+  assert.equal(signature, expected);
+});
+
+it('deterministic digestCancelBuyNow', async () => {
+  const buyNowId = '0x03214d89eb62587cbb48c9056dba878f839a4ebad3ad75f8826d76c566e4acd0';
+  const digest = digestCancelBuyNow({ buyNowId });
+  const signature = sign({ digest, web3account: account });
+  const expected = '0x2302e0592665be3ba067f15a8cde6da84bd97069347248ead1783c7809000d1b4ac81b606c3786bdf17692077fe724994c327370d7ae9612e9153756fa47ca5c1c';
   assert.equal(signature, expected);
 });
 
