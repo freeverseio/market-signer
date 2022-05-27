@@ -254,6 +254,13 @@ function digestChangeIdAlias({ email, alias, freeverseId }) {
   });
 }
 
+function digestCancelBuyNow({ buyNowId }) {
+  return concatHash({
+    types: ['string', 'bytes32'],
+    vals: ['cancelBuyNow', buyNowId],
+  });
+}
+
 function digestBuyNowFromBuyNowIdCertified({
   buyNowId, assetCID,
 }) {
@@ -496,6 +503,7 @@ module.exports = {
   digestCashout,
   digestChangeIdAlias,
   digestStolenEmail,
+  digestCancelBuyNow,
   digestPayNow,
   digestPutForSaleAuction,
   digestPutForSaleBuyNow,
