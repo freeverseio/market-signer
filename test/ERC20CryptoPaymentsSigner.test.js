@@ -249,7 +249,7 @@ describe('Payments in ERC20', () => {
     assert.equal(ERC20Payments.isValidPaymentData({ paymentData: data }), true);
     await assert.isRejected(
       erc20Payments.pay({ paymentData: data, signature, from: account.address }),
-      'VM Exception while processing transaction: revert only buyer can execute this function',
+      'VM Exception while processing transaction: revert',
     );
   });
 });
