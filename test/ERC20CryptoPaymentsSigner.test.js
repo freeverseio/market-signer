@@ -12,6 +12,7 @@ const Eth = require('web3-eth');
 const fs = require('fs');
 const myTokenJSON = require('./contracts/MyToken.json');
 const PaymentsERC20JSON = require('./contracts/PaymentsERC20.json');
+const EIP712JSON = require('./contracts/EIP712Verifier.json');
 const { ERC20Payments } = require('../dist/main');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
@@ -44,6 +45,7 @@ const symbol = 'TokenSymbol';
 const currencyDescriptor = 'TestERC20Token';
 
 let provider;
+let EIP712deploy;
 let erc20Contract;
 let erc20Deploy;
 let erc20Addr;
@@ -61,6 +63,13 @@ describe('Payments in ERC20', () => {
 
     eth = new Eth(provider);
 
+    // deploy EIP712 contract
+    const EIP712contract = new Contract(EIP712JSON.abi);
+    EIP712contract.setProvider(provider);
+    EIP712deploy = await EIP712contract.deploy({
+      data: EIP712JSON.bytecode,
+    }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
+
     // deploy MyToken ERC20
     erc20Contract = new Contract(myTokenJSON.abi);
     erc20Contract.setProvider(provider);
@@ -75,7 +84,7 @@ describe('Payments in ERC20', () => {
     paymentsContract.setProvider(provider);
     paymentsDeploy = await paymentsContract.deploy({
       data: PaymentsERC20JSON.bytecode,
-      arguments: [erc20Addr, currencyDescriptor],
+      arguments: [erc20Addr, currencyDescriptor, EIP712deploy.options.address],
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
 
@@ -211,7 +220,7 @@ describe('Payments in ERC20', () => {
   it('withdraw', async () => {
     await assert.isRejected(
       erc20Payments.withdraw({ from: account.address }),
-      'VM Exception while processing transaction: revert cannot withdraw: balance is zero',
+      'VM Exception while processing transaction: revert cannot withdraw zero amount',
     );
   });
 

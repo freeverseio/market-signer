@@ -12,6 +12,7 @@ const Eth = require('web3-eth');
 const fs = require('fs');
 const { NativeCryptoPayments } = require('../dist/main');
 const PaymentsNativeJSON = require('./contracts/PaymentsNative.json');
+const EIP712JSON = require('./contracts/EIP712Verifier.json');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
@@ -42,6 +43,7 @@ const currencyDescriptor = 'TestNativeCoin';
 
 let provider;
 let nativePayments;
+let EIP712deploy;
 let paymentsDeploy;
 let paymentsAddr;
 let eth;
@@ -54,12 +56,19 @@ describe('Payments in Native Cryptocurrencies', () => {
 
     eth = new Eth(provider);
 
+    // deploy EIP712 contract
+    const EIP712contract = new Contract(EIP712JSON.abi);
+    EIP712contract.setProvider(provider);
+    EIP712deploy = await EIP712contract.deploy({
+      data: EIP712JSON.bytecode,
+    }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
+
     // deploy Payments contract
     const paymentsContract = new Contract(PaymentsNativeJSON.abi);
     paymentsContract.setProvider(provider);
     paymentsDeploy = await paymentsContract.deploy({
       data: PaymentsNativeJSON.bytecode,
-      arguments: [currencyDescriptor],
+      arguments: [currencyDescriptor, EIP712deploy.options.address],
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
 
@@ -167,7 +176,7 @@ describe('Payments in Native Cryptocurrencies', () => {
   it('withdraw', async () => {
     await assert.isRejected(
       nativePayments.withdraw({ from: account.address }),
-      'VM Exception while processing transaction: revert cannot withdraw: balance is zero',
+      'VM Exception while processing transaction: revert cannot withdraw zero amount',
     );
   });
 
