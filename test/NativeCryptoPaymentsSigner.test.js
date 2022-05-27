@@ -205,7 +205,7 @@ describe('Payments in Native Cryptocurrencies', () => {
     assert.equal(NativeCryptoPayments.isValidPaymentData({ paymentData: data }), true);
     await assert.isRejected(
       nativePayments.pay({ paymentData: data, signature, from: account.address }),
-      'VM Exception while processing transaction: revert only buyer can execute this function',
+      'VM Exception while processing transaction: revert',
     );
   });
 });
