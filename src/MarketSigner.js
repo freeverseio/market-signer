@@ -256,8 +256,8 @@ function digestChangeIdAlias({ email, alias, freeverseId }) {
 
 function digestCancelBuyNow({ buyNowId }) {
   return concatHash({
-    types: ['bytes32'],
-    vals: [buyNowId],
+    types: ['string', 'bytes32'],
+    vals: ['cancelBuyNow', buyNowId],
   });
 }
 

@@ -229,7 +229,7 @@ it('deterministic digestCancelBuyNow', async () => {
   const buyNowId = '0x03214d89eb62587cbb48c9056dba878f839a4ebad3ad75f8826d76c566e4acd0';
   const digest = digestCancelBuyNow({ buyNowId });
   const signature = sign({ digest, web3account: account });
-  const expected = '0x2302e0592665be3ba067f15a8cde6da84bd97069347248ead1783c7809000d1b4ac81b606c3786bdf17692077fe724994c327370d7ae9612e9153756fa47ca5c1c';
+  const expected = '0xbc88e1ba759b7d73bc8bb19d0298188ef1b0c1b847b94ef4bad84accea89c7c61e856537548547d25e4f3aabf410eb936a49ec6514e105f93777c99adb29bc751c';
   assert.equal(signature, expected);
 });
 
