@@ -44,6 +44,9 @@ function concatHash({ types, vals }) {
   return Utils.keccak256(abi.encodeParameters(types, vals));
 }
 
+/**
+ * @deprecated since version 1.5.7
+ */
 function digestLinkId({ email, freeverseId }) {
   return concatHash({
     types: ['string', 'string'],
@@ -51,10 +54,27 @@ function digestLinkId({ email, freeverseId }) {
   });
 }
 
+/**
+ * @deprecated since version 1.5.7
+ */
 function digestUnlinkId({ email, freeverseId }) {
   return concatHash({
     types: ['string', 'string'],
     vals: [email, freeverseId],
+  });
+}
+
+function digestLinkAddress({ email, web3Address }) {
+  return concatHash({
+    types: ['string', 'string'],
+    vals: [email, web3Address],
+  });
+}
+
+function digestUnlinkAddress({ email, web3Address }) {
+  return concatHash({
+    types: ['string', 'string'],
+    vals: [email, web3Address],
   });
 }
 
@@ -240,6 +260,9 @@ function digestCashout({ paymentId, iban }) {
   });
 }
 
+/**
+ * @deprecated since version 1.5.7
+ */
 function digestStolenEmail({ freeverseId }) {
   return concatHash({
     types: ['string'],
@@ -247,10 +270,27 @@ function digestStolenEmail({ freeverseId }) {
   });
 }
 
+/**
+ * @deprecated since version 1.5.7
+ */
 function digestChangeIdAlias({ email, alias, freeverseId }) {
   return concatHash({
     types: ['string', 'string', 'string'],
     vals: [email, alias, freeverseId],
+  });
+}
+
+function digestStolenEmailByAddress({ web3Address }) {
+  return concatHash({
+    types: ['string'],
+    vals: [web3Address],
+  });
+}
+
+function digestChangeAddressAlias({ email, alias, web3Address }) {
+  return concatHash({
+    types: ['string', 'string', 'string'],
+    vals: [email, alias, web3Address],
   });
 }
 
@@ -500,9 +540,13 @@ module.exports = {
   sign,
   digestLinkId,
   digestUnlinkId,
+  digestLinkAddress,
+  digestUnlinkAddress,
   digestCashout,
   digestChangeIdAlias,
   digestStolenEmail,
+  digestStolenEmailByAddress,
+  digestChangeAddressAlias,
   digestCancelBuyNow,
   digestPayNow,
   digestPutForSaleAuction,
