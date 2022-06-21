@@ -287,7 +287,7 @@ function digestStolenEmailByAddress({ web3Address }) {
   });
 }
 
-function digestChangeAddressAlias({ email, alias, web3Address }) {
+function digestChangeAlias({ email, alias, web3Address }) {
   return concatHash({
     types: ['string', 'string', 'string'],
     vals: [email, alias, web3Address],
@@ -546,7 +546,7 @@ module.exports = {
   digestChangeIdAlias,
   digestStolenEmail,
   digestStolenEmailByAddress,
-  digestChangeAddressAlias,
+  digestChangeAlias,
   digestCancelBuyNow,
   digestPayNow,
   digestPutForSaleAuction,

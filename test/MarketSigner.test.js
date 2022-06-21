@@ -14,7 +14,7 @@ const {
   digestChangeIdAlias,
   digestStolenEmail,
   digestStolenEmailByAddress,
-  digestChangeAddressAlias,
+  digestChangeAlias,
   digestCancelBuyNow,
   digestPayNow,
   digestPutForSaleAuction,
@@ -239,11 +239,11 @@ it('deterministic digestChangeIdAlias', async () => {
   assert.equal(signature, expected);
 });
 
-it('deterministic digestChangeAddressAlias', async () => {
+it('deterministic digestChangeAlias', async () => {
   const email = 'super.dooper@mylab.great';
   const alias = 'my gaming account';
   const web3Address = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestChangeAddressAlias({ email, alias, web3Address });
+  const digest = digestChangeAlias({ email, alias, web3Address });
   const signature = sign({ digest, web3account: account });
   const expected = '0x296d9f3ae69fbe97f1b30997a98b780fb51a54af7476e587dd8bc2d6af4638846e08109d4dc44459294e1ec23f5949061e8fca318ea743511040ec67fc1e27c81c';
   assert.equal(signature, expected);
