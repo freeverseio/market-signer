@@ -47,20 +47,20 @@ function concatHash({ types, vals }) {
 /**
  * @deprecated since version 1.5.7
  */
-function digestLinkId({ email, freeverseId }) {
+function digestLinkId({ email, web3Address }) {
   return concatHash({
     types: ['string', 'string'],
-    vals: [email, freeverseId],
+    vals: [email, web3Address],
   });
 }
 
 /**
  * @deprecated since version 1.5.7
  */
-function digestUnlinkId({ email, freeverseId }) {
+function digestUnlinkId({ email, web3Address }) {
   return concatHash({
     types: ['string', 'string'],
-    vals: [email, freeverseId],
+    vals: [email, web3Address],
   });
 }
 
@@ -263,20 +263,20 @@ function digestCashout({ paymentId, iban }) {
 /**
  * @deprecated since version 1.5.7
  */
-function digestStolenEmail({ freeverseId }) {
+function digestStolenEmail({ web3Address }) {
   return concatHash({
     types: ['string'],
-    vals: [freeverseId],
+    vals: [web3Address],
   });
 }
 
 /**
  * @deprecated since version 1.5.7
  */
-function digestChangeIdAlias({ email, alias, freeverseId }) {
+function digestChangeIdAlias({ email, alias, web3Address }) {
   return concatHash({
     types: ['string', 'string', 'string'],
-    vals: [email, alias, freeverseId],
+    vals: [email, alias, web3Address],
   });
 }
 

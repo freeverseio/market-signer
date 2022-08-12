@@ -175,8 +175,8 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
 
 it('deterministic digestLinkId', async () => {
   const email = 'super.dooper@mylab.great';
-  const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestLinkId({ email, freeverseId });
+  const web3Address = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
+  const digest = digestLinkId({ email, web3Address });
   const signature = sign({ digest, web3account: account });
   const expected = '0x3531526e836fd00e30d3812c7d7f95d4abeb502c03a40e2171650c79e3435f21414cff8394e64a3ec0930fb290623dd0681e126dd75f53eeec49a2f815e3b8201b';
   assert.equal(signature, expected);
@@ -193,8 +193,8 @@ it('deterministic digestLinkAddress', async () => {
 
 it('deterministic digestUnlinkId', async () => {
   const email = 'super.dooper@mylab.great';
-  const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestUnlinkId({ email, freeverseId });
+  const web3Address = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
+  const digest = digestUnlinkId({ email, web3Address });
   const signature = sign({ digest, web3account: account });
   const expected = '0x3531526e836fd00e30d3812c7d7f95d4abeb502c03a40e2171650c79e3435f21414cff8394e64a3ec0930fb290623dd0681e126dd75f53eeec49a2f815e3b8201b';
   assert.equal(signature, expected);
@@ -232,8 +232,8 @@ it('deterministic digestCashout', async () => {
 it('deterministic digestChangeIdAlias', async () => {
   const email = 'super.dooper@mylab.great';
   const alias = 'my gaming account';
-  const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestChangeIdAlias({ email, alias, freeverseId });
+  const web3Address = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
+  const digest = digestChangeIdAlias({ email, alias, web3Address });
   const signature = sign({ digest, web3account: account });
   const expected = '0x296d9f3ae69fbe97f1b30997a98b780fb51a54af7476e587dd8bc2d6af4638846e08109d4dc44459294e1ec23f5949061e8fca318ea743511040ec67fc1e27c81c';
   assert.equal(signature, expected);
@@ -250,8 +250,8 @@ it('deterministic digestChangeAlias', async () => {
 });
 
 it('deterministic digestStolenEmail', async () => {
-  const freeverseId = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
-  const digest = digestStolenEmail({ freeverseId });
+  const web3Address = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
+  const digest = digestStolenEmail({ web3Address });
   const signature = sign({ digest, web3account: account });
   const expected = '0x2808a64c2e34edcf78448345aeed8bc93e5b305f7f1b6536d2f8c3c4b94f01153c294de2c054ef46dfd51d35dc9cb7c23a87f807f6028ed0147b78dd3a78fb0c1c';
   assert.equal(signature, expected);
