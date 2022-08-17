@@ -200,6 +200,28 @@ describe('Payments in Native Cryptocurrencies', () => {
     assert.equal(NativeCryptoPayments.isValidPaymentData({ paymentData: data }), false);
   });
 
+  it('signature correctly verified (tested against Solidity)', async () => {
+    const data = {
+      paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
+      amount: '23',
+      feeBPS: 500,
+      universeId: '1',
+      deadline: '1646175615',
+      buyer: '0x5Ca59cbA5D0D0D604bF59cD0e7b3cD3c350142BE',
+      seller: '0xBDcaD33BA6eF2086F2511610Fa5Bedaf062CC1Cf',
+    };
+
+    const operatorPvk = 'aaf06722787393a80c2079882825f9777f003949bb7d41af20c4efe64f6a31f3';
+    const operatorAcc = new Accounts().privateKeyToAccount(operatorPvk);
+    const signature = '0x82ba2795090e608e8ed5b7065566354804a119b583e4cfb39ff7143026bb3a5973e3f4928cca9cc72778cce9d31630b9ba6f3f7fac47c4176cd3c7c0dcd9343d1c';
+// 
+    const b = await eth.getChainId();
+    console.log(b);
+    const eip712 = new eth.Contract(EIP712JSON.abi, EIP712deploy.options.address);
+    const a = await eip712.methods.verifyPayment(data, signature, operatorAcc.address).call();
+    assert.equal(a, true);
+  });
+
   it('pay fails if not buyer', async () => {
     const data = {
       paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
