@@ -11,7 +11,8 @@ const Contract = require('web3-eth-contract');
 const Eth = require('web3-eth');
 const fs = require('fs');
 const { NativeCryptoPayments } = require('../dist/main');
-const PaymentsNativeJSON = require('./contracts/PaymentsNative.json');
+const EIP712SON = require('./contracts/EIP712VerifierBuyNow.json');
+const PaymentsNativeJSON = require('./contracts/BuyNowNative.json');
 
 // This is the private key of the first account created with Ganache given the mnemonic below
 const pvk = 'F2F48EE19680706196E2E339E5DA3491186E0C4C5030670656B0E0164837257D';
@@ -40,8 +41,13 @@ const ganacheSubprovider = new GanacheSubprovider({
 
 const currencyDescriptor = 'TestNativeCoin';
 
+const EIP712VerifierName = 'LivingAssets Native CryptoPayments';
+const EIP712VerifierVersion = 1;
+
 let provider;
+let eip712Contract;
 let nativePayments;
+let eip712Deploy;
 let paymentsDeploy;
 let paymentsAddr;
 let eth;
@@ -54,12 +60,20 @@ describe('Payments in Native Cryptocurrencies', () => {
 
     eth = new Eth(provider);
 
+    // deploy EIP712 contract
+    eip712Contract = new Contract(EIP712SON.abi);
+    eip712Contract.setProvider(provider);
+    eip712Deploy = await eip712Contract.deploy({
+      data: EIP712SON.bytecode,
+      arguments: [EIP712VerifierName, EIP712VerifierVersion],
+    }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
+
     // deploy Payments contract
     const paymentsContract = new Contract(PaymentsNativeJSON.abi);
     paymentsContract.setProvider(provider);
     paymentsDeploy = await paymentsContract.deploy({
       data: PaymentsNativeJSON.bytecode,
-      arguments: [currencyDescriptor],
+      arguments: [currencyDescriptor, eip712Deploy.options.address],
     }).send({ from: account.address, gas: 5000000, gasPrice: '3000000000000' });
     paymentsAddr = paymentsDeploy.options.address;
 
@@ -167,7 +181,7 @@ describe('Payments in Native Cryptocurrencies', () => {
   it('withdraw', async () => {
     await assert.isRejected(
       nativePayments.withdraw({ from: account.address }),
-      'VM Exception while processing transaction: revert cannot withdraw: balance is zero',
+      'VM Exception while processing transaction: revert BuyNowBase::_withdrawAmount: cannot withdraw zero amount',
     );
   });
 
@@ -191,7 +205,7 @@ describe('Payments in Native Cryptocurrencies', () => {
     assert.equal(NativeCryptoPayments.isValidPaymentData({ paymentData: data }), false);
   });
 
-  it('pay fails if not buyer', async () => {
+  it('buyNow fails if signature is incorrect', async () => {
     const data = {
       paymentId: '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
       amount: '32',
@@ -201,10 +215,13 @@ describe('Payments in Native Cryptocurrencies', () => {
       buyer: '0x56270bf851453EF41A060fb3C7427B9c3Cc0cde5',
       seller: '0x4f97a6d1fcf56be844d6b7510a21f407e9101d1e',
     };
-    const signature = '0x009a76c8f1c6f4286eb295ddc60d1fbe306880cbc5d36178c67e97d4993d6bfc112c56ff9b4d988af904cd107cdcc61f11461d6a436e986b665bb88e1b6d32c81c';
+    const sellerSignature = '0x123';
+    const operatorSignature = '0x009a76c8f1c6f4286eb295ddc60d1fbe306880cbc5d36178c67e97d4993d6bfc112c56ff9b4d988af904cd107cdcc61f11461d6a436e986b665bb88e1b6d32c81c';
     assert.equal(NativeCryptoPayments.isValidPaymentData({ paymentData: data }), true);
     await assert.isRejected(
-      nativePayments.pay({ paymentData: data, signature, from: account.address }),
+      nativePayments.buyNow({
+        paymentData: data, operatorSignature, sellerSignature, from: account.address,
+      }),
       'VM Exception while processing transaction: revert',
     );
   });
