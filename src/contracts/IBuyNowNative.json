@@ -1,0 +1,1218 @@
+{
+  "contractName": "IBuyNowNative",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "seller",
+          "type": "address"
+        }
+      ],
+      "name": "BuyNow",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        }
+      ],
+      "name": "BuyerRefunded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "eip712address",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "prevEip712address",
+          "type": "address"
+        }
+      ],
+      "name": "EIP712",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "maxFeeBPS",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "prevMaxFeeBPS",
+          "type": "uint256"
+        }
+      ],
+      "name": "MaxFeeBPS",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "seller",
+          "type": "address"
+        }
+      ],
+      "name": "NewSeller",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "onlyUserCanWithdraw",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "prevOnlyUserCanWithdraw",
+          "type": "bool"
+        }
+      ],
+      "name": "OnlyUserCanWithdraw",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Paid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "window",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "prevWindow",
+          "type": "uint256"
+        }
+      ],
+      "name": "PaymentWindow",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Withdraw",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "EIP712Address",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "acceptsRefunds",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.BuyNowInput",
+          "name": "buyNowInp",
+          "type": "tuple"
+        }
+      ],
+      "name": "assertBuyNowInputsOK",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "feeBPS",
+          "type": "uint256"
+        }
+      ],
+      "name": "computeFeeAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "currencyLongDescriptor",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "enoughFundsAvailable",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bool",
+              "name": "wasSuccessful",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.AssetTransferResult",
+          "name": "transferResult",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "finalize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bool",
+              "name": "wasSuccessful",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.AssetTransferResult",
+          "name": "transferResult",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "finalizeAndWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "isRegisteredSeller",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isSellerRegistrationRequired",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxFeeBPS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        }
+      ],
+      "name": "maxFundsAvailable",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "onlyUserCanWithdraw",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "paymentInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum IBuyNowBase.State",
+              "name": "state",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "feesCollector",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "expirationTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IBuyNowBase.Payment",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "paymentState",
+      "outputs": [
+        {
+          "internalType": "enum IBuyNowBase.State",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paymentWindow",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "refund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "refundAndWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "registerAsSeller",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        }
+      ],
+      "name": "relayedWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "onlyUserCan",
+          "type": "bool"
+        }
+      ],
+      "name": "setOnlyUserCanWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "splitFundingSources",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "externalFunds",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "localFunds",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.BuyNowInput",
+          "name": "buyNowInp",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "sellerSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "buyNow",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.14+commit.80d49f37\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"name\":\"BuyNow\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"}],\"name\":\"BuyerRefunded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"eip712address\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"prevEip712address\",\"type\":\"address\"}],\"name\":\"EIP712\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxFeeBPS\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"prevMaxFeeBPS\",\"type\":\"uint256\"}],\"name\":\"MaxFeeBPS\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"name\":\"NewSeller\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"onlyUserCanWithdraw\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"prevOnlyUserCanWithdraw\",\"type\":\"bool\"}],\"name\":\"OnlyUserCanWithdraw\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"Paid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"window\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"prevWindow\",\"type\":\"uint256\"}],\"name\":\"PaymentWindow\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"EIP712Address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"acceptsRefunds\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"struct ISignableStructsBuyNow.BuyNowInput\",\"name\":\"buyNowInp\",\"type\":\"tuple\"}],\"name\":\"assertBuyNowInputsOK\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"struct ISignableStructsBuyNow.BuyNowInput\",\"name\":\"buyNowInp\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"sellerSignature\",\"type\":\"bytes\"}],\"name\":\"buyNow\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"}],\"name\":\"computeFeeAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currencyLongDescriptor\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"enoughFundsAvailable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"wasSuccessful\",\"type\":\"bool\"}],\"internalType\":\"struct ISignableStructsBuyNow.AssetTransferResult\",\"name\":\"transferResult\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"}],\"name\":\"finalize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"wasSuccessful\",\"type\":\"bool\"}],\"internalType\":\"struct ISignableStructsBuyNow.AssetTransferResult\",\"name\":\"transferResult\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"}],\"name\":\"finalizeAndWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isRegisteredSeller\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"isSellerRegistrationRequired\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxFeeBPS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"}],\"name\":\"maxFundsAvailable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"onlyUserCanWithdraw\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"paymentInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"enum IBuyNowBase.State\",\"name\":\"state\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"feesCollector\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"expirationTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"internalType\":\"struct IBuyNowBase.Payment\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"paymentState\",\"outputs\":[{\"internalType\":\"enum IBuyNowBase.State\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paymentWindow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"refund\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"refundAndWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"registerAsSeller\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"relayedWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"onlyUserCan\",\"type\":\"bool\"}],\"name\":\"setOnlyUserCanWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"splitFundingSources\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"externalFunds\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"localFunds\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdrawAmount\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"details\":\"The contract that implements this interface adds an entry point for BuyNow payments, which are defined and documented in the inherited IBuyNowBase. - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call.\",\"kind\":\"dev\",\"methods\":{\"EIP712Address()\":{\"returns\":{\"_0\":\"the address of the EIP712 verifier contract\"}},\"acceptsRefunds(bytes32)\":{\"details\":\"The payment must be in ASSET_TRANSFERRING and beyond expirationTime.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"},\"returns\":{\"_0\":\"true if the payment accepts a refund to the buyer.\"}},\"assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))\":{\"params\":{\"buyNowInp\":\"The BuyNowInput struct\"}},\"balanceOf(address)\":{\"params\":{\"addr\":\"the address that is queried\"},\"returns\":{\"_0\":\"the local balance\"}},\"buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)\":{\"details\":\"Executed by the buyer, who relays the MetaTX with the operator's signature.  The buyer must provide the correct amount via msg.value.  If all requirements are fulfilled, it stores the data relevant  for the next steps of the payment, and it locks the funds  in this contract.  Follows standard Checks-Effects-Interactions pattern  to protect against re-entrancy attacks.  Moves payment to ASSET_TRANSFERRING state.\",\"params\":{\"buyNowInp\":\"The struct containing all required payment data\",\"operatorSignature\":\"The signature of 'buyNowInp' by the operator\",\"sellerSignature\":\"the signature of the seller agreeing to list the asset\"}},\"computeFeeAmount(uint256,uint256)\":{\"details\":\"Must return a value that is guaranteed to be less or equal to the provided amount\",\"params\":{\"amount\":\"The amount\",\"feeBPS\":\"The percentage fee expressed in Basis Points (bps).  feeBPS examples:  2.5% = 250 bps, 10% = 1000 bps, 100% = 10000 bps\"},\"returns\":{\"_0\":\"The fee amount\"}},\"currencyLongDescriptor()\":{\"returns\":{\"_0\":\"the string describing the currency\"}},\"enoughFundsAvailable(address,uint256)\":{\"details\":\"In more detail: returns true if the sum of the buyer's local balance in this contract,  plus the external available balance, is larger or equal than 'amount'\",\"params\":{\"amount\":\"The amount that is queried\",\"buyer\":\"The address for which funds are queried\"},\"returns\":{\"_0\":\"Returns true if enough funds are available\"}},\"finalize((bytes32,bool),bytes)\":{\"details\":\"Can be executed by anyone, but the operator signature must be included as input param.  Seller or Buyer's local balances are updated, allowing explicit withdrawal.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.\",\"params\":{\"operatorSignature\":\"The operator signature of transferResult\",\"transferResult\":\"The asset transfer result struct signed by the operator.\"}},\"finalizeAndWithdraw((bytes32,bool),bytes)\":{\"details\":\"If recipient has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the recipient too, but with a  helping 3rd party covering gas costs and TX sending hassle.  The operator signature must be included as input param.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.\",\"params\":{\"operatorSignature\":\"The operator signature of transferResult\",\"transferResult\":\"The asset transfer result struct signed by the operator.\"}},\"isRegisteredSeller(address)\":{\"params\":{\"addr\":\"the address that is queried\"},\"returns\":{\"_0\":\"Returns whether the address is registered as seller\"}},\"isSellerRegistrationRequired()\":{\"returns\":{\"_0\":\"Returns true if sellers need to be registered to be able to accept payments\"}},\"maxFeeBPS()\":{\"returns\":{\"_0\":\"the max fee (in BPS units)\"}},\"maxFundsAvailable(address)\":{\"details\":\"In more detail: returns the sum of the buyer's local balance in this contract,  plus the available external balance.\",\"params\":{\"buyer\":\"The address for which funds are queried\"},\"returns\":{\"_0\":\"the max funds available\"}},\"onlyUserCanWithdraw(address)\":{\"params\":{\"user\":\"The address of the user\"}},\"paymentInfo(bytes32)\":{\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"},\"returns\":{\"_0\":\"the struct stored for the payment\"}},\"paymentState(bytes32)\":{\"details\":\"If payment is in ASSET_TRANSFERRING, it may be worth  checking acceptsRefunds to check if it has gone beyond expirationTime.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"},\"returns\":{\"_0\":\"the state of the payment.\"}},\"paymentWindow()\":{\"returns\":{\"_0\":\"the payment window in secs\"}},\"refund(bytes32)\":{\"details\":\"Anybody can call this function.  Requires acceptsRefunds == true to proceed.  After updating buyer's balance, he/she can later withdraw.  Moves payment to REFUNDED state.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"}},\"refundAndWithdraw(bytes32)\":{\"details\":\"If the buyer has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the buyer too, but with a  helping 3rd party covering gas costs and TX sending hassle.  Requires acceptsRefunds == true to proceed.  All of msg.sender's balance in the contract is withdrawn,  not only the part that was locked in this particular paymentId  Moves payment to REFUNDED state.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"}},\"setOnlyUserCanWithdraw(bool)\":{\"params\":{\"onlyUserCan\":\"true if only the user can execute withdrawals of his/her local balance\"}},\"splitFundingSources(address,uint256)\":{\"params\":{\"amount\":\"The amount to be split\",\"buyer\":\"The address for which the amount is to be split\"},\"returns\":{\"externalFunds\":\"The funds required to be transferred from the external buyer balance\",\"localFunds\":\"The amount of local funds that will be used.\"}},\"withdrawAmount(uint256)\":{\"params\":{\"amount\":\"The required amount to withdraw\"}}},\"title\":\"Interface to Escrow Contract for Payments in BuyNow mode, in native cryptocurrency.\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"EIP712Address()\":{\"notice\":\"Returns the address of the of the contract containing  the implementation of the EIP712 verifying functions\"},\"acceptsRefunds(bytes32)\":{\"notice\":\"Returns true if the payment accepts a refund to the buyer\"},\"assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))\":{\"notice\":\"Reverts unless the requirements for a BuyNowInput are fulfilled.\"},\"balanceOf(address)\":{\"notice\":\"Returns the local balance of the provided address that is stored in this  contract, and hence, available for withdrawal.\"},\"buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)\":{\"notice\":\"Starts Payment process by the buyer.\"},\"computeFeeAmount(uint256,uint256)\":{\"notice\":\"Safe computation of fee amount for a provided amount, feeBPS pair\"},\"currencyLongDescriptor()\":{\"notice\":\"Returns a descriptor about the currency that this contract accepts\"},\"enoughFundsAvailable(address,uint256)\":{\"notice\":\"Returns true if the 'amount' required for a payment is available to this contract.\"},\"finalize((bytes32,bool),bytes)\":{\"notice\":\"Relays the operator signature declaring that the asset transfer was successful or failed,  and updates local balances of seller or buyer, respectively.\"},\"finalizeAndWithdraw((bytes32,bool),bytes)\":{\"notice\":\"Relays the operator signature declaring that the asset transfer was successful or failed,  updates balances of seller or buyer, respectively, and proceeds to withdraw all funds   in this contract available to the rightful recipient of the paymentId:   the seller if transferResult.wasSuccessful == true, the buyer otherwise.\"},\"isRegisteredSeller(address)\":{\"notice\":\"Returns true if the address provided is a registered seller\"},\"isSellerRegistrationRequired()\":{\"notice\":\"Returns whether sellers need to be registered to be able to accept payments\"},\"maxFeeBPS()\":{\"notice\":\"Returns the max fee (in BPS units) that can be accepted in any payment  despite operator and buyer having signed a larger amount;  a value of 10000 BPS would correspond to 100% (no limit at all)\"},\"maxFundsAvailable(address)\":{\"notice\":\"Returns the maximum amount of funds available to a buyer\"},\"onlyUserCanWithdraw(address)\":{\"notice\":\"Returns the value of onlyUserCanWithdraw for a given user\"},\"paymentInfo(bytes32)\":{\"notice\":\"Returns all data stored in a payment\"},\"paymentState(bytes32)\":{\"notice\":\"Returns the state of a payment.\"},\"paymentWindow()\":{\"notice\":\"Returns the amount of seconds that a payment  can remain in ASSET_TRANSFERRING state without positive  or negative confirmation by the operator\"},\"refund(bytes32)\":{\"notice\":\"Moves buyer's provided funds to buyer's balance.\"},\"refundAndWithdraw(bytes32)\":{\"notice\":\"Executes refund and withdraw to the buyer in one transaction.\"},\"registerAsSeller()\":{\"notice\":\"Registers msg.sender as seller so that, if the contract has set  _isSellerRegistrationRequired = true, then payments will be accepted with  msg.sender as seller.\"},\"relayedWithdraw(address)\":{\"notice\":\"Transfers funds avaliable in this  contract's balanceOf[recipient] to recipient.  The funds still go to straight the recipient, as if he/she  has executed the withdrawal() method, but the msg.sender  covers gas costs and the hassle of executing the transaction.  Users can always opt out from this feature, using the setOnlyUserCanWithdraw method.\"},\"setOnlyUserCanWithdraw(bool)\":{\"notice\":\"Sets the value of onlyUserCanWithdraw for the user with msg.sender address:  - if true: only the user can execute withdrawals of his/her local balance  - if false: any address can help and execute the withdrawals on behalf of the user   (the funds still go straight to the user, but the helper address covers gas costs    and the hassle of executing the transaction)\"},\"splitFundingSources(address,uint256)\":{\"notice\":\"Splits the funds required to provide 'amount' into two sources:  - externalFunds: the funds required to be transferred from the external buyer balance  - localFunds: the funds required from the buyer's already available balance in this contract.\"},\"withdraw()\":{\"notice\":\"Transfers funds avaliable in this  contract's balanceOf[msg.sender] to msg.sender\"},\"withdrawAmount(uint256)\":{\"notice\":\"Transfers only the specified amount  from this contract's balanceOf[msg.sender] to msg.sender.  Reverts if balanceOf[msg.sender] < amount.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/buyNow/IBuyNowNative.sol\":\"IBuyNowNative\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/buyNow/IBuyNowNative.sol\":{\"keccak256\":\"0x274bae7e92aeeeffd488420c2b4abea7e157ca436f2fd58ce0a9abdf150fc20e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dafd0b5230338d9a639869ac84cf8c6241a5d4ff20f2a5d0e6617ce7800b7423\",\"dweb:/ipfs/QmU8dLsrm3gib6EYXAyp1LyMUYeG7i3jSXR7EA6nybFEDM\"]},\"project:/contracts/buyNow/base/IBuyNowBase.sol\":{\"keccak256\":\"0x39edba57d7e2b5d254629a366c38d3c82c91276ba9bd79f677f26f5e9142fc76\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6f21fa0d66272a610d607b7c74c024667ba41499f13e74fa4af0a3130257be81\",\"dweb:/ipfs/QmVJ4Ca8eD3NjHrihv5XeHQLxFmu75xds2nxF3vc9x38wu\"]},\"project:/contracts/buyNow/base/ISignableStructsBuyNow.sol\":{\"keccak256\":\"0x83085af5f91ebeb7423408dbe13eb0640e5c079e71e5958ccca2e7431841530a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5c634c4894e2c0a60249aef809c3bf5e4e11a5a55a95bf214f75b5d9614d7c80\",\"dweb:/ipfs/QmQbTaWbuPfe8dbTPgVQooQJ8s4ekGxJ3viHMKBPhq8DBG\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity =0.8.14;\n\nimport \"./base/IBuyNowBase.sol\";\n\n/**\n * @title Interface to Escrow Contract for Payments in BuyNow mode, in native cryptocurrency.\n * @author Freeverse.io, www.freeverse.io\n * @dev The contract that implements this interface adds an entry point for BuyNow payments,\n * which are defined and documented in the inherited IBuyNowBase.\n * - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),\n *   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call.\n */\n\ninterface IBuyNowNative is IBuyNowBase {\n    /**\n     * @notice Starts Payment process by the buyer.\n     * @dev Executed by the buyer, who relays the MetaTX with the operator's signature.\n     *  The buyer must provide the correct amount via msg.value.\n     *  If all requirements are fulfilled, it stores the data relevant\n     *  for the next steps of the payment, and it locks the funds\n     *  in this contract.\n     *  Follows standard Checks-Effects-Interactions pattern\n     *  to protect against re-entrancy attacks.\n     *  Moves payment to ASSET_TRANSFERRING state.\n     * @param buyNowInp The struct containing all required payment data\n     * @param operatorSignature The signature of 'buyNowInp' by the operator\n     * @param sellerSignature the signature of the seller agreeing to list the asset\n     */\n    function buyNow(\n        BuyNowInput calldata buyNowInp,\n        bytes calldata operatorSignature,\n        bytes calldata sellerSignature\n    ) external payable;\n}\n",
+  "sourcePath": "/Users/toni/gits/crypto-payments/contracts/buyNow/IBuyNowNative.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/buyNow/IBuyNowNative.sol",
+    "exportedSymbols": {
+      "IBuyNowBase": [
+        5198
+      ],
+      "IBuyNowNative": [
+        3718
+      ],
+      "ISignableStructsBuyNow": [
+        5266
+      ]
+    },
+    "id": 3719,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3702,
+        "literals": [
+          "solidity",
+          "=",
+          "0.8",
+          ".14"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:21"
+      },
+      {
+        "absolutePath": "project:/contracts/buyNow/base/IBuyNowBase.sol",
+        "file": "./base/IBuyNowBase.sol",
+        "id": 3703,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 3719,
+        "sourceUnit": 5199,
+        "src": "58:32:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 3705,
+              "name": "IBuyNowBase",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 5198,
+              "src": "617:11:21"
+            },
+            "id": 3706,
+            "nodeType": "InheritanceSpecifier",
+            "src": "617:11:21"
+          }
+        ],
+        "canonicalName": "IBuyNowNative",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 3704,
+          "nodeType": "StructuredDocumentation",
+          "src": "92:496:21",
+          "text": " @title Interface to Escrow Contract for Payments in BuyNow mode, in native cryptocurrency.\n @author Freeverse.io, www.freeverse.io\n @dev The contract that implements this interface adds an entry point for BuyNow payments,\n which are defined and documented in the inherited IBuyNowBase.\n - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),\n   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call."
+        },
+        "fullyImplemented": false,
+        "id": 3718,
+        "linearizedBaseContracts": [
+          3718,
+          5198,
+          5266
+        ],
+        "name": "IBuyNowNative",
+        "nameLocation": "600:13:21",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 3707,
+              "nodeType": "StructuredDocumentation",
+              "src": "635:773:21",
+              "text": " @notice Starts Payment process by the buyer.\n @dev Executed by the buyer, who relays the MetaTX with the operator's signature.\n  The buyer must provide the correct amount via msg.value.\n  If all requirements are fulfilled, it stores the data relevant\n  for the next steps of the payment, and it locks the funds\n  in this contract.\n  Follows standard Checks-Effects-Interactions pattern\n  to protect against re-entrancy attacks.\n  Moves payment to ASSET_TRANSFERRING state.\n @param buyNowInp The struct containing all required payment data\n @param operatorSignature The signature of 'buyNowInp' by the operator\n @param sellerSignature the signature of the seller agreeing to list the asset"
+            },
+            "functionSelector": "42d20b25",
+            "id": 3717,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "buyNow",
+            "nameLocation": "1422:6:21",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3715,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3710,
+                  "mutability": "mutable",
+                  "name": "buyNowInp",
+                  "nameLocation": "1459:9:21",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3717,
+                  "src": "1438:30:21",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BuyNowInput_$5260_calldata_ptr",
+                    "typeString": "struct ISignableStructsBuyNow.BuyNowInput"
+                  },
+                  "typeName": {
+                    "id": 3709,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 3708,
+                      "name": "BuyNowInput",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 5260,
+                      "src": "1438:11:21"
+                    },
+                    "referencedDeclaration": 5260,
+                    "src": "1438:11:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BuyNowInput_$5260_storage_ptr",
+                      "typeString": "struct ISignableStructsBuyNow.BuyNowInput"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3712,
+                  "mutability": "mutable",
+                  "name": "operatorSignature",
+                  "nameLocation": "1493:17:21",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3717,
+                  "src": "1478:32:21",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3711,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1478:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3714,
+                  "mutability": "mutable",
+                  "name": "sellerSignature",
+                  "nameLocation": "1535:15:21",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3717,
+                  "src": "1520:30:21",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3713,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1520:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1428:128:21"
+            },
+            "returnParameters": {
+              "id": 3716,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1573:0:21"
+            },
+            "scope": 3718,
+            "src": "1413:161:21",
+            "stateMutability": "payable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3719,
+        "src": "590:986:21",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:1545:21"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.14+commit.80d49f37.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-09-12T09:23:11.063Z",
+  "devdoc": {
+    "author": "Freeverse.io, www.freeverse.io",
+    "details": "The contract that implements this interface adds an entry point for BuyNow payments, which are defined and documented in the inherited IBuyNowBase. - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call.",
+    "kind": "dev",
+    "methods": {
+      "EIP712Address()": {
+        "returns": {
+          "_0": "the address of the EIP712 verifier contract"
+        }
+      },
+      "acceptsRefunds(bytes32)": {
+        "details": "The payment must be in ASSET_TRANSFERRING and beyond expirationTime.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        },
+        "returns": {
+          "_0": "true if the payment accepts a refund to the buyer."
+        }
+      },
+      "assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))": {
+        "params": {
+          "buyNowInp": "The BuyNowInput struct"
+        }
+      },
+      "balanceOf(address)": {
+        "params": {
+          "addr": "the address that is queried"
+        },
+        "returns": {
+          "_0": "the local balance"
+        }
+      },
+      "buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)": {
+        "details": "Executed by the buyer, who relays the MetaTX with the operator's signature.  The buyer must provide the correct amount via msg.value.  If all requirements are fulfilled, it stores the data relevant  for the next steps of the payment, and it locks the funds  in this contract.  Follows standard Checks-Effects-Interactions pattern  to protect against re-entrancy attacks.  Moves payment to ASSET_TRANSFERRING state.",
+        "params": {
+          "buyNowInp": "The struct containing all required payment data",
+          "operatorSignature": "The signature of 'buyNowInp' by the operator",
+          "sellerSignature": "the signature of the seller agreeing to list the asset"
+        }
+      },
+      "computeFeeAmount(uint256,uint256)": {
+        "details": "Must return a value that is guaranteed to be less or equal to the provided amount",
+        "params": {
+          "amount": "The amount",
+          "feeBPS": "The percentage fee expressed in Basis Points (bps).  feeBPS examples:  2.5% = 250 bps, 10% = 1000 bps, 100% = 10000 bps"
+        },
+        "returns": {
+          "_0": "The fee amount"
+        }
+      },
+      "currencyLongDescriptor()": {
+        "returns": {
+          "_0": "the string describing the currency"
+        }
+      },
+      "enoughFundsAvailable(address,uint256)": {
+        "details": "In more detail: returns true if the sum of the buyer's local balance in this contract,  plus the external available balance, is larger or equal than 'amount'",
+        "params": {
+          "amount": "The amount that is queried",
+          "buyer": "The address for which funds are queried"
+        },
+        "returns": {
+          "_0": "Returns true if enough funds are available"
+        }
+      },
+      "finalize((bytes32,bool),bytes)": {
+        "details": "Can be executed by anyone, but the operator signature must be included as input param.  Seller or Buyer's local balances are updated, allowing explicit withdrawal.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.",
+        "params": {
+          "operatorSignature": "The operator signature of transferResult",
+          "transferResult": "The asset transfer result struct signed by the operator."
+        }
+      },
+      "finalizeAndWithdraw((bytes32,bool),bytes)": {
+        "details": "If recipient has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the recipient too, but with a  helping 3rd party covering gas costs and TX sending hassle.  The operator signature must be included as input param.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.",
+        "params": {
+          "operatorSignature": "The operator signature of transferResult",
+          "transferResult": "The asset transfer result struct signed by the operator."
+        }
+      },
+      "isRegisteredSeller(address)": {
+        "params": {
+          "addr": "the address that is queried"
+        },
+        "returns": {
+          "_0": "Returns whether the address is registered as seller"
+        }
+      },
+      "isSellerRegistrationRequired()": {
+        "returns": {
+          "_0": "Returns true if sellers need to be registered to be able to accept payments"
+        }
+      },
+      "maxFeeBPS()": {
+        "returns": {
+          "_0": "the max fee (in BPS units)"
+        }
+      },
+      "maxFundsAvailable(address)": {
+        "details": "In more detail: returns the sum of the buyer's local balance in this contract,  plus the available external balance.",
+        "params": {
+          "buyer": "The address for which funds are queried"
+        },
+        "returns": {
+          "_0": "the max funds available"
+        }
+      },
+      "onlyUserCanWithdraw(address)": {
+        "params": {
+          "user": "The address of the user"
+        }
+      },
+      "paymentInfo(bytes32)": {
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        },
+        "returns": {
+          "_0": "the struct stored for the payment"
+        }
+      },
+      "paymentState(bytes32)": {
+        "details": "If payment is in ASSET_TRANSFERRING, it may be worth  checking acceptsRefunds to check if it has gone beyond expirationTime.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        },
+        "returns": {
+          "_0": "the state of the payment."
+        }
+      },
+      "paymentWindow()": {
+        "returns": {
+          "_0": "the payment window in secs"
+        }
+      },
+      "refund(bytes32)": {
+        "details": "Anybody can call this function.  Requires acceptsRefunds == true to proceed.  After updating buyer's balance, he/she can later withdraw.  Moves payment to REFUNDED state.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        }
+      },
+      "refundAndWithdraw(bytes32)": {
+        "details": "If the buyer has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the buyer too, but with a  helping 3rd party covering gas costs and TX sending hassle.  Requires acceptsRefunds == true to proceed.  All of msg.sender's balance in the contract is withdrawn,  not only the part that was locked in this particular paymentId  Moves payment to REFUNDED state.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        }
+      },
+      "setOnlyUserCanWithdraw(bool)": {
+        "params": {
+          "onlyUserCan": "true if only the user can execute withdrawals of his/her local balance"
+        }
+      },
+      "splitFundingSources(address,uint256)": {
+        "params": {
+          "amount": "The amount to be split",
+          "buyer": "The address for which the amount is to be split"
+        },
+        "returns": {
+          "externalFunds": "The funds required to be transferred from the external buyer balance",
+          "localFunds": "The amount of local funds that will be used."
+        }
+      },
+      "withdrawAmount(uint256)": {
+        "params": {
+          "amount": "The required amount to withdraw"
+        }
+      }
+    },
+    "title": "Interface to Escrow Contract for Payments in BuyNow mode, in native cryptocurrency.",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "EIP712Address()": {
+        "notice": "Returns the address of the of the contract containing  the implementation of the EIP712 verifying functions"
+      },
+      "acceptsRefunds(bytes32)": {
+        "notice": "Returns true if the payment accepts a refund to the buyer"
+      },
+      "assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))": {
+        "notice": "Reverts unless the requirements for a BuyNowInput are fulfilled."
+      },
+      "balanceOf(address)": {
+        "notice": "Returns the local balance of the provided address that is stored in this  contract, and hence, available for withdrawal."
+      },
+      "buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)": {
+        "notice": "Starts Payment process by the buyer."
+      },
+      "computeFeeAmount(uint256,uint256)": {
+        "notice": "Safe computation of fee amount for a provided amount, feeBPS pair"
+      },
+      "currencyLongDescriptor()": {
+        "notice": "Returns a descriptor about the currency that this contract accepts"
+      },
+      "enoughFundsAvailable(address,uint256)": {
+        "notice": "Returns true if the 'amount' required for a payment is available to this contract."
+      },
+      "finalize((bytes32,bool),bytes)": {
+        "notice": "Relays the operator signature declaring that the asset transfer was successful or failed,  and updates local balances of seller or buyer, respectively."
+      },
+      "finalizeAndWithdraw((bytes32,bool),bytes)": {
+        "notice": "Relays the operator signature declaring that the asset transfer was successful or failed,  updates balances of seller or buyer, respectively, and proceeds to withdraw all funds   in this contract available to the rightful recipient of the paymentId:   the seller if transferResult.wasSuccessful == true, the buyer otherwise."
+      },
+      "isRegisteredSeller(address)": {
+        "notice": "Returns true if the address provided is a registered seller"
+      },
+      "isSellerRegistrationRequired()": {
+        "notice": "Returns whether sellers need to be registered to be able to accept payments"
+      },
+      "maxFeeBPS()": {
+        "notice": "Returns the max fee (in BPS units) that can be accepted in any payment  despite operator and buyer having signed a larger amount;  a value of 10000 BPS would correspond to 100% (no limit at all)"
+      },
+      "maxFundsAvailable(address)": {
+        "notice": "Returns the maximum amount of funds available to a buyer"
+      },
+      "onlyUserCanWithdraw(address)": {
+        "notice": "Returns the value of onlyUserCanWithdraw for a given user"
+      },
+      "paymentInfo(bytes32)": {
+        "notice": "Returns all data stored in a payment"
+      },
+      "paymentState(bytes32)": {
+        "notice": "Returns the state of a payment."
+      },
+      "paymentWindow()": {
+        "notice": "Returns the amount of seconds that a payment  can remain in ASSET_TRANSFERRING state without positive  or negative confirmation by the operator"
+      },
+      "refund(bytes32)": {
+        "notice": "Moves buyer's provided funds to buyer's balance."
+      },
+      "refundAndWithdraw(bytes32)": {
+        "notice": "Executes refund and withdraw to the buyer in one transaction."
+      },
+      "registerAsSeller()": {
+        "notice": "Registers msg.sender as seller so that, if the contract has set  _isSellerRegistrationRequired = true, then payments will be accepted with  msg.sender as seller."
+      },
+      "relayedWithdraw(address)": {
+        "notice": "Transfers funds avaliable in this  contract's balanceOf[recipient] to recipient.  The funds still go to straight the recipient, as if he/she  has executed the withdrawal() method, but the msg.sender  covers gas costs and the hassle of executing the transaction.  Users can always opt out from this feature, using the setOnlyUserCanWithdraw method."
+      },
+      "setOnlyUserCanWithdraw(bool)": {
+        "notice": "Sets the value of onlyUserCanWithdraw for the user with msg.sender address:  - if true: only the user can execute withdrawals of his/her local balance  - if false: any address can help and execute the withdrawals on behalf of the user   (the funds still go straight to the user, but the helper address covers gas costs    and the hassle of executing the transaction)"
+      },
+      "splitFundingSources(address,uint256)": {
+        "notice": "Splits the funds required to provide 'amount' into two sources:  - externalFunds: the funds required to be transferred from the external buyer balance  - localFunds: the funds required from the buyer's already available balance in this contract."
+      },
+      "withdraw()": {
+        "notice": "Transfers funds avaliable in this  contract's balanceOf[msg.sender] to msg.sender"
+      },
+      "withdrawAmount(uint256)": {
+        "notice": "Transfers only the specified amount  from this contract's balanceOf[msg.sender] to msg.sender.  Reverts if balanceOf[msg.sender] < amount."
+      }
+    },
+    "version": 1
+  }
+}

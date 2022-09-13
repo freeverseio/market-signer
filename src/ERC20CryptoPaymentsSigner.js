@@ -22,7 +22,7 @@
 
 const Utils = require('web3-utils');
 const IERC20JSON = require('./contracts/IERC20.json');
-const ERC20PaymentsJSON = require('./contracts/IPaymentsERC20.json');
+const ERC20PaymentsJSON = require('./contracts/IBuyNowERC20.json');
 const { NativeCryptoPayments } = require('./NativeCryptoPaymentsSigner');
 
 class ERC20Payments extends NativeCryptoPayments {
@@ -46,8 +46,10 @@ class ERC20Payments extends NativeCryptoPayments {
     return this.erc20Contract.options.address;
   }
 
-  pay({ paymentData, signature, from }) {
-    return this.paymentsContract.methods.pay(paymentData, signature)
+  buyNow({
+    paymentData, operatorSignature, sellerSignature, from,
+  }) {
+    return this.paymentsContract.methods.buyNow(paymentData, operatorSignature, sellerSignature)
       .send({ from, value: 0, gas: 400000 });
   }
 

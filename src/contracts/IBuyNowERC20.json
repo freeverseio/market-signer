@@ -1,0 +1,2013 @@
+{
+  "contractName": "IBuyNowERC20",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "seller",
+          "type": "address"
+        }
+      ],
+      "name": "BuyNow",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        }
+      ],
+      "name": "BuyerRefunded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "eip712address",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "prevEip712address",
+          "type": "address"
+        }
+      ],
+      "name": "EIP712",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "maxFeeBPS",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "prevMaxFeeBPS",
+          "type": "uint256"
+        }
+      ],
+      "name": "MaxFeeBPS",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "seller",
+          "type": "address"
+        }
+      ],
+      "name": "NewSeller",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "onlyUserCanWithdraw",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "prevOnlyUserCanWithdraw",
+          "type": "bool"
+        }
+      ],
+      "name": "OnlyUserCanWithdraw",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Paid",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "window",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "prevWindow",
+          "type": "uint256"
+        }
+      ],
+      "name": "PaymentWindow",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Withdraw",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "EIP712Address",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "acceptsRefunds",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.BuyNowInput",
+          "name": "buyNowInp",
+          "type": "tuple"
+        }
+      ],
+      "name": "assertBuyNowInputsOK",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "feeBPS",
+          "type": "uint256"
+        }
+      ],
+      "name": "computeFeeAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "currencyLongDescriptor",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "enoughFundsAvailable",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bool",
+              "name": "wasSuccessful",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.AssetTransferResult",
+          "name": "transferResult",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "finalize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "bool",
+              "name": "wasSuccessful",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.AssetTransferResult",
+          "name": "transferResult",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "finalizeAndWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "isRegisteredSeller",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isSellerRegistrationRequired",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxFeeBPS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        }
+      ],
+      "name": "maxFundsAvailable",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "onlyUserCanWithdraw",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "paymentInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum IBuyNowBase.State",
+              "name": "state",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "feesCollector",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "expirationTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IBuyNowBase.Payment",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "paymentState",
+      "outputs": [
+        {
+          "internalType": "enum IBuyNowBase.State",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paymentWindow",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "refund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "refundAndWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "registerAsSeller",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        }
+      ],
+      "name": "relayedWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "onlyUserCan",
+          "type": "bool"
+        }
+      ],
+      "name": "setOnlyUserCanWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "splitFundingSources",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "externalFunds",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "localFunds",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.BuyNowInput",
+          "name": "buyNowInp",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "sellerSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "buyNow",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "paymentId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "feeBPS",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "universeId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "buyer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "seller",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISignableStructsBuyNow.BuyNowInput",
+          "name": "buyNowInp",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "operatorSignature",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "buyerSignature",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "sellerSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "relayedBuyNow",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "erc20",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "erc20ContractName",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "erc20ContractSymbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "erc20ContractDecimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "erc20BalanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "buyer",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.14+commit.80d49f37\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"name\":\"BuyNow\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"}],\"name\":\"BuyerRefunded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"eip712address\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"prevEip712address\",\"type\":\"address\"}],\"name\":\"EIP712\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxFeeBPS\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"prevMaxFeeBPS\",\"type\":\"uint256\"}],\"name\":\"MaxFeeBPS\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"name\":\"NewSeller\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"onlyUserCanWithdraw\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"prevOnlyUserCanWithdraw\",\"type\":\"bool\"}],\"name\":\"OnlyUserCanWithdraw\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"Paid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"window\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"prevWindow\",\"type\":\"uint256\"}],\"name\":\"PaymentWindow\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"EIP712Address\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"acceptsRefunds\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"struct ISignableStructsBuyNow.BuyNowInput\",\"name\":\"buyNowInp\",\"type\":\"tuple\"}],\"name\":\"assertBuyNowInputsOK\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"struct ISignableStructsBuyNow.BuyNowInput\",\"name\":\"buyNowInp\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"sellerSignature\",\"type\":\"bytes\"}],\"name\":\"buyNow\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"}],\"name\":\"computeFeeAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currencyLongDescriptor\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"enoughFundsAvailable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"erc20\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"erc20BalanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"erc20ContractDecimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"erc20ContractName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"erc20ContractSymbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"wasSuccessful\",\"type\":\"bool\"}],\"internalType\":\"struct ISignableStructsBuyNow.AssetTransferResult\",\"name\":\"transferResult\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"}],\"name\":\"finalize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"wasSuccessful\",\"type\":\"bool\"}],\"internalType\":\"struct ISignableStructsBuyNow.AssetTransferResult\",\"name\":\"transferResult\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"}],\"name\":\"finalizeAndWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"isRegisteredSeller\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"isSellerRegistrationRequired\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxFeeBPS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"}],\"name\":\"maxFundsAvailable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"onlyUserCanWithdraw\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"paymentInfo\",\"outputs\":[{\"components\":[{\"internalType\":\"enum IBuyNowBase.State\",\"name\":\"state\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"feesCollector\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"expirationTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"internalType\":\"struct IBuyNowBase.Payment\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"paymentState\",\"outputs\":[{\"internalType\":\"enum IBuyNowBase.State\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paymentWindow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"refund\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"}],\"name\":\"refundAndWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"registerAsSeller\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"paymentId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"feeBPS\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"universeId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"struct ISignableStructsBuyNow.BuyNowInput\",\"name\":\"buyNowInp\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"operatorSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"buyerSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"sellerSignature\",\"type\":\"bytes\"}],\"name\":\"relayedBuyNow\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"relayedWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"onlyUserCan\",\"type\":\"bool\"}],\"name\":\"setOnlyUserCanWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"splitFundingSources\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"externalFunds\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"localFunds\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdrawAmount\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Freeverse.io, www.freeverse.io\",\"details\":\"The contract that implements this interface adds two entry points for BuyNow payments, which are defined and documented in the inherited IBuyNowBase. - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call. - in the 'relayedBuyNow' method, anyone can be msg.sender, but both the operator and the buyer   EIP712-signatures of the BuyNowInput struct are provided as input to the call.\",\"kind\":\"dev\",\"methods\":{\"EIP712Address()\":{\"returns\":{\"_0\":\"the address of the EIP712 verifier contract\"}},\"acceptsRefunds(bytes32)\":{\"details\":\"The payment must be in ASSET_TRANSFERRING and beyond expirationTime.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"},\"returns\":{\"_0\":\"true if the payment accepts a refund to the buyer.\"}},\"allowance(address)\":{\"params\":{\"buyer\":\"the address of the buyer\"},\"returns\":{\"_0\":\"the amount allowed by buyer\"}},\"assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))\":{\"params\":{\"buyNowInp\":\"The BuyNowInput struct\"}},\"balanceOf(address)\":{\"params\":{\"addr\":\"the address that is queried\"},\"returns\":{\"_0\":\"the local balance\"}},\"buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)\":{\"details\":\"Executed by the buyer, who relays the operator's signature.  This method will transfer only the minimum required amount from the bidder  to this contract, re-using any existing local balance.  If all requirements are fulfilled, it stores the data relevant  for the next steps of the payment, and it locks the funds  in this contract.  Follows standard Checks-Effects-Interactions pattern  to protect against re-entrancy attacks.  Moves payment to ASSET_TRANSFERRING state.\",\"params\":{\"buyNowInp\":\"The struct containing all required payment data\",\"operatorSignature\":\"The signature of 'buyNowInp' by the operator\",\"sellerSignature\":\"the signature of the seller agreeing to list the asset\"}},\"computeFeeAmount(uint256,uint256)\":{\"details\":\"Must return a value that is guaranteed to be less or equal to the provided amount\",\"params\":{\"amount\":\"The amount\",\"feeBPS\":\"The percentage fee expressed in Basis Points (bps).  feeBPS examples:  2.5% = 250 bps, 10% = 1000 bps, 100% = 10000 bps\"},\"returns\":{\"_0\":\"The fee amount\"}},\"currencyLongDescriptor()\":{\"returns\":{\"_0\":\"the string describing the currency\"}},\"enoughFundsAvailable(address,uint256)\":{\"details\":\"In more detail: returns true if the sum of the buyer's local balance in this contract,  plus the external available balance, is larger or equal than 'amount'\",\"params\":{\"amount\":\"The amount that is queried\",\"buyer\":\"The address for which funds are queried\"},\"returns\":{\"_0\":\"Returns true if enough funds are available\"}},\"erc20()\":{\"returns\":{\"_0\":\"the address of the ERC20 contract\"}},\"erc20BalanceOf(address)\":{\"params\":{\"addr\":\"the address that is queried\"},\"returns\":{\"_0\":\"the balance in the external ERC20 contract\"}},\"erc20ContractDecimals()\":{\"returns\":{\"_0\":\"the return of the decimals() method call to the ERC20 contract\"}},\"erc20ContractName()\":{\"returns\":{\"_0\":\"the return of the name() method call to the ERC20 contract\"}},\"erc20ContractSymbol()\":{\"returns\":{\"_0\":\"the return of the symbol() method call to the ERC20 contract\"}},\"finalize((bytes32,bool),bytes)\":{\"details\":\"Can be executed by anyone, but the operator signature must be included as input param.  Seller or Buyer's local balances are updated, allowing explicit withdrawal.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.\",\"params\":{\"operatorSignature\":\"The operator signature of transferResult\",\"transferResult\":\"The asset transfer result struct signed by the operator.\"}},\"finalizeAndWithdraw((bytes32,bool),bytes)\":{\"details\":\"If recipient has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the recipient too, but with a  helping 3rd party covering gas costs and TX sending hassle.  The operator signature must be included as input param.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.\",\"params\":{\"operatorSignature\":\"The operator signature of transferResult\",\"transferResult\":\"The asset transfer result struct signed by the operator.\"}},\"isRegisteredSeller(address)\":{\"params\":{\"addr\":\"the address that is queried\"},\"returns\":{\"_0\":\"Returns whether the address is registered as seller\"}},\"isSellerRegistrationRequired()\":{\"returns\":{\"_0\":\"Returns true if sellers need to be registered to be able to accept payments\"}},\"maxFeeBPS()\":{\"returns\":{\"_0\":\"the max fee (in BPS units)\"}},\"maxFundsAvailable(address)\":{\"details\":\"In more detail: returns the sum of the buyer's local balance in this contract,  plus the available external balance.\",\"params\":{\"buyer\":\"The address for which funds are queried\"},\"returns\":{\"_0\":\"the max funds available\"}},\"onlyUserCanWithdraw(address)\":{\"params\":{\"user\":\"The address of the user\"}},\"paymentInfo(bytes32)\":{\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"},\"returns\":{\"_0\":\"the struct stored for the payment\"}},\"paymentState(bytes32)\":{\"details\":\"If payment is in ASSET_TRANSFERRING, it may be worth  checking acceptsRefunds to check if it has gone beyond expirationTime.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"},\"returns\":{\"_0\":\"the state of the payment.\"}},\"paymentWindow()\":{\"returns\":{\"_0\":\"the payment window in secs\"}},\"refund(bytes32)\":{\"details\":\"Anybody can call this function.  Requires acceptsRefunds == true to proceed.  After updating buyer's balance, he/she can later withdraw.  Moves payment to REFUNDED state.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"}},\"refundAndWithdraw(bytes32)\":{\"details\":\"If the buyer has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the buyer too, but with a  helping 3rd party covering gas costs and TX sending hassle.  Requires acceptsRefunds == true to proceed.  All of msg.sender's balance in the contract is withdrawn,  not only the part that was locked in this particular paymentId  Moves payment to REFUNDED state.\",\"params\":{\"paymentId\":\"The unique ID that identifies the payment.\"}},\"relayedBuyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes,bytes)\":{\"details\":\"Executed by anyone, who relays  relay both the operator and the buyer signatures.  The buyer must have approved the amount to this contract before.  If all requirements are fulfilled, it stores the data relevant  for the next steps of the payment, and it locks the ERC20  in this contract.  Follows standard Checks-Effects-Interactions pattern  to protect against re-entrancy attacks.  Moves payment to ASSET_TRANSFERRING state.\",\"params\":{\"buyNowInp\":\"The struct containing all required payment data\",\"buyerSignature\":\"The signature of 'buyNowInp' by the buyer\",\"operatorSignature\":\"The signature of 'buyNowInp' by the operator\",\"sellerSignature\":\"the signature of the seller agreeing to list the asset\"}},\"setOnlyUserCanWithdraw(bool)\":{\"params\":{\"onlyUserCan\":\"true if only the user can execute withdrawals of his/her local balance\"}},\"splitFundingSources(address,uint256)\":{\"params\":{\"amount\":\"The amount to be split\",\"buyer\":\"The address for which the amount is to be split\"},\"returns\":{\"externalFunds\":\"The funds required to be transferred from the external buyer balance\",\"localFunds\":\"The amount of local funds that will be used.\"}},\"withdrawAmount(uint256)\":{\"params\":{\"amount\":\"The required amount to withdraw\"}}},\"title\":\"Interface to Escrow Contract for Payments in BuyNow mode, in ERC20 tokens.\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"EIP712Address()\":{\"notice\":\"Returns the address of the of the contract containing  the implementation of the EIP712 verifying functions\"},\"acceptsRefunds(bytes32)\":{\"notice\":\"Returns true if the payment accepts a refund to the buyer\"},\"allowance(address)\":{\"notice\":\"Returns the allowance that the buyer has approved  directly in the ERC20 contract in favour of this contract.\"},\"assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))\":{\"notice\":\"Reverts unless the requirements for a BuyNowInput are fulfilled.\"},\"balanceOf(address)\":{\"notice\":\"Returns the local balance of the provided address that is stored in this  contract, and hence, available for withdrawal.\"},\"buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)\":{\"notice\":\"Starts Payment process by the buyer.\"},\"computeFeeAmount(uint256,uint256)\":{\"notice\":\"Safe computation of fee amount for a provided amount, feeBPS pair\"},\"currencyLongDescriptor()\":{\"notice\":\"Returns a descriptor about the currency that this contract accepts\"},\"enoughFundsAvailable(address,uint256)\":{\"notice\":\"Returns true if the 'amount' required for a payment is available to this contract.\"},\"erc20()\":{\"notice\":\"Returns the address of the ERC20 contract from which  tokens are accepted for payments\"},\"erc20BalanceOf(address)\":{\"notice\":\"Returns the ERC20 balance of address in the ERC20 contract\"},\"erc20ContractDecimals()\":{\"notice\":\"Proxy that queries the decimals() method from an external  ERC20 contract, which may optionally implement it. \"},\"erc20ContractName()\":{\"notice\":\"Proxy that queries the name() method from an external  ERC20 contract, which may optionally implement it. \"},\"erc20ContractSymbol()\":{\"notice\":\"Proxy that queries the symbol() method from an external  ERC20 contract, which may optionally implement it. \"},\"finalize((bytes32,bool),bytes)\":{\"notice\":\"Relays the operator signature declaring that the asset transfer was successful or failed,  and updates local balances of seller or buyer, respectively.\"},\"finalizeAndWithdraw((bytes32,bool),bytes)\":{\"notice\":\"Relays the operator signature declaring that the asset transfer was successful or failed,  updates balances of seller or buyer, respectively, and proceeds to withdraw all funds   in this contract available to the rightful recipient of the paymentId:   the seller if transferResult.wasSuccessful == true, the buyer otherwise.\"},\"isRegisteredSeller(address)\":{\"notice\":\"Returns true if the address provided is a registered seller\"},\"isSellerRegistrationRequired()\":{\"notice\":\"Returns whether sellers need to be registered to be able to accept payments\"},\"maxFeeBPS()\":{\"notice\":\"Returns the max fee (in BPS units) that can be accepted in any payment  despite operator and buyer having signed a larger amount;  a value of 10000 BPS would correspond to 100% (no limit at all)\"},\"maxFundsAvailable(address)\":{\"notice\":\"Returns the maximum amount of funds available to a buyer\"},\"onlyUserCanWithdraw(address)\":{\"notice\":\"Returns the value of onlyUserCanWithdraw for a given user\"},\"paymentInfo(bytes32)\":{\"notice\":\"Returns all data stored in a payment\"},\"paymentState(bytes32)\":{\"notice\":\"Returns the state of a payment.\"},\"paymentWindow()\":{\"notice\":\"Returns the amount of seconds that a payment  can remain in ASSET_TRANSFERRING state without positive  or negative confirmation by the operator\"},\"refund(bytes32)\":{\"notice\":\"Moves buyer's provided funds to buyer's balance.\"},\"refundAndWithdraw(bytes32)\":{\"notice\":\"Executes refund and withdraw to the buyer in one transaction.\"},\"registerAsSeller()\":{\"notice\":\"Registers msg.sender as seller so that, if the contract has set  _isSellerRegistrationRequired = true, then payments will be accepted with  msg.sender as seller.\"},\"relayedBuyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes,bytes)\":{\"notice\":\"Starts the Payment process via relay-by-operator.\"},\"relayedWithdraw(address)\":{\"notice\":\"Transfers funds avaliable in this  contract's balanceOf[recipient] to recipient.  The funds still go to straight the recipient, as if he/she  has executed the withdrawal() method, but the msg.sender  covers gas costs and the hassle of executing the transaction.  Users can always opt out from this feature, using the setOnlyUserCanWithdraw method.\"},\"setOnlyUserCanWithdraw(bool)\":{\"notice\":\"Sets the value of onlyUserCanWithdraw for the user with msg.sender address:  - if true: only the user can execute withdrawals of his/her local balance  - if false: any address can help and execute the withdrawals on behalf of the user   (the funds still go straight to the user, but the helper address covers gas costs    and the hassle of executing the transaction)\"},\"splitFundingSources(address,uint256)\":{\"notice\":\"Splits the funds required to provide 'amount' into two sources:  - externalFunds: the funds required to be transferred from the external buyer balance  - localFunds: the funds required from the buyer's already available balance in this contract.\"},\"withdraw()\":{\"notice\":\"Transfers funds avaliable in this  contract's balanceOf[msg.sender] to msg.sender\"},\"withdrawAmount(uint256)\":{\"notice\":\"Transfers only the specified amount  from this contract's balanceOf[msg.sender] to msg.sender.  Reverts if balanceOf[msg.sender] < amount.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/buyNow/IBuyNowERC20.sol\":\"IBuyNowERC20\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/buyNow/IBuyNowERC20.sol\":{\"keccak256\":\"0x79b619a903087aaf638484f30131494b7144d141422d656b33db1b53507b478e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ff0375bf34fed3cb2876fdf8df1adc1334039cdf177bd8fefb792b81bd11ebcd\",\"dweb:/ipfs/QmaohpwgD7zwhuxks5pWt8mJKCBDuA4prCf7yq1A6QVm2R\"]},\"project:/contracts/buyNow/base/IBuyNowBase.sol\":{\"keccak256\":\"0x39edba57d7e2b5d254629a366c38d3c82c91276ba9bd79f677f26f5e9142fc76\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6f21fa0d66272a610d607b7c74c024667ba41499f13e74fa4af0a3130257be81\",\"dweb:/ipfs/QmVJ4Ca8eD3NjHrihv5XeHQLxFmu75xds2nxF3vc9x38wu\"]},\"project:/contracts/buyNow/base/ISignableStructsBuyNow.sol\":{\"keccak256\":\"0x83085af5f91ebeb7423408dbe13eb0640e5c079e71e5958ccca2e7431841530a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5c634c4894e2c0a60249aef809c3bf5e4e11a5a55a95bf214f75b5d9614d7c80\",\"dweb:/ipfs/QmQbTaWbuPfe8dbTPgVQooQJ8s4ekGxJ3viHMKBPhq8DBG\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity =0.8.14;\n\nimport \"./base/IBuyNowBase.sol\";\n\n/**\n * @title Interface to Escrow Contract for Payments in BuyNow mode, in ERC20 tokens.\n * @author Freeverse.io, www.freeverse.io\n * @dev The contract that implements this interface adds two entry points for BuyNow payments,\n * which are defined and documented in the inherited IBuyNowBase.\n * - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),\n *   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call.\n * - in the 'relayedBuyNow' method, anyone can be msg.sender, but both the operator and the buyer\n *   EIP712-signatures of the BuyNowInput struct are provided as input to the call.\n */\n\ninterface IBuyNowERC20 is IBuyNowBase {\n    /**\n     * @notice Starts Payment process by the buyer.\n     * @dev Executed by the buyer, who relays the operator's signature.\n     *  This method will transfer only the minimum required amount from the bidder\n     *  to this contract, re-using any existing local balance.\n     *  If all requirements are fulfilled, it stores the data relevant\n     *  for the next steps of the payment, and it locks the funds\n     *  in this contract.\n     *  Follows standard Checks-Effects-Interactions pattern\n     *  to protect against re-entrancy attacks.\n     *  Moves payment to ASSET_TRANSFERRING state.\n     * @param buyNowInp The struct containing all required payment data\n     * @param operatorSignature The signature of 'buyNowInp' by the operator\n     * @param sellerSignature the signature of the seller agreeing to list the asset\n     */\n    function buyNow(\n        BuyNowInput calldata buyNowInp,\n        bytes calldata operatorSignature,\n        bytes calldata sellerSignature\n    ) external;\n\n    /**\n     * @notice Starts the Payment process via relay-by-operator.\n     * @dev Executed by anyone, who relays  relay both the operator and the buyer signatures.\n     *  The buyer must have approved the amount to this contract before.\n     *  If all requirements are fulfilled, it stores the data relevant\n     *  for the next steps of the payment, and it locks the ERC20\n     *  in this contract.\n     *  Follows standard Checks-Effects-Interactions pattern\n     *  to protect against re-entrancy attacks.\n     *  Moves payment to ASSET_TRANSFERRING state.\n     * @param buyNowInp The struct containing all required payment data\n     * @param operatorSignature The signature of 'buyNowInp' by the operator\n     * @param buyerSignature The signature of 'buyNowInp' by the buyer\n     * @param sellerSignature the signature of the seller agreeing to list the asset\n     */\n    function relayedBuyNow(\n        BuyNowInput calldata buyNowInp,\n        bytes calldata operatorSignature,\n        bytes calldata buyerSignature,\n        bytes calldata sellerSignature\n    ) external;\n\n    /**\n     * @notice Returns the address of the ERC20 contract from which\n     *  tokens are accepted for payments\n     * @return the address of the ERC20 contract\n     */\n    function erc20() external view returns (address);\n\n    /**\n     * @notice Proxy that queries the name() method from an external\n     *  ERC20 contract, which may optionally implement it. \n     * @return the return of the name() method call to the ERC20 contract\n     */\n    function erc20ContractName() external view returns (string memory);\n\n    /**\n     * @notice Proxy that queries the symbol() method from an external\n     *  ERC20 contract, which may optionally implement it. \n     * @return the return of the symbol() method call to the ERC20 contract\n     */\n    function erc20ContractSymbol() external view returns (string memory);\n\n\n    /**\n     * @notice Proxy that queries the decimals() method from an external\n     *  ERC20 contract, which may optionally implement it. \n     * @return the return of the decimals() method call to the ERC20 contract\n     */\n    function erc20ContractDecimals() external view returns (uint8);\n\n    /**\n     * @notice Returns the ERC20 balance of address in the ERC20 contract\n     * @param addr the address that is queried\n     * @return the balance in the external ERC20 contract\n     */\n    function erc20BalanceOf(address addr) external view returns (uint256);\n\n    /**\n     * @notice Returns the allowance that the buyer has approved\n     *  directly in the ERC20 contract in favour of this contract.\n     * @param buyer the address of the buyer\n     * @return the amount allowed by buyer\n     */\n    function allowance(address buyer) external view returns (uint256);\n}\n",
+  "sourcePath": "/Users/toni/gits/crypto-payments/contracts/buyNow/IBuyNowERC20.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/buyNow/IBuyNowERC20.sol",
+    "exportedSymbols": {
+      "IBuyNowBase": [
+        5198
+      ],
+      "IBuyNowERC20": [
+        3700
+      ],
+      "ISignableStructsBuyNow": [
+        5266
+      ]
+    },
+    "id": 3701,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3631,
+        "literals": [
+          "solidity",
+          "=",
+          "0.8",
+          ".14"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:20"
+      },
+      {
+        "absolutePath": "project:/contracts/buyNow/base/IBuyNowBase.sol",
+        "file": "./base/IBuyNowBase.sol",
+        "id": 3632,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 3701,
+        "sourceUnit": 5199,
+        "src": "58:32:20",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 3634,
+              "name": "IBuyNowBase",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 5198,
+              "src": "791:11:20"
+            },
+            "id": 3635,
+            "nodeType": "InheritanceSpecifier",
+            "src": "791:11:20"
+          }
+        ],
+        "canonicalName": "IBuyNowERC20",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 3633,
+          "nodeType": "StructuredDocumentation",
+          "src": "92:671:20",
+          "text": " @title Interface to Escrow Contract for Payments in BuyNow mode, in ERC20 tokens.\n @author Freeverse.io, www.freeverse.io\n @dev The contract that implements this interface adds two entry points for BuyNow payments,\n which are defined and documented in the inherited IBuyNowBase.\n - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),\n   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call.\n - in the 'relayedBuyNow' method, anyone can be msg.sender, but both the operator and the buyer\n   EIP712-signatures of the BuyNowInput struct are provided as input to the call."
+        },
+        "fullyImplemented": false,
+        "id": 3700,
+        "linearizedBaseContracts": [
+          3700,
+          5198,
+          5266
+        ],
+        "name": "IBuyNowERC20",
+        "nameLocation": "775:12:20",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 3636,
+              "nodeType": "StructuredDocumentation",
+              "src": "809:838:20",
+              "text": " @notice Starts Payment process by the buyer.\n @dev Executed by the buyer, who relays the operator's signature.\n  This method will transfer only the minimum required amount from the bidder\n  to this contract, re-using any existing local balance.\n  If all requirements are fulfilled, it stores the data relevant\n  for the next steps of the payment, and it locks the funds\n  in this contract.\n  Follows standard Checks-Effects-Interactions pattern\n  to protect against re-entrancy attacks.\n  Moves payment to ASSET_TRANSFERRING state.\n @param buyNowInp The struct containing all required payment data\n @param operatorSignature The signature of 'buyNowInp' by the operator\n @param sellerSignature the signature of the seller agreeing to list the asset"
+            },
+            "functionSelector": "42d20b25",
+            "id": 3646,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "buyNow",
+            "nameLocation": "1661:6:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3644,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3639,
+                  "mutability": "mutable",
+                  "name": "buyNowInp",
+                  "nameLocation": "1698:9:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3646,
+                  "src": "1677:30:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BuyNowInput_$5260_calldata_ptr",
+                    "typeString": "struct ISignableStructsBuyNow.BuyNowInput"
+                  },
+                  "typeName": {
+                    "id": 3638,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 3637,
+                      "name": "BuyNowInput",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 5260,
+                      "src": "1677:11:20"
+                    },
+                    "referencedDeclaration": 5260,
+                    "src": "1677:11:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BuyNowInput_$5260_storage_ptr",
+                      "typeString": "struct ISignableStructsBuyNow.BuyNowInput"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3641,
+                  "mutability": "mutable",
+                  "name": "operatorSignature",
+                  "nameLocation": "1732:17:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3646,
+                  "src": "1717:32:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3640,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1717:5:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3643,
+                  "mutability": "mutable",
+                  "name": "sellerSignature",
+                  "nameLocation": "1774:15:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3646,
+                  "src": "1759:30:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3642,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1759:5:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1667:128:20"
+            },
+            "returnParameters": {
+              "id": 3645,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1804:0:20"
+            },
+            "scope": 3700,
+            "src": "1652:153:20",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3647,
+              "nodeType": "StructuredDocumentation",
+              "src": "1811:871:20",
+              "text": " @notice Starts the Payment process via relay-by-operator.\n @dev Executed by anyone, who relays  relay both the operator and the buyer signatures.\n  The buyer must have approved the amount to this contract before.\n  If all requirements are fulfilled, it stores the data relevant\n  for the next steps of the payment, and it locks the ERC20\n  in this contract.\n  Follows standard Checks-Effects-Interactions pattern\n  to protect against re-entrancy attacks.\n  Moves payment to ASSET_TRANSFERRING state.\n @param buyNowInp The struct containing all required payment data\n @param operatorSignature The signature of 'buyNowInp' by the operator\n @param buyerSignature The signature of 'buyNowInp' by the buyer\n @param sellerSignature the signature of the seller agreeing to list the asset"
+            },
+            "functionSelector": "60e98d76",
+            "id": 3659,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "relayedBuyNow",
+            "nameLocation": "2696:13:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3657,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3650,
+                  "mutability": "mutable",
+                  "name": "buyNowInp",
+                  "nameLocation": "2740:9:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3659,
+                  "src": "2719:30:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_BuyNowInput_$5260_calldata_ptr",
+                    "typeString": "struct ISignableStructsBuyNow.BuyNowInput"
+                  },
+                  "typeName": {
+                    "id": 3649,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 3648,
+                      "name": "BuyNowInput",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 5260,
+                      "src": "2719:11:20"
+                    },
+                    "referencedDeclaration": 5260,
+                    "src": "2719:11:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_BuyNowInput_$5260_storage_ptr",
+                      "typeString": "struct ISignableStructsBuyNow.BuyNowInput"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3652,
+                  "mutability": "mutable",
+                  "name": "operatorSignature",
+                  "nameLocation": "2774:17:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3659,
+                  "src": "2759:32:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3651,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2759:5:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3654,
+                  "mutability": "mutable",
+                  "name": "buyerSignature",
+                  "nameLocation": "2816:14:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3659,
+                  "src": "2801:29:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3653,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2801:5:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3656,
+                  "mutability": "mutable",
+                  "name": "sellerSignature",
+                  "nameLocation": "2855:15:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3659,
+                  "src": "2840:30:20",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 3655,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2840:5:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2709:167:20"
+            },
+            "returnParameters": {
+              "id": 3658,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2885:0:20"
+            },
+            "scope": 3700,
+            "src": "2687:199:20",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3660,
+              "nodeType": "StructuredDocumentation",
+              "src": "2892:169:20",
+              "text": " @notice Returns the address of the ERC20 contract from which\n  tokens are accepted for payments\n @return the address of the ERC20 contract"
+            },
+            "functionSelector": "785e9e86",
+            "id": 3665,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "erc20",
+            "nameLocation": "3075:5:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3661,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3080:2:20"
+            },
+            "returnParameters": {
+              "id": 3664,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3663,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3665,
+                  "src": "3106:7:20",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3662,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3106:7:20",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3105:9:20"
+            },
+            "scope": 3700,
+            "src": "3066:49:20",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3666,
+              "nodeType": "StructuredDocumentation",
+              "src": "3121:214:20",
+              "text": " @notice Proxy that queries the name() method from an external\n  ERC20 contract, which may optionally implement it. \n @return the return of the name() method call to the ERC20 contract"
+            },
+            "functionSelector": "18602092",
+            "id": 3671,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "erc20ContractName",
+            "nameLocation": "3349:17:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3667,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3366:2:20"
+            },
+            "returnParameters": {
+              "id": 3670,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3669,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3671,
+                  "src": "3392:13:20",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 3668,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3392:6:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3391:15:20"
+            },
+            "scope": 3700,
+            "src": "3340:67:20",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3672,
+              "nodeType": "StructuredDocumentation",
+              "src": "3413:218:20",
+              "text": " @notice Proxy that queries the symbol() method from an external\n  ERC20 contract, which may optionally implement it. \n @return the return of the symbol() method call to the ERC20 contract"
+            },
+            "functionSelector": "c3d1f83f",
+            "id": 3677,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "erc20ContractSymbol",
+            "nameLocation": "3645:19:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3673,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3664:2:20"
+            },
+            "returnParameters": {
+              "id": 3676,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3675,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3677,
+                  "src": "3690:13:20",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 3674,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3690:6:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3689:15:20"
+            },
+            "scope": 3700,
+            "src": "3636:69:20",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3678,
+              "nodeType": "StructuredDocumentation",
+              "src": "3712:222:20",
+              "text": " @notice Proxy that queries the decimals() method from an external\n  ERC20 contract, which may optionally implement it. \n @return the return of the decimals() method call to the ERC20 contract"
+            },
+            "functionSelector": "cf70b880",
+            "id": 3683,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "erc20ContractDecimals",
+            "nameLocation": "3948:21:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3679,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3969:2:20"
+            },
+            "returnParameters": {
+              "id": 3682,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3681,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3683,
+                  "src": "3995:5:20",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 3680,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3995:5:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3994:7:20"
+            },
+            "scope": 3700,
+            "src": "3939:63:20",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3684,
+              "nodeType": "StructuredDocumentation",
+              "src": "4008:190:20",
+              "text": " @notice Returns the ERC20 balance of address in the ERC20 contract\n @param addr the address that is queried\n @return the balance in the external ERC20 contract"
+            },
+            "functionSelector": "02519da3",
+            "id": 3691,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "erc20BalanceOf",
+            "nameLocation": "4212:14:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3687,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3686,
+                  "mutability": "mutable",
+                  "name": "addr",
+                  "nameLocation": "4235:4:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3691,
+                  "src": "4227:12:20",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3685,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4227:7:20",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4226:14:20"
+            },
+            "returnParameters": {
+              "id": 3690,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3689,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3691,
+                  "src": "4264:7:20",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3688,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4264:7:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4263:9:20"
+            },
+            "scope": 3700,
+            "src": "4203:70:20",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 3692,
+              "nodeType": "StructuredDocumentation",
+              "src": "4279:231:20",
+              "text": " @notice Returns the allowance that the buyer has approved\n  directly in the ERC20 contract in favour of this contract.\n @param buyer the address of the buyer\n @return the amount allowed by buyer"
+            },
+            "functionSelector": "3e5beab9",
+            "id": 3699,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "allowance",
+            "nameLocation": "4524:9:20",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3695,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3694,
+                  "mutability": "mutable",
+                  "name": "buyer",
+                  "nameLocation": "4542:5:20",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3699,
+                  "src": "4534:13:20",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3693,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4534:7:20",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4533:15:20"
+            },
+            "returnParameters": {
+              "id": 3698,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3697,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3699,
+                  "src": "4572:7:20",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3696,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4572:7:20",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4571:9:20"
+            },
+            "scope": 3700,
+            "src": "4515:66:20",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3701,
+        "src": "765:3818:20",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:4552:20"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.14+commit.80d49f37.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-09-12T09:23:11.061Z",
+  "devdoc": {
+    "author": "Freeverse.io, www.freeverse.io",
+    "details": "The contract that implements this interface adds two entry points for BuyNow payments, which are defined and documented in the inherited IBuyNowBase. - in the 'buyNow' method, the buyer is the msg.sender (the buyer therefore signs the TX),   and the operator's EIP712-signature of the BuyNowInput struct is provided as input to the call. - in the 'relayedBuyNow' method, anyone can be msg.sender, but both the operator and the buyer   EIP712-signatures of the BuyNowInput struct are provided as input to the call.",
+    "kind": "dev",
+    "methods": {
+      "EIP712Address()": {
+        "returns": {
+          "_0": "the address of the EIP712 verifier contract"
+        }
+      },
+      "acceptsRefunds(bytes32)": {
+        "details": "The payment must be in ASSET_TRANSFERRING and beyond expirationTime.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        },
+        "returns": {
+          "_0": "true if the payment accepts a refund to the buyer."
+        }
+      },
+      "allowance(address)": {
+        "params": {
+          "buyer": "the address of the buyer"
+        },
+        "returns": {
+          "_0": "the amount allowed by buyer"
+        }
+      },
+      "assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))": {
+        "params": {
+          "buyNowInp": "The BuyNowInput struct"
+        }
+      },
+      "balanceOf(address)": {
+        "params": {
+          "addr": "the address that is queried"
+        },
+        "returns": {
+          "_0": "the local balance"
+        }
+      },
+      "buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)": {
+        "details": "Executed by the buyer, who relays the operator's signature.  This method will transfer only the minimum required amount from the bidder  to this contract, re-using any existing local balance.  If all requirements are fulfilled, it stores the data relevant  for the next steps of the payment, and it locks the funds  in this contract.  Follows standard Checks-Effects-Interactions pattern  to protect against re-entrancy attacks.  Moves payment to ASSET_TRANSFERRING state.",
+        "params": {
+          "buyNowInp": "The struct containing all required payment data",
+          "operatorSignature": "The signature of 'buyNowInp' by the operator",
+          "sellerSignature": "the signature of the seller agreeing to list the asset"
+        }
+      },
+      "computeFeeAmount(uint256,uint256)": {
+        "details": "Must return a value that is guaranteed to be less or equal to the provided amount",
+        "params": {
+          "amount": "The amount",
+          "feeBPS": "The percentage fee expressed in Basis Points (bps).  feeBPS examples:  2.5% = 250 bps, 10% = 1000 bps, 100% = 10000 bps"
+        },
+        "returns": {
+          "_0": "The fee amount"
+        }
+      },
+      "currencyLongDescriptor()": {
+        "returns": {
+          "_0": "the string describing the currency"
+        }
+      },
+      "enoughFundsAvailable(address,uint256)": {
+        "details": "In more detail: returns true if the sum of the buyer's local balance in this contract,  plus the external available balance, is larger or equal than 'amount'",
+        "params": {
+          "amount": "The amount that is queried",
+          "buyer": "The address for which funds are queried"
+        },
+        "returns": {
+          "_0": "Returns true if enough funds are available"
+        }
+      },
+      "erc20()": {
+        "returns": {
+          "_0": "the address of the ERC20 contract"
+        }
+      },
+      "erc20BalanceOf(address)": {
+        "params": {
+          "addr": "the address that is queried"
+        },
+        "returns": {
+          "_0": "the balance in the external ERC20 contract"
+        }
+      },
+      "erc20ContractDecimals()": {
+        "returns": {
+          "_0": "the return of the decimals() method call to the ERC20 contract"
+        }
+      },
+      "erc20ContractName()": {
+        "returns": {
+          "_0": "the return of the name() method call to the ERC20 contract"
+        }
+      },
+      "erc20ContractSymbol()": {
+        "returns": {
+          "_0": "the return of the symbol() method call to the ERC20 contract"
+        }
+      },
+      "finalize((bytes32,bool),bytes)": {
+        "details": "Can be executed by anyone, but the operator signature must be included as input param.  Seller or Buyer's local balances are updated, allowing explicit withdrawal.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.",
+        "params": {
+          "operatorSignature": "The operator signature of transferResult",
+          "transferResult": "The asset transfer result struct signed by the operator."
+        }
+      },
+      "finalizeAndWithdraw((bytes32,bool),bytes)": {
+        "details": "If recipient has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the recipient too, but with a  helping 3rd party covering gas costs and TX sending hassle.  The operator signature must be included as input param.  Moves payment to PAID or REFUNDED state on transfer success/failure, respectively.",
+        "params": {
+          "operatorSignature": "The operator signature of transferResult",
+          "transferResult": "The asset transfer result struct signed by the operator."
+        }
+      },
+      "isRegisteredSeller(address)": {
+        "params": {
+          "addr": "the address that is queried"
+        },
+        "returns": {
+          "_0": "Returns whether the address is registered as seller"
+        }
+      },
+      "isSellerRegistrationRequired()": {
+        "returns": {
+          "_0": "Returns true if sellers need to be registered to be able to accept payments"
+        }
+      },
+      "maxFeeBPS()": {
+        "returns": {
+          "_0": "the max fee (in BPS units)"
+        }
+      },
+      "maxFundsAvailable(address)": {
+        "details": "In more detail: returns the sum of the buyer's local balance in this contract,  plus the available external balance.",
+        "params": {
+          "buyer": "The address for which funds are queried"
+        },
+        "returns": {
+          "_0": "the max funds available"
+        }
+      },
+      "onlyUserCanWithdraw(address)": {
+        "params": {
+          "user": "The address of the user"
+        }
+      },
+      "paymentInfo(bytes32)": {
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        },
+        "returns": {
+          "_0": "the struct stored for the payment"
+        }
+      },
+      "paymentState(bytes32)": {
+        "details": "If payment is in ASSET_TRANSFERRING, it may be worth  checking acceptsRefunds to check if it has gone beyond expirationTime.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        },
+        "returns": {
+          "_0": "the state of the payment."
+        }
+      },
+      "paymentWindow()": {
+        "returns": {
+          "_0": "the payment window in secs"
+        }
+      },
+      "refund(bytes32)": {
+        "details": "Anybody can call this function.  Requires acceptsRefunds == true to proceed.  After updating buyer's balance, he/she can later withdraw.  Moves payment to REFUNDED state.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        }
+      },
+      "refundAndWithdraw(bytes32)": {
+        "details": "If the buyer has set onlyUserCanWithdraw == true, then msg.sender must be the recipient;  otherwise, anyone can execute this method, with funds arriving to the buyer too, but with a  helping 3rd party covering gas costs and TX sending hassle.  Requires acceptsRefunds == true to proceed.  All of msg.sender's balance in the contract is withdrawn,  not only the part that was locked in this particular paymentId  Moves payment to REFUNDED state.",
+        "params": {
+          "paymentId": "The unique ID that identifies the payment."
+        }
+      },
+      "relayedBuyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes,bytes)": {
+        "details": "Executed by anyone, who relays  relay both the operator and the buyer signatures.  The buyer must have approved the amount to this contract before.  If all requirements are fulfilled, it stores the data relevant  for the next steps of the payment, and it locks the ERC20  in this contract.  Follows standard Checks-Effects-Interactions pattern  to protect against re-entrancy attacks.  Moves payment to ASSET_TRANSFERRING state.",
+        "params": {
+          "buyNowInp": "The struct containing all required payment data",
+          "buyerSignature": "The signature of 'buyNowInp' by the buyer",
+          "operatorSignature": "The signature of 'buyNowInp' by the operator",
+          "sellerSignature": "the signature of the seller agreeing to list the asset"
+        }
+      },
+      "setOnlyUserCanWithdraw(bool)": {
+        "params": {
+          "onlyUserCan": "true if only the user can execute withdrawals of his/her local balance"
+        }
+      },
+      "splitFundingSources(address,uint256)": {
+        "params": {
+          "amount": "The amount to be split",
+          "buyer": "The address for which the amount is to be split"
+        },
+        "returns": {
+          "externalFunds": "The funds required to be transferred from the external buyer balance",
+          "localFunds": "The amount of local funds that will be used."
+        }
+      },
+      "withdrawAmount(uint256)": {
+        "params": {
+          "amount": "The required amount to withdraw"
+        }
+      }
+    },
+    "title": "Interface to Escrow Contract for Payments in BuyNow mode, in ERC20 tokens.",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "EIP712Address()": {
+        "notice": "Returns the address of the of the contract containing  the implementation of the EIP712 verifying functions"
+      },
+      "acceptsRefunds(bytes32)": {
+        "notice": "Returns true if the payment accepts a refund to the buyer"
+      },
+      "allowance(address)": {
+        "notice": "Returns the allowance that the buyer has approved  directly in the ERC20 contract in favour of this contract."
+      },
+      "assertBuyNowInputsOK((bytes32,uint256,uint256,uint256,uint256,address,address))": {
+        "notice": "Reverts unless the requirements for a BuyNowInput are fulfilled."
+      },
+      "balanceOf(address)": {
+        "notice": "Returns the local balance of the provided address that is stored in this  contract, and hence, available for withdrawal."
+      },
+      "buyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes)": {
+        "notice": "Starts Payment process by the buyer."
+      },
+      "computeFeeAmount(uint256,uint256)": {
+        "notice": "Safe computation of fee amount for a provided amount, feeBPS pair"
+      },
+      "currencyLongDescriptor()": {
+        "notice": "Returns a descriptor about the currency that this contract accepts"
+      },
+      "enoughFundsAvailable(address,uint256)": {
+        "notice": "Returns true if the 'amount' required for a payment is available to this contract."
+      },
+      "erc20()": {
+        "notice": "Returns the address of the ERC20 contract from which  tokens are accepted for payments"
+      },
+      "erc20BalanceOf(address)": {
+        "notice": "Returns the ERC20 balance of address in the ERC20 contract"
+      },
+      "erc20ContractDecimals()": {
+        "notice": "Proxy that queries the decimals() method from an external  ERC20 contract, which may optionally implement it. "
+      },
+      "erc20ContractName()": {
+        "notice": "Proxy that queries the name() method from an external  ERC20 contract, which may optionally implement it. "
+      },
+      "erc20ContractSymbol()": {
+        "notice": "Proxy that queries the symbol() method from an external  ERC20 contract, which may optionally implement it. "
+      },
+      "finalize((bytes32,bool),bytes)": {
+        "notice": "Relays the operator signature declaring that the asset transfer was successful or failed,  and updates local balances of seller or buyer, respectively."
+      },
+      "finalizeAndWithdraw((bytes32,bool),bytes)": {
+        "notice": "Relays the operator signature declaring that the asset transfer was successful or failed,  updates balances of seller or buyer, respectively, and proceeds to withdraw all funds   in this contract available to the rightful recipient of the paymentId:   the seller if transferResult.wasSuccessful == true, the buyer otherwise."
+      },
+      "isRegisteredSeller(address)": {
+        "notice": "Returns true if the address provided is a registered seller"
+      },
+      "isSellerRegistrationRequired()": {
+        "notice": "Returns whether sellers need to be registered to be able to accept payments"
+      },
+      "maxFeeBPS()": {
+        "notice": "Returns the max fee (in BPS units) that can be accepted in any payment  despite operator and buyer having signed a larger amount;  a value of 10000 BPS would correspond to 100% (no limit at all)"
+      },
+      "maxFundsAvailable(address)": {
+        "notice": "Returns the maximum amount of funds available to a buyer"
+      },
+      "onlyUserCanWithdraw(address)": {
+        "notice": "Returns the value of onlyUserCanWithdraw for a given user"
+      },
+      "paymentInfo(bytes32)": {
+        "notice": "Returns all data stored in a payment"
+      },
+      "paymentState(bytes32)": {
+        "notice": "Returns the state of a payment."
+      },
+      "paymentWindow()": {
+        "notice": "Returns the amount of seconds that a payment  can remain in ASSET_TRANSFERRING state without positive  or negative confirmation by the operator"
+      },
+      "refund(bytes32)": {
+        "notice": "Moves buyer's provided funds to buyer's balance."
+      },
+      "refundAndWithdraw(bytes32)": {
+        "notice": "Executes refund and withdraw to the buyer in one transaction."
+      },
+      "registerAsSeller()": {
+        "notice": "Registers msg.sender as seller so that, if the contract has set  _isSellerRegistrationRequired = true, then payments will be accepted with  msg.sender as seller."
+      },
+      "relayedBuyNow((bytes32,uint256,uint256,uint256,uint256,address,address),bytes,bytes,bytes)": {
+        "notice": "Starts the Payment process via relay-by-operator."
+      },
+      "relayedWithdraw(address)": {
+        "notice": "Transfers funds avaliable in this  contract's balanceOf[recipient] to recipient.  The funds still go to straight the recipient, as if he/she  has executed the withdrawal() method, but the msg.sender  covers gas costs and the hassle of executing the transaction.  Users can always opt out from this feature, using the setOnlyUserCanWithdraw method."
+      },
+      "setOnlyUserCanWithdraw(bool)": {
+        "notice": "Sets the value of onlyUserCanWithdraw for the user with msg.sender address:  - if true: only the user can execute withdrawals of his/her local balance  - if false: any address can help and execute the withdrawals on behalf of the user   (the funds still go straight to the user, but the helper address covers gas costs    and the hassle of executing the transaction)"
+      },
+      "splitFundingSources(address,uint256)": {
+        "notice": "Splits the funds required to provide 'amount' into two sources:  - externalFunds: the funds required to be transferred from the external buyer balance  - localFunds: the funds required from the buyer's already available balance in this contract."
+      },
+      "withdraw()": {
+        "notice": "Transfers funds avaliable in this  contract's balanceOf[msg.sender] to msg.sender"
+      },
+      "withdrawAmount(uint256)": {
+        "notice": "Transfers only the specified amount  from this contract's balanceOf[msg.sender] to msg.sender.  Reverts if balanceOf[msg.sender] < amount."
+      }
+    },
+    "version": 1
+  }
+}

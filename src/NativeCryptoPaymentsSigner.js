@@ -20,7 +20,7 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-const NativePaymentsJSON = require('./contracts/IPaymentsNative.json');
+const NativePaymentsJSON = require('./contracts/IBuyNowNative.json');
 
 class NativeCryptoPayments {
   constructor({
@@ -53,8 +53,10 @@ class NativeCryptoPayments {
       .finalizeAndWithdraw(assetTransferData, signature).send({ from, value: 0, gas: 400000 });
   }
 
-  pay({ paymentData, signature, from }) {
-    return this.paymentsContract.methods.pay(paymentData, signature)
+  buyNow({
+    paymentData, operatorSignature, sellerSignature, from,
+  }) {
+    return this.paymentsContract.methods.buyNow(paymentData, operatorSignature, sellerSignature)
       .send({ from, value: paymentData.amount, gas: 400000 });
   }
 
@@ -100,7 +102,7 @@ class NativeCryptoPayments {
   }
 
   acceptedCurrency() {
-    return this.paymentsContract.methods.acceptedCurrency().call();
+    return this.paymentsContract.methods.currencyLongDescriptor().call();
   }
 
   static isValidPaymentData({ paymentData }) {
