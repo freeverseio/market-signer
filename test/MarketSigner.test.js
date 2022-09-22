@@ -36,7 +36,6 @@ const {
   plannedSubmissionVerse,
   expiresAtTime,
   getExpiryData,
-  encryptRSAWithPublicKey,
 } = require('../dist/main');
 
 const mktSigner = rewire('../src/MarketSigner');
