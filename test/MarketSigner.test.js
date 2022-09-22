@@ -2,6 +2,7 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
+const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via window.openpgp
 const { encryptRSAWithPublicKey } = require('../src/MarketSigner');
 
 const {
