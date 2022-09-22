@@ -23,6 +23,7 @@
 const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 const Utils = require('web3-utils');
+const JSEncrypt = require('jsencrypt');
 
 const abi = Abi; // this is necessary to avoid parcel tree-shaking breaking the eth-abi module
 
@@ -536,6 +537,18 @@ function getExpiryData({
   return { lastValidVerse, expirationTime };
 }
 
+function encryptRSAWithPublicKey(message, publicKey) {
+  // Start the  encryptor.
+  const jsEncrypt = new JSEncrypt();
+
+  // Assign the encryptor to utilize the public key.
+  jsEncrypt.setPublicKey(publicKey);
+
+  // Perform the encryption based on received public key - only private key can read it!
+  const encrypted = jsEncrypt.encrypt(message);
+  return encrypted;
+}
+
 module.exports = {
   sign,
   digestLinkId,
@@ -568,4 +581,5 @@ module.exports = {
   plannedSubmissionVerse,
   expiresAtTime,
   getExpiryData,
+  encryptRSAWithPublicKey,
 };
