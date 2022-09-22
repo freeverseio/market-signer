@@ -2,6 +2,9 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
+const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via window.openpgp
+const { encryptRSAWithPublicKey } = require('../src/MarketSigner');
+
 const {
   digestBuyNowFromBuyNowId,
   digestBuyNowFromBuyNowIdCertified,
@@ -42,7 +45,9 @@ const concatHash = mktSigner.__get__('concatHash');
 const computeAuctionId = mktSigner.__get__('computeAuctionId');
 const computeBuyNowId = mktSigner.__get__('computeBuyNowId');
 const computePutForSaleDigest = mktSigner.__get__('computePutForSaleDigest');
-const account = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+const account = new Accounts().privateKeyToAccount(
+  '0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54',
+);
 
 it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () => {
   const randomTime = 1634217828;
@@ -140,7 +145,10 @@ it('plannedSubmissionTime, plannedSubmissionVerse and expiresAtTime', async () =
   });
 
   assert.equal(expirationData.lastValidVerse, 2);
-  assert.equal(expirationData.expirationTime, randomTime + 2 * interval - safetyMargin);
+  assert.equal(
+    expirationData.expirationTime,
+    randomTime + 2 * interval - safetyMargin,
+  );
 
   assert.equal(
     expiresAtTime({
@@ -223,7 +231,10 @@ it('deterministic digestCashout', async () => {
   const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
   const iban = 'NL74INGB9985747011';
   const digest = digestCashout({ paymentId, iban });
-  assert.equal(digest, '0xbb7c44c78b091b7796ebdf589cbf0af318f148e9b1c5e75b21aede577d82afa4');
+  assert.equal(
+    digest,
+    '0xbb7c44c78b091b7796ebdf589cbf0af318f148e9b1c5e75b21aede577d82afa4',
+  );
   const signature = sign({ digest, web3account: account });
   const expected = '0xc09b37519795caeb5bdfeac57ddc5021dd98c84d5156d5c34f4c035f126faab248c8dbe39bc622e05b4535b6f5c1b4deecb79397d6359b7b219dac554e642f101c';
   assert.equal(signature, expected);
@@ -291,7 +302,10 @@ it('deterministic auctionId and digest', async () => {
     offerValidUntil: 0,
     versesToPay,
   });
-  assert.equal(auctionId1, '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03');
+  assert.equal(
+    auctionId1,
+    '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03',
+  );
 
   const auctionId2 = computeAuctionId({
     currencyId,
@@ -302,19 +316,24 @@ it('deterministic auctionId and digest', async () => {
     offerValidUntil,
     versesToPay,
   });
-  assert.equal(auctionId2, '0x3f6a3102f21d4269ae1e9eac6172c102a6179ac04e21808bc95baaf6bf18c9fd');
+  assert.equal(
+    auctionId2,
+    '0x3f6a3102f21d4269ae1e9eac6172c102a6179ac04e21808bc95baaf6bf18c9fd',
+  );
 
   const auctionId3 = computeAuctionId({
     currencyId,
     price,
-    sellerRnd:
-      rnd,
+    sellerRnd: rnd,
     assetId,
     validUntil: 0,
     offerValidUntil,
     versesToPay,
   });
-  assert.equal(auctionId3, '0x3f6a3102f21d4269ae1e9eac6172c102a6179ac04e21808bc95baaf6bf18c9fd');
+  assert.equal(
+    auctionId3,
+    '0x3f6a3102f21d4269ae1e9eac6172c102a6179ac04e21808bc95baaf6bf18c9fd',
+  );
 });
 
 it('deterministic digestPutForSaleAuction', async () => {
@@ -340,7 +359,12 @@ it('deterministic digestPutForSaleAuction', async () => {
   assert.equal(digest, expectedDigest);
 
   const digest2 = digestPutForSaleAuction({
-    currencyId, price, rnd, validUntil, versesToPay, assetId,
+    currencyId,
+    price,
+    rnd,
+    validUntil,
+    versesToPay,
+    assetId,
   });
   const sigSeller = sign({ digest: digest2, web3account: sellerAccount });
   assert.equal(sigSeller, expectedSignature);
@@ -356,7 +380,11 @@ it('deterministic digestPutForSaleBuyNow', async () => {
   const expectedSignature = '0x9d7d39a3a62b75e8de09fda3da019ead171221faf853d5adc5fe2b65035c2e5a1e0e321240d5d223fb3c0a87d8347b77c517ae7c48f914cfa2d1b952b3a23fa91c';
 
   const digest = digestPutForSaleBuyNow({
-    currencyId, price, rnd, validUntil, assetId,
+    currencyId,
+    price,
+    rnd,
+    validUntil,
+    assetId,
   });
   const sigSeller = sign({ digest, web3account: sellerAccount });
   assert.equal(sigSeller, expectedSignature);
@@ -374,7 +402,13 @@ it('deterministic digestAcceptOffer', async () => {
   const expected = '0xfc18ba14ff1ed175a50d2319bd919f5160b75337ef9d1446a9de9ec90d02ef903b548d57ff3fa43652c0c7b37a28bd2f8a31ea074d13dd3c2304c24da845b6e71b';
 
   const digest = digestAcceptOffer({
-    currencyId, price, rnd, validUntil, offerValidUntil, versesToPay, assetId,
+    currencyId,
+    price,
+    rnd,
+    validUntil,
+    offerValidUntil,
+    versesToPay,
+    assetId,
   });
   const sigSeller = sign({ digest, web3account: sellerAccount });
   assert.equal(sigSeller, expected);
@@ -392,14 +426,25 @@ it('deterministic digestOfferCertified', async () => {
   const expectedSig = '0xd768887ddd3ab9fb862dd44fc710a7857bc079bc8787cf8d145f9ceb00db69cb49a7a2d74dcab0a8bbefa33632baac0b87c21c688d072c7f1f1b58c106eed6a51c';
 
   const digest = digestOfferCertified({
-    currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID,
+    currencyId,
+    price,
+    offererRnd,
+    assetId,
+    offerValidUntil,
+    versesToPay,
+    assetCID,
   });
   const signedOffer = sign({ digest, web3account: offererAccount });
   assert.equal(signedOffer, expectedSig);
 
   // Uncertified version:
   const digest2 = digestOffer({
-    currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay,
+    currencyId,
+    price,
+    offererRnd,
+    assetId,
+    offerValidUntil,
+    versesToPay,
   });
   const signedOffer2 = sign({ digest: digest2, web3account: offererAccount });
   const expectedSig2 = '0x0168cefa72e1e3e441eae4e3a274f5dd9bd84a2efe5eae8e075c604b356925626100da319e57118957f76851883ba4479c435631e7a7b38bd2e0eb5e145474251b';
@@ -534,15 +579,28 @@ it('deterministic buyNow', async () => {
 
   // test that buyer can be recovered from signature
   const recoveredBuyer = getBuyNowBuyer({
-    currencyId, price, sellerRnd, assetId, validUntil, assetCID, signature: signedBuyNow,
+    currencyId,
+    price,
+    sellerRnd,
+    assetId,
+    validUntil,
+    assetCID,
+    signature: signedBuyNow,
   });
   assert.equal(recoveredBuyer, buyerAccount.address);
 
   const buyNowId = computeBuyNowId({
-    currencyId, price, sellerRnd, validUntil, assetId,
+    currencyId,
+    price,
+    sellerRnd,
+    validUntil,
+    assetId,
   });
 
-  assert.equal(buyNowId, '0x03214d89eb62587cbb48c9056dba878f839a4ebad3ad75f8826d76c566e4acd0');
+  assert.equal(
+    buyNowId,
+    '0x03214d89eb62587cbb48c9056dba878f839a4ebad3ad75f8826d76c566e4acd0',
+  );
 
   const digest1b = digestBuyNowFromBuyNowIdCertified({
     buyNowId,
@@ -720,7 +778,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
   assert.equal(bidderAddress, buyerAccount.address);
 });
 
-it('Hash of concatenated args', () => {
+it('Hash of concatenated args', async () => {
   const someBytes32 = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const result = concatHash({
     types: ['uint256', 'bytes32'],
@@ -728,4 +786,80 @@ it('Hash of concatenated args', () => {
   });
   const expected = '0x7522d1cef7c9def1b2b909d6e5d00a91f8ee07b51bc10f407986278971c2cbeb';
   assert.equal(result, expected);
+});
+
+describe('testing rsa encrypt', () => {
+  it('encrypt and decrypt coincide with golang', async () => {
+    const msg = '3ccb01128433ec5cc07e5c2133ebf545510e3e2f3491675afccc34355e91b515017fcd7b2bcd2012092eebdecb4ff0577d8aa74fec5e1a73e123ae4a2ff63309';
+    const pubKey = `-----BEGIN RSA PUBLIC KEY-----
+MIIBpDANBgkqhkiG9w0BAQEFAAOCAZEAMIIBjAKCAYMJNgnN/sXb41c0QuRCcQqo
+KdNh1IQlv37BdcrByl8U+VJyUkYhb7ZfApbcwF1X342vlYCfvR7+pMrkcBOXvBAV
+WyuBRzL8Ivsm6o5CiuPoWfmX4BFMPhsUXMxRHzwZZc5d0F8p8ZGsmXKAN3SNdFMm
+Ub2Qe7ZqoFUzt8rD9+qBwT2Xr/dRKLzqAHxxTmW50fHHnBxYlV/J7Tjc4KWZVa42
+sqtyJnqUN5c3Gw/tKF+XeBDE8V//he9PuHCq+KHO9g8Y+Li4gfNhTYyIEPxBcEHM
+ngvAhC3cqL5DFX/+HNBzRTAJ7CSeXNRttmj7MGDKUOAeoknP/+VpEDMnZnNlerCV
+5UymThazYIbJa44Pucd7AyR7sMl8aejQ7UasB3r3gXAqSLqbWD+Z34mPMt4u3DND
+B84iQkKWotc+5cqdaLqluPZXPSW4twT/t5VDvAskzuGjnD6YJIrSD3C9jsGGPxB7
+lWjiffYFXpdujFOEfv7YFief+a58D5WxNMmdY4JBt4UVgdsCAwEAAQ==
+-----END RSA PUBLIC KEY-----`;
+    const privKey = `-----BEGIN RSA PRIVATE KEY-----
+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
+boYZ
+-----END RSA PRIVATE KEY-----`;
+
+    // Perform the encryption based on received public key - only private key can read it!
+    const encrypted = encryptRSAWithPublicKey(msg, pubKey);
+
+    const privateKey = await openpgp.decryptKey({
+      privateKey: await openpgp.readPrivateKey({ armoredKey: privKey }),
+    });
+
+    const message = await openpgp.readMessage({
+      armoredMessage: encrypted, // parse armored message
+    });
+
+    const { data: decrypted } = await openpgp.decrypt({
+      message,
+      decryptionKeys: privateKey,
+    });
+
+    console.log(decrypted); // 'Hello, World!'
+    assert.equal(decrypted, msg);
+  });
 });
