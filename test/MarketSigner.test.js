@@ -2,7 +2,6 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
-const JSEncrypt = require('jsencrypt');
 
 const {
   digestBuyNowFromBuyNowId,

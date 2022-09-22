@@ -622,16 +622,6 @@ function getExpiryData({
 }
 
 async function encryptRSAWithPublicKey(message, publicKey) {
-  // // Start the  encryptor.
-  // const jsEncrypt = new JSEncrypt();
-
-  // // Assign the encryptor to utilize the public key.
-  // jsEncrypt.setPublicKey(publicKey);
-
-  // // Perform the encryption based on received public key - only private key can read it!
-  // const encrypted = jsEncrypt.encrypt(message);
-  // return encrypted;
-
   const pubKey = await openpgp.readKey({ armoredKey: publicKey });
 
   const encrypted = await openpgp.encrypt({
