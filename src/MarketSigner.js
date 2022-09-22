@@ -23,7 +23,7 @@
 const Abi = require('web3-eth-abi');
 const Accounts = require('web3-eth-accounts');
 const Utils = require('web3-utils');
-const JSEncrypt = require('jsencrypt');
+const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via window.openpgp
 
 const abi = Abi; // this is necessary to avoid parcel tree-shaking breaking the eth-abi module
 
@@ -127,7 +127,9 @@ function digestPutForSaleAuction({
 }
 
 function computeBuyNowIdFromHiddePrice({
-  sellerHiddenPrice, validUntil, assetId,
+  sellerHiddenPrice,
+  validUntil,
+  assetId,
 }) {
   return concatHash({
     types: ['bytes32', 'uint256', 'uint32'],
@@ -136,19 +138,33 @@ function computeBuyNowIdFromHiddePrice({
 }
 
 function computeBuyNowId({
-  currencyId, price, sellerRnd, validUntil, assetId,
+  currencyId,
+  price,
+  sellerRnd,
+  validUntil,
+  assetId,
 }) {
   const sellerHiddenPrice = hideSellerPrice({ currencyId, price, sellerRnd });
   return computeBuyNowIdFromHiddePrice({
-    sellerHiddenPrice, validUntil, assetId,
+    sellerHiddenPrice,
+    validUntil,
+    assetId,
   });
 }
 
 function digestPutForSaleBuyNow({
-  currencyId, price, rnd, validUntil, assetId,
+  currencyId,
+  price,
+  rnd,
+  validUntil,
+  assetId,
 }) {
   return computeBuyNowId({
-    currencyId, price, sellerRnd: rnd, validUntil, assetId,
+    currencyId,
+    price,
+    sellerRnd: rnd,
+    validUntil,
+    assetId,
   });
 }
 
@@ -166,7 +182,12 @@ function computeAuctionIdFromHiddenPrice({
     })
     : concatHash({
       types: ['bytes32', 'uint256', 'uint32', 'uint32'],
-      vals: [sellerHiddenPrice, assetId.toString(), offerValidUntil, versesToPay],
+      vals: [
+        sellerHiddenPrice,
+        assetId.toString(),
+        offerValidUntil,
+        versesToPay,
+      ],
     });
 }
 
@@ -243,7 +264,10 @@ function digestBidCertified({
     versesToPay,
   });
   return digestBidFromAuctionIdCertified({
-    auctionId, extraPrice, buyerRnd, assetCID,
+    auctionId,
+    extraPrice,
+    buyerRnd,
+    assetCID,
   });
 }
 
@@ -302,9 +326,7 @@ function digestCancelBuyNow({ buyNowId }) {
   });
 }
 
-function digestBuyNowFromBuyNowIdCertified({
-  buyNowId, assetCID,
-}) {
+function digestBuyNowFromBuyNowIdCertified({ buyNowId, assetCID }) {
   return concatHash({
     types: ['bytes32', 'string'],
     vals: [buyNowId, assetCID],
@@ -312,13 +334,23 @@ function digestBuyNowFromBuyNowIdCertified({
 }
 
 function digestBuyNowCertified({
-  currencyId, price, sellerRnd, validUntil, assetCID, assetId,
+  currencyId,
+  price,
+  sellerRnd,
+  validUntil,
+  assetCID,
+  assetId,
 }) {
   const buyNowId = computeBuyNowId({
-    currencyId, price, sellerRnd, validUntil, assetId,
+    currencyId,
+    price,
+    sellerRnd,
+    validUntil,
+    assetId,
   });
   return digestBuyNowFromBuyNowIdCertified({
-    buyNowId, assetCID,
+    buyNowId,
+    assetCID,
   });
 }
 
@@ -343,7 +375,13 @@ function digestBuyNowFromBuyNowId({ buyNowId }) {
 }
 
 function digestAcceptOffer({
-  currencyId, price, rnd, validUntil, offerValidUntil, versesToPay, assetId,
+  currencyId,
+  price,
+  rnd,
+  validUntil,
+  offerValidUntil,
+  versesToPay,
+  assetId,
 }) {
   return computePutForSaleDigest({
     currencyId,
@@ -356,11 +394,7 @@ function digestAcceptOffer({
   });
 }
 
-function digestBidFromAuctionId({
-  auctionId,
-  extraPrice,
-  buyerRnd,
-}) {
+function digestBidFromAuctionId({ auctionId, extraPrice, buyerRnd }) {
   return digestBidFromAuctionIdCertified({
     auctionId,
     extraPrice,
@@ -439,28 +473,45 @@ function getBidder({
   });
 }
 
-function getBuyNowBuyerFromBuyNowId({
-  buyNowId, assetCID, signature,
-}) {
+function getBuyNowBuyerFromBuyNowId({ buyNowId, assetCID, signature }) {
   const digest = digestBuyNowFromBuyNowIdCertified({
-    buyNowId, assetCID,
+    buyNowId,
+    assetCID,
   });
   return new Accounts().recover(digest, signature);
 }
 
 function getBuyNowBuyer({
-  currencyId, price, sellerRnd, assetId, validUntil, assetCID, signature,
+  currencyId,
+  price,
+  sellerRnd,
+  assetId,
+  validUntil,
+  assetCID,
+  signature,
 }) {
   const buyNowId = computeBuyNowId({
-    currencyId, price, sellerRnd, validUntil, assetId,
+    currencyId,
+    price,
+    sellerRnd,
+    validUntil,
+    assetId,
   });
   return getBuyNowBuyerFromBuyNowId({
-    buyNowId, assetCID, signature,
+    buyNowId,
+    assetCID,
+    signature,
   });
 }
 
 function digestOfferCertified({
-  currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID,
+  currencyId,
+  price,
+  offererRnd,
+  assetId,
+  offerValidUntil,
+  versesToPay,
+  assetCID,
 }) {
   return digestBidCertified({
     currencyId,
@@ -477,10 +528,21 @@ function digestOfferCertified({
 }
 
 function digestOffer({
-  currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay,
+  currencyId,
+  price,
+  offererRnd,
+  assetId,
+  offerValidUntil,
+  versesToPay,
 }) {
   return digestOfferCertified({
-    currencyId, price, offererRnd, assetId, offerValidUntil, versesToPay, assetCID: '',
+    currencyId,
+    price,
+    offererRnd,
+    assetId,
+    offerValidUntil,
+    versesToPay,
+    assetCID: '',
   });
 }
 
@@ -495,35 +557,57 @@ function sign({ digest, web3account }) {
 // Verses have a planned submission time.
 // They expire as soon as the next verse is submitted.
 function plannedSubmissionTime({
-  verse, referenceVerse, referenceTime, verseInterval,
+  verse,
+  referenceVerse,
+  referenceTime,
+  verseInterval,
 }) {
-  return +referenceTime + (+verse - +referenceVerse) * (+verseInterval);
+  return +referenceTime + (+verse - +referenceVerse) * +verseInterval;
 }
 // Conversely, the frontend can obtain the verse that would correspond to a given timestamp
 // Since a timestamp may happen between verses, the following function
 // returns the largest of the two, to allow for time variability,
 // as recommended for usage in signing BuyNows/Auctions/Bids.
 function plannedSubmissionVerse({
-  time, referenceVerse, referenceTime, verseInterval,
+  time,
+  referenceVerse,
+  referenceTime,
+  verseInterval,
 }) {
   return Math.ceil((+time - +referenceTime) / +verseInterval) + +referenceVerse;
 }
 
 function expiresAtTime({
-  verse, referenceVerse, referenceTime, verseInterval, safetyMargin,
+  verse,
+  referenceVerse,
+  referenceTime,
+  verseInterval,
+  safetyMargin,
 }) {
   const nextSubmissionVerse = +verse + 1;
   const defaultSafetyMargin = 300;
-  return plannedSubmissionTime({
-    verse: nextSubmissionVerse, referenceVerse, referenceTime, verseInterval,
-  }) - (safetyMargin || defaultSafetyMargin);
+  return (
+    plannedSubmissionTime({
+      verse: nextSubmissionVerse,
+      referenceVerse,
+      referenceTime,
+      verseInterval,
+    }) - (safetyMargin || defaultSafetyMargin)
+  );
 }
 
 function getExpiryData({
-  time, referenceVerse, referenceTime, verseInterval, safetyMargin,
+  time,
+  referenceVerse,
+  referenceTime,
+  verseInterval,
+  safetyMargin,
 }) {
   const submissionVerse = plannedSubmissionVerse({
-    time, referenceVerse, referenceTime, verseInterval,
+    time,
+    referenceVerse,
+    referenceTime,
+    verseInterval,
   });
   const lastValidVerse = +submissionVerse - 1;
   const defaultSafetyMargin = 300;
@@ -537,15 +621,24 @@ function getExpiryData({
   return { lastValidVerse, expirationTime };
 }
 
-function encryptRSAWithPublicKey(message, publicKey) {
-  // Start the  encryptor.
-  const jsEncrypt = new JSEncrypt();
+async function encryptRSAWithPublicKey(message, publicKey) {
+  // // Start the  encryptor.
+  // const jsEncrypt = new JSEncrypt();
 
-  // Assign the encryptor to utilize the public key.
-  jsEncrypt.setPublicKey(publicKey);
+  // // Assign the encryptor to utilize the public key.
+  // jsEncrypt.setPublicKey(publicKey);
 
-  // Perform the encryption based on received public key - only private key can read it!
-  const encrypted = jsEncrypt.encrypt(message);
+  // // Perform the encryption based on received public key - only private key can read it!
+  // const encrypted = jsEncrypt.encrypt(message);
+  // return encrypted;
+
+  const pubKey = await openpgp.readKey({ armoredKey: publicKey });
+
+  const encrypted = await openpgp.encrypt({
+    message: await openpgp.createMessage({ text: message }), // input as Message object
+    encryptionKeys: pubKey,
+  });
+  console.log(encrypted); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
   return encrypted;
 }
 

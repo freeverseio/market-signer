@@ -778,7 +778,7 @@ it('deterministic digestBidCertified with non-zero offerValidUntil and zero extr
   assert.equal(bidderAddress, buyerAccount.address);
 });
 
-it('Hash of concatenated args', () => {
+it('Hash of concatenated args', async () => {
   const someBytes32 = '0xf2208c967df089f60420785795c0a9ba8896b0f6f1867fa7f1f12ad6f79c1a18';
   const result = concatHash({
     types: ['uint256', 'bytes32'],
@@ -789,8 +789,8 @@ it('Hash of concatenated args', () => {
 });
 
 describe('testing rsa encrypt', () => {
-  it('encrypt and decrypt coincide with golang', () => {
-    const message = '3ccb01128433ec5cc07e5c2133ebf545510e3e2f3491675afccc34355e91b515017fcd7b2bcd2012092eebdecb4ff0577d8aa74fec5e1a73e123ae4a2ff63309';
+  it('encrypt and decrypt coincide with golang', async () => {
+    const msg = '3ccb01128433ec5cc07e5c2133ebf545510e3e2f3491675afccc34355e91b515017fcd7b2bcd2012092eebdecb4ff0577d8aa74fec5e1a73e123ae4a2ff63309';
     const pubKey = `-----BEGIN RSA PUBLIC KEY-----
 MIIBpDANBgkqhkiG9w0BAQEFAAOCAZEAMIIBjAKCAYMJNgnN/sXb41c0QuRCcQqo
 KdNh1IQlv37BdcrByl8U+VJyUkYhb7ZfApbcwF1X342vlYCfvR7+pMrkcBOXvBAV
@@ -844,15 +844,22 @@ boYZ
 -----END RSA PRIVATE KEY-----`;
 
     // Perform the encryption based on received public key - only private key can read it!
-    const encrypted = encryptRSAWithPublicKey(message, pubKey);
+    const encrypted = encryptRSAWithPublicKey(msg, pubKey);
 
-    const jsEncrypt = new JSEncrypt();
+    const privateKey = await openpgp.decryptKey({
+      privateKey: await openpgp.readPrivateKey({ armoredKey: privKey }),
+    });
 
-    // Assign the decryptor to utilize the private key.
-    jsEncrypt.setPrivateKey(privKey);
+    const message = await openpgp.readMessage({
+      armoredMessage: encrypted, // parse armored message
+    });
 
-    // Perform the decryption and compare it with the original message
-    const decrypted = jsEncrypt.decrypt(encrypted);
-    assert.equal(decrypted, message);
+    const { data: decrypted } = await openpgp.decrypt({
+      message,
+      decryptionKeys: privateKey,
+    });
+
+    console.log(decrypted); // 'Hello, World!'
+    assert.equal(decrypted, msg);
   });
 });
