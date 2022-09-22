@@ -2,6 +2,7 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
 const Accounts = require('web3-eth-accounts');
+const { encryptRSAWithPublicKey } = require('../src/MarketSigner');
 
 const {
   digestBuyNowFromBuyNowId,
