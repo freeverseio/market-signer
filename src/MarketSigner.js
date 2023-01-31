@@ -252,12 +252,21 @@ function digestPayNow({ auctionId, amount }) {
     vals: [auctionId, amount],
   });
 }
+/**
+ * @deprecated since version 3.1.0
+ */
+function digestCashout({ paymentId, iban }) {
+  return concatHash({
+    types: ['bytes32', 'string'],
+    vals: [paymentId, iban],
+  });
+}
 
 function digestCashoutFiat({
   nonce, iban, currencyId, amount,
 }) {
   return concatHash({
-    types: ['uint256', 'string', 'uint8', 'string'],
+    types: ['uint256', 'string', 'uint8', 'uint256'],
     vals: [nonce, iban, currencyId, amount],
   });
 }
@@ -551,6 +560,7 @@ module.exports = {
   digestUnlinkId,
   digestLinkAddress,
   digestUnlinkAddress,
+  digestCashout,
   digestCashoutFiat,
   digestCashoutCrypto,
   digestChangeIdAlias,
