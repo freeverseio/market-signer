@@ -10,7 +10,6 @@ const {
   digestUnlinkId,
   digestLinkAddress,
   digestUnlinkAddress,
-  digestCashout,
   digestCashoutCrypto,
   digestCashoutFiat,
   digestChangeIdAlias,
@@ -217,17 +216,6 @@ it('deterministic digestPayNow', async () => {
   const digest = digestPayNow({ auctionId, amount });
   const signature = sign({ digest, web3account: account });
   const expected = '0xfcf88c8e103169e37a7c2d5094c920b2dfaa61b0551306871cc5a0f5e9bbe4e97397348cebd59be7376e4fdd76fa21a456523c7607f5feda07d8f687432c04aa1c';
-  assert.equal(signature, expected);
-});
-
-it('deterministic digestCashout', async () => {
-  // pymentId can refer to either an auctionId or a buyNowId
-  const paymentId = '0xb884e47bc302c43df83356222374305300b0bcc64bb8d2c300350e06c790ee03';
-  const iban = 'NL74INGB9985747011';
-  const digest = digestCashout({ paymentId, iban });
-  assert.equal(digest, '0xbb7c44c78b091b7796ebdf589cbf0af318f148e9b1c5e75b21aede577d82afa4');
-  const signature = sign({ digest, web3account: account });
-  const expected = '0xc09b37519795caeb5bdfeac57ddc5021dd98c84d5156d5c34f4c035f126faab248c8dbe39bc622e05b4535b6f5c1b4deecb79397d6359b7b219dac554e642f101c';
   assert.equal(signature, expected);
 });
 
