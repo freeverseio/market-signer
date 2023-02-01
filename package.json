@@ -1,6 +1,6 @@
 {
   "name": "freeverse-marketsigner-js",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "source": "src/index.js",
   "main": "dist/main.js",
   "module": "dist/module.js",
