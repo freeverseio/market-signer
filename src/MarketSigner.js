@@ -253,10 +253,19 @@ function digestPayNow({ auctionId, amount }) {
   });
 }
 
-function digestCashout({ paymentId, iban }) {
+function digestCashoutFiat({
+  nonce, iban, currencyId, amount,
+}) {
+  return concatHash({
+    types: ['uint256', 'string', 'uint8', 'uint256'],
+    vals: [nonce, iban, currencyId, amount],
+  });
+}
+
+function digestCashoutCrypto({ paymentId }) {
   return concatHash({
     types: ['bytes32', 'string'],
-    vals: [paymentId, iban],
+    vals: [paymentId, 'cashoutCrypto'],
   });
 }
 
@@ -542,7 +551,8 @@ module.exports = {
   digestUnlinkId,
   digestLinkAddress,
   digestUnlinkAddress,
-  digestCashout,
+  digestCashoutFiat,
+  digestCashoutCrypto,
   digestChangeIdAlias,
   digestStolenEmail,
   digestStolenEmailByAddress,
