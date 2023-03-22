@@ -402,6 +402,15 @@ function digestBid({
   });
 }
 
+function digestTransferBalanceToWeb3address({
+  owner, toWeb3Address, amount, fromCurrencyId, toCurrencyId, nonce,
+}) {
+  return concatHash({
+    types: ['string', 'string', 'string', 'string', 'uint8', 'uint8', 'uint32'],
+    vals: ['transferBalanceToWeb3address', owner, toWeb3Address, amount, fromCurrencyId, toCurrencyId, nonce],
+  });
+}
+
 function getBidderFromHiddenPrice({
   auctionId,
   buyerHiddenPrice,
@@ -572,6 +581,7 @@ module.exports = {
   digestAcceptOffer,
   digestOfferCertified,
   digestOffer,
+  digestTransferBalanceToWeb3address,
   getBidder,
   getBuyNowBuyer,
   plannedSubmissionTime,
