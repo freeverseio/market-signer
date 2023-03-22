@@ -29,6 +29,7 @@ const {
   digestAcceptOffer,
   digestOfferCertified,
   digestOffer,
+  digestTransferBalanceToWeb3address,
   getBidder,
   getBuyNowBuyer,
   plannedSubmissionTime,
@@ -743,4 +744,20 @@ it('Hash of concatenated args', () => {
   });
   const expected = '0x7522d1cef7c9def1b2b909d6e5d00a91f8ee07b51bc10f407986278971c2cbeb';
   assert.equal(result, expected);
+});
+
+it('deterministic digestTransferBalanceToWeb3address', async () => {
+  const owner = account.address;
+  const toWeb3Address = '0x70141191E3304f70D07217Ee3B8316eF0F437670';
+  const amount = '100';
+  const fromCurrencyId = 203;
+  const toCurrencyId = 6;
+  const nonce = 1;
+  const expected = '0x33e088a59d886d6cd9a38303bf9a1947ad8e0e3c23d16b4859517171c35281d050c21b34421e2475f164b8ee7de05c56f7fea1a597e8e776575cdc4f205c77941b';
+
+  const digest = digestTransferBalanceToWeb3address({
+    owner, toWeb3Address, amount, fromCurrencyId, toCurrencyId, nonce,
+  });
+  const sigSeller = sign({ digest, web3account: account });
+  assert.equal(sigSeller, expected);
 });
