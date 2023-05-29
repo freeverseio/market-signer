@@ -30,6 +30,7 @@ const {
   digestOfferCertified,
   digestOffer,
   digestTransferBalanceToWeb3address,
+  digestSend,
   getBidder,
   getBuyNowBuyer,
   plannedSubmissionTime,
@@ -760,4 +761,18 @@ it('deterministic digestTransferBalanceToWeb3address', async () => {
   });
   const sigSeller = sign({ digest, web3account: account });
   assert.equal(sigSeller, expected);
+});
+
+it('deterministic digestSend', async () => {
+  const assetId = 11114324213423;
+  const validUntil = 235985749;
+  const recipientAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A55');
+  const recipient = recipientAccount.address;
+  const sellerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const expectedSignature = '0xb923cefd3644d05035e5b8a87fac34a788b2551f49f342fc9741c1bfc038dcf831d2a2df9b46ae502d91fbd325f59323775696f81f7b2fa9a22a0a62a3d5c5741b';
+  const digest = digestSend({
+    recipient, assetId, validUntil,
+  });
+  const sigSeller = sign({ digest, web3account: sellerAccount });
+  assert.equal(sigSeller, expectedSignature);
 });

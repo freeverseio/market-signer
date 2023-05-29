@@ -411,6 +411,20 @@ function digestTransferBalanceToWeb3address({
   });
 }
 
+function digestSend({
+  recipient, assetId, validUntil,
+}) {
+  const SEND_SALT = concatHash({
+    types: ['string'],
+    vals: ['SEND_EXPLICIT_STRING'],
+  });
+  const digest = concatHash({
+    types: ['bytes32', 'address', 'uint256', 'uint32'],
+    vals: [SEND_SALT, recipient, assetId, validUntil],
+  });
+  return digest;
+}
+
 function getBidderFromHiddenPrice({
   auctionId,
   buyerHiddenPrice,
@@ -582,6 +596,7 @@ module.exports = {
   digestOfferCertified,
   digestOffer,
   digestTransferBalanceToWeb3address,
+  digestSend,
   getBidder,
   getBuyNowBuyer,
   plannedSubmissionTime,
