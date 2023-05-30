@@ -769,10 +769,12 @@ it('deterministic digestSend', async () => {
   const recipientAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A55');
   const recipient = recipientAccount.address;
   const sellerAccount = new Accounts().privateKeyToAccount('0x3B878F7892FBBFA30C8AED1DF317C19B853685E707C2CF0EE1927DC516060A54');
+  const expectedDigest = '0xd5da3ab36e1474ce94fa14c7e740a58d96fb952a17a71a7ae12115d2263ebb57';
   const expectedSignature = '0xb923cefd3644d05035e5b8a87fac34a788b2551f49f342fc9741c1bfc038dcf831d2a2df9b46ae502d91fbd325f59323775696f81f7b2fa9a22a0a62a3d5c5741b';
   const digest = digestSend({
     recipient, assetId, validUntil,
   });
+  assert.equal(digest, expectedDigest);
   const sigSeller = sign({ digest, web3account: sellerAccount });
   assert.equal(sigSeller, expectedSignature);
 });
