@@ -254,11 +254,11 @@ function digestPayNow({ auctionId, amount }) {
 }
 
 function digestCashoutFiat({
-  nonce, iban, currencyId, amount,
+  nonce, destination, currencyId, amount,
 }) {
   return concatHash({
     types: ['uint256', 'string', 'uint8', 'uint256'],
-    vals: [nonce, iban, currencyId, amount],
+    vals: [nonce, destination, currencyId, amount],
   });
 }
 
