@@ -234,11 +234,11 @@ it('deterministic digestCashoutCrypto', async () => {
 it('deterministic digestCashoutFiat', async () => {
   // pymentId can refer to either an auctionId or a buyNowId
   const nonce = 123;
-  const iban = 'NL74INGB9985747011';
+  const destination = 'NL74INGB9985747011';
   const currencyId = 203;
   const amount = '1000';
   const digest = digestCashoutFiat({
-    nonce, iban, currencyId, amount,
+    nonce, destination, currencyId, amount,
   });
   assert.equal(digest, '0xa13b51f800c5996987699f9c693d92a194a18e5186f9c722a1b6161d8b20e55a');
   const signature = sign({ digest, web3account: account });
