@@ -1,6 +1,6 @@
 # freeverse-marketsigner-js
 
-`freeverse-marketsigner-js`` is a
+`freeverse-marketsigner-js` is a
 JS library for creating digests and signatures
 used to trade assets in the Living Assets Layer-2.
 
