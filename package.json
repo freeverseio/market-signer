@@ -1,9 +1,18 @@
 {
   "name": "freeverse-marketsigner-js",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "source": "src/index.js",
   "main": "dist/main.js",
   "module": "dist/module.js",
+  "files": [
+    "dist/*.js",
+    "src/",
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "!test/",
+    "!.circleci/"
+  ],
   "description": "Library for signing API calls to Living Assets market",
   "homepage": "https://www.freeverse.io/",
   "author": "The Freeverse.io team <dev@freeverse.io> (https://www.freeverse.io/)",
